@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="">
+  <meta name="generator" content="Hugo 0.68.3" />
+  <title>杂谈设计模式 — nzooherd 写字的地方</title>
+
+  <meta name="description" content="">
+  <link rel="shortcut icon" href="https://blog.nzooherd.me/favicon.ico" type="image/x-icon" />
+  <link href="" rel="alternate"
+    type="application/rss+xml" title="nzooherd 写字的地方">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Arvo:400,700">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/highlight.css">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/paperback.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.css" integrity="sha384-L+Gq2Cso/Y2x8fX4wausgiZT8z0QPZz7OqPuz4YqAycQJyrJT9NRLpjFBD6zlOia" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.js" integrity="sha384-z64WtjpyrKFsxox9eI4SI8eM9toXdoYeWb5Qh+8PO+eG54Bv9BZqf9xNhlcLf/sA" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          renderMathInElement(document.body, {
+            
+            
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            
+            throwOnError : false
+          });
+      });
+  </script>
+</head>
+
+
+<body>
+  <main class="container">
+
+    <header>
+  <h1></h1>
+  <p>杂谈设计模式</p>
+
+  
+  <time datetime="2018-02-03 23:16:13 &#43;0000 UTC">2018/02/03</time>
+  
+
+  
+</header>
+
+
+    <article>
+      <p>最近在读程杰的&laquo;大话设计模式&raquo;，学了十几个设计模式后感觉每个都很相似，下面虽然写了一堆，但是要真正理解还有写代码才可以，实践是检验真理的唯一标准。</p>
+<h2 id="面向对象">面向对象</h2>
+<p>学完了面向对象的Java语言，知道了类，方法，构造，抽象类，接口等概念，然而并不能很优雅的说出面向对象的优点所在，只知道可以增加代码复用。最近在读&laquo;大话设计模式&raquo;，特此记录。
+下面是面向对象设计的三大原则。</p>
+<ul>
+<li>
+<p>封装
+把客观事务封装成类，对不安全的数据进行隐藏，对有需要的数据提供接口。</p>
+</li>
+<li>
+<p>继承
+从一般到特殊，从抽象到细节，从面向细节到面向抽象。</p>
+</li>
+<li>
+<p>多态
+不同对象对同一信息的不同反应。
+$$ \text{三个条件}\left{
+\begin{aligned}
+\text{继承} \<br>
+\text{重写} \<br>
+\text{父类引用指向子类对象}
+\end{aligned}
+\right.
+$$</p>
+</li>
+</ul>
+<h2 id="原则">原则</h2>
+<h3 id="单一职责">单一职责</h3>
+<p><strong>就一个类而言，应该有且仅有一个引起它变化的原因。</strong></p>
+<h3 id="开放封闭">开放封闭</h3>
+<p><strong>软件实体(类，模块，函数)应该可以扩展，但是不可以修改。</strong>
+开放封闭是面向对象设计的核心所在，可维护，可扩展，可复用开发人员应该仅对程序中呈现出频繁变化部分作出抽象。</p>
+<h3 id="依赖倒转">依赖倒转</h3>
+<p><strong>抽象不应该依赖细节，细节应该依赖抽象。</strong>
+读到这里我才明白抽象类和接口的职责所在，以前写代码，抽象类和接口基本没有使用过，原因就在于将一切细节都考虑到了具体类中，导致代码没有丝毫的可扩张性。细节依赖抽象就是要将共有的元素抽象出来成抽象类或接口，然后面向这些抽象类编程。</p>
+<h3 id="里氏代换">里氏代换</h3>
+<p><strong>子类型必须能够替换掉它们的父类型。</strong>
+一个软件实体如果使用的是一个父类的话，那么一定使用于其子类，而且它察觉不出父类和子类对象的区别。</p>
+<h3 id="迪米特法则">迪米特法则</h3>
+<p><strong>如果两个类不必彼此直接通信，那么这两个类就不应当发生直接的相互作用，如果其中一个类需要调用另一个类的某一个方法的话，可以通过第三者转发中这个调用。</strong></p>
+<h2 id="常用设计模式">常用设计模式</h2>
+<h3 id="三个工厂模式">三个工厂模式</h3>
+<h4 id="简单工厂模式">简单工厂模式</h4>
+<blockquote>
+<p>设计一个简单的计算器,可以满足加减乘除等要求。</p>
+</blockquote>
+<p>在面向过程的设计模式中，初学者可能会写出下面的代码。</p>
+<pre><code>import java.util.*;
+
+public class Calculator{
+    public double add(double a, double b){
+        return a + b;
+    }
+    public double sub(double a, double b) {
+        return a - b;
+    }
+    public double mul(double a, double b) {
+        return a * b;
+    }
+    public double div(double a, double b) {
+        return a / b;
+    }
+
+    public static void main(String[] args) {
+        Calculator calculator = new Calculator();
+        Scanner scanner = new Scanner(System.in);
+        String s = scanner.nextLine();
+        if(&quot;+&quot;.equals(s)) {
+            ......
+        }       
+        else if(&quot;-&quot;.equals(s)) {
+
+        }
+        ......
+        else {
+            System.out.println(&quot;输入错误&quot;);
+        }
+    }
+}
+</code></pre><p>很准确的切合了题目的需求，然而需求这东西往往越契合越不好。如果需要增加乘方运算，就需要增加新的方法和新的判断逻辑，这与面向对象的思维背道而驰。如果用简单工厂的方式，如下。</p>
+<pre><code>abstract class Operator{
+    protacted double numberA = 0;
+    protacted double numberB = 0;
+
+    public void set(double A, double B) {
+        numberA = A;
+        numberB = B;
+    }
+    public abstract double getResult();
+
+}
+class AddOpe extends Operator {
+    public double getResult(){
+        return numberA + numberB;
+    }
+}
+......
+
+class Factory{
+    public Operator getOpe(String s) {
+        if(&quot;+&quot;.equals(s)) {
+            return new AddOpe();
+        }
+        else if(&quot;-&quot;.equals(s)) {
+            return new SubOpe();
+        }
+        ......
+
+    }
+}
+
+class Main(){
+    public static void main(String[] args) {
+        double result = 0;
+        Scanner scanner = new Scanner(System.in);
+        Factory facotry = new Factory();
+        String op = Scanner.nextLine();
+        Operator = facotry.getOpe(op);
+        if(Operator == null) {
+
+        }
+        else {
+            ...... 
+            result = Operator.getResult();
+        }
+    }
+}
+</code></pre><p>简单工厂模式中将运算抽象出来，在一个简单的工厂内部判断需要什么运算符，来生产需要的运算符，这样增加新的运算时只需要添加新的运算类，并在工厂内部增加判断逻辑就可以了，然而这样并不是特别符合开放-封闭原则，这就是简单工厂模式。
+下面是简单工厂模式的UML类图。
+<img src="http://o6uo0abyf.bkt.clouddn.com/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<h4 id="工厂方法模式">工厂方法模式</h4>
+<p>如果用工厂方法模式来实现上面的计算器，下面是工厂方法模式的UML类图。
+<img src="http://o6uo0abyf.bkt.clouddn.com/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<p>如果需要增加新的功能，对比就可以发现<em>简单工厂模式中只需增加一个简单的运算类，然后去更改工厂中的case判断，但是工厂方法模式却需要增加一个工厂类和一个运算类，而且需要在客户端判断生成哪个工厂。</em> 从表面上来看，并没有减少什么难度，反而增加了更多的类。</p>
+<p>简单工厂模式的弊端在于违反了开放-封闭原则，当添加新的方法时，需要修改代码内部。工厂方法把简单工厂的内部逻辑判断放在了客户端，如果想增加新的功能，只需要修改客户端代码就可以了。</p>
+<h4 id="抽象工厂模式">抽象工厂模式</h4>
+<blockquote>
+<p>小成有两间塑料加工厂（A厂仅生产容器类产品；B厂仅生产模具类产品）；随着客户需求的变化，A厂所在地的客户需要也模具类产品，B厂所在地的客户也需要容器类产品；</p>
+</blockquote>
+<p>上面是一个典型的使用抽象工厂模式的例子。UML图如下。
+<img src="http://o6uo0abyf.bkt.clouddn.com/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82.png" alt=""></p>
+<ol>
+<li>首先创建抽象工厂。</li>
+</ol>
+<pre><code>abstract class Factory{
+    public abstract class createA();
+    public abstract class createB();
+}
+</code></pre><ol start="2">
+<li>创建抽象产品族类。</li>
+</ol>
+<pre><code>abstract class AbstractProduct{
+    public abstarct void show();  
+}
+</code></pre><ol start="3">
+<li>创建抽象产品类类。</li>
+</ol>
+<pre><code>abstract class AbstractProductA extends AbstractProduct1{
+    @Override
+    public abstract void show();
+}
+abstract class AbstracctProductB extends AbstractProduct2{
+    @Override
+    public abstract void show();
+}
+</code></pre><ol start="4">
+<li>创建具体产品类。</li>
+</ol>
+<pre><code>class ProductA1 extends AbstractProductA{
+    @Override
+    public void show(){
+    }
+}
+class ProductB1 extends AbstractProductB{
+    @Override
+    public void show(){
+
+    }
+}
+
+class ProductA2 extends AbstractProductA{
+    @Override
+    public void show(){
+
+    }
+}
+class ProductB2 extends AbstracctProductB{
+    @Override
+    public void show(){
+
+    }
+}
+</code></pre><ol start="5">
+<li>创建具体工厂。</li>
+</ol>
+<pre><code>class Factory1 extends Facotry{
+    public void createProductA1(){
+
+    }
+    public void createProductB1(){
+
+    }
+}
+
+class Factory2 extends Factory{
+    public void createProductA2(){
+
+    }
+    public void createProductB2(){
+
+    }
+}
+</code></pre><ol start="6">
+<li>客户端运行</li>
+</ol>
+<pre><code>class Main{
+    public static void main(String[] args) {
+        Factory1 factory1 = new Factory1();
+        Factory2 factory2 = new Factory2();
+
+        factory1.createProductA1();
+        factory2.createProductA2();
+    }
+}
+</code></pre><p>对比简单工厂模式和工厂方法模式，可以发现抽象工厂模式对新的产品增加修改需要更改的地方很多，这一方面解隅，另一方面也增加了修改的难度，而且修改的难度对于增加的不同产品也有所不同。</p>
+<p><strong>观察上面的UML图，可以发现如果新增加一个AbstractProductC，每个工厂就都需要修改，这违反了开放-封闭原则，但是如果只是增加一个Product3，只需要增加几个具体的类和一个新的工厂即可，并不违反开放封闭原则，这叫开-闭原则的倾斜性。</strong></p>
+<h3 id="四个器模式">四个*器模式</h3>
+<h4 id="装饰器模式">装饰器模式</h4>
+<blockquote>
+<p>实现一个给人加不同装饰的换装系统。</p>
+</blockquote>
+<p>这是一个典型的装饰器模式，<strong>动态地给一个对象添加一些额外的职责，就增加功能来说，装饰器模式比生成子类更加灵活</strong>。
+下面是装饰器模式的UML图。
+<img src="http://o6uo0abyf.bkt.clouddn.com/%E8%A3%85%E9%A5%B0%E5%99%A8.png" alt="">
+代码实现</p>
+<pre><code>abstract class Component{
+    public abstract void Operation();
+}
+
+class ConcreteComponent{
+    @Override
+    public void Operation(){
+
+    }
+}
+</code></pre><pre><code>class Decorator extends Component{
+    protected Componect component;
+    public void SetComponent(Component compontent) { //设置Component
+        this.componentt = component;
+    }
+    @Override
+    public void Operation() { //具体装饰方法
+        if(component != null) component.Operation();
+    }
+}
+
+class ConcreteDecoratorA extends Decorator
+{
+    private string addedState;  //独有的功能
+
+    @Override
+    public void Operation() {
+        super.Operation();
+        addedState = &quot;New State&quot;;
+    }
+}
+</code></pre><pre><code>//客户端
+
+public class Main{
+    public static void main(String[] args) {
+        ConcreteComponent cc = new ConcreteComponent();
+        ConcreteDecoratorA d1 = new ConcreteDecoratorA();
+        ConcreateDecoratorB d2 = new ConcreteDecoratorB();
+
+        d1.SetComponent(c); //装饰方法
+        d2.SetComponent(c1) ;
+        d2.Operation();
+
+    }
+}
+</code></pre><p><strong>装饰器模式利用SetComponent实现自身和装饰对象的分离，每个对象只需关心自己的功能，不需要关心如何被添加到对象链当中。</strong></p>
+<h4 id="适配器模式">适配器模式</h4>
+<p><strong>将一个类的接口转换称客户希望的另外一个接口。Adapter模式使得原本犹豫接口不兼容而不能一起工作的那些类可以一起工作</strong>。说的简单点就是一个翻译。
+下面是适配器模式的UML类图。
+<img src="http://o6uo0abyf.bkt.clouddn.com/%E9%80%82%E9%85%8D%E5%99%A8.png" alt=""></p>
+<pre><code>class Target{
+    public abstract void Request(){
+
+    }
+}
+
+class Adaptee{
+    public void SpecificRequest(){
+
+    }
+}
+
+class Adapter extends Target{
+    private Adaptee adaptee = new Adaptee();
+
+    @Override
+    public void Request() {
+        adaptee.SpecifiRequest();
+    }
+}
+
+class Main{
+    public static void main(String[] args) {
+        Target target = new Adapter();
+        target.Request();
+    }
+}
+</code></pre><h4 id="解释器模式">解释器模式</h4>
+<p><strong>解释器模式，给定一个语言，定义它的文法的一种表示，并定义一个解释器，这个计时器使用该表示来解释语言中的句子。</strong> //让我想起了python语言解释器。</p>
+<p>下面是解释器模式的UML图。
+<img src="http://o6uo0abyf.bkt.clouddn.com/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<p>看了看书，好像要设计到语法树，学完编译原理再说吧。。。</p>
+<h4 id="迭代器模式">迭代器模式</h4>
+<p><strong>提供一种方法顺序访问一个聚合对象中各个元素，而又不暴露该对象的内部表示。</strong>
+下面是迭代器模式的UML类图。
+<img src="http://o6uo0abyf.bkt.clouddn.com/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<pre><code>abstract class Iterator{
+    public abstract object First();
+    public abstract object next();
+    public abstract object IsDone();
+    public abstract object CurrentItem();
+}
+
+abstract class Aggregate{
+    public abstract Iterator CreateIterator();
+}
+
+class ConcreateIterator extends Iterator{
+    private ConcreateAggregate aggregate;
+    private int current = 0;
+
+    public COncreateIterator(ConcreteAggregate aggregate) {
+        this.aggregate = aggregate;
+    }
+    @Override
+    publiic object First(){
+
+    }
+
+    @Override
+    public object Next(){
+        object ret = null;
+        current++;
+        if(current &lt; aggregate.Count&gt;) {
+            ret = aggregate(currcent);
+        }
+        retuen ret;
+    }
+    @Override
+    public override bool IsDone(){
+        return current &gt;= aggregate.Count ? true : false;
+    }        
+    @Override
+    public object CurrentItem() {
+        return aggregate[current];
+    }
+}
+
+class ConcreteAggregate extends Aggregate {
+    private IList&lt;object&gt; items =  new List&lt;object&gt;;
+    @Override
+    public Iterator CreateIterator(){
+        return new ConcreteIterator(this);
+    }
+
+    @Override
+    public int Count{
+        return items.count;
+    }
+
+}
+
+</code></pre><pre><code>//客户端
+class Main{
+    public static void main(String[] args) {
+        ConcreteAggregate a = new ConcreteAggreate();
+        a[0] = &quot;1&quot;;
+        a[1] = &quot;2&quot;;
+        a[2] = &quot;3&quot;;
+
+        Iterator i = new ConcreteIterator(a);
+        Object item = i.First();
+        while(!i.IsDone()) {
+            i.Next();
+        }
+    }
+}
+</code></pre><p>迭代器模式就是对遍历的一个封装。看了这种，终于明白了Java里面迭代器的内幕。</p>
+<h3 id="三个者模式">三个*者模式</h3>
+<h4 id="建造者模式">建造者模式</h4>
+<p><strong>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</strong>
+下面是建造者模式的UML图。<img src="http://o6uo0abyf.bkt.clouddn.com/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<pre><code>//Product类，由多个部件组成。
+class Product{
+    List&lt;String&gt; parts = new List&lt;String&gt;();
+
+    public void Add(String part){  //添加产品部件
+        parts.Add(part);
+    } 
+
+    public void Show() {
+        foreach(String part : paths) {
+
+        }
+    }
+}
+
+//Builder类，确定产品由两个部件PartA和PartB组成。
+
+abstract class Builder{
+    public abstract void BuildPartA();
+    public abstract void BuildPartB();
+    public abstract Product GetResult();
+}
+
+//ConcreteBuilder1 类--具体建造者
+class ConcreteBuilder1 extends Builder
+{
+    private Product product = new Product();
+
+    @Override 
+    public void BuildPartA(){
+        product.Add(&quot;部件A&quot;);
+    };
+
+    @Override
+    public void BuildPartB(){
+        product.Add(&quot;部件B&quot;);
+    };
+
+    public Product GetResult(){
+        return product;
+    }
+}
+
+//Director类--指挥者类
+class Director{
+    public void Construct(Builder builder) {
+        builder.BuildPartA();
+        builder.BuildPartB();
+    }
+}
+
+//客户端代码
+class Main()
+{
+    Director director = new Director();
+    Builder b1 = new ConcreteBuilder1();
+    Builder b2 = new ConcreteBuilder2();
+
+    director.Construct(b1);  //指挥者用ConcreteBuilder2方法建造产品
+    Product p1 = b1.GetResult();
+    
+    director.Construct(b2);
+    Product p2 = b2.GetResult();
+
+}
+</code></pre><p>*建造者模式中一个很重要的类，Director(指挥者)，用它来封装建造过程，也用来隔离用户与建造过程的关联。*第一次看Director的源码，感觉这里使用的是Java的封装，同时也导致耦合性的提高。</p>
+<p><strong>建造者模式是再创建复杂对象的算法应该独立于该对象的组成部分以及与他们的装配方式适用的模式。</strong></p>
+<h4 id="观察者模式">观察者模式</h4>
+<p><strong>定义了一种一对多的以来关系，让多个观察者对象同时监听某一个主题对象。这个主题对象再状态发生改变时，会通知所有观察者对象，是他们可以自动更新自己。</strong>
+<img src="http://o6uo0abyf.bkt.clouddn.com/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<pre><code>//Subject类，可翻译成主题或者抽象通知者，一般用一个抽象类或者一个接口实现，把所有观察者对象的引用保存在一个聚集里，每个主题都可以有任何数量的观察者。
+abstract class Subject{
+    private List&lt;Observer&gt; observers = new List&lt;Observer&gt;();
+
+    public void attach(Observer observer) {
+        observers.Add(observer);
+    }
+
+    public void detach(Observer observer) {
+        observers.Remove(observer); 
+    }
+
+    public void notify() {
+        foreach(Observer o : observers) {
+            o.update();
+        }
+    }
+}
+
+//ConcreteSubject类，具体主题或具体通知者，将有关状态存入具体观察者对象。
+class ConcreteSubject extends Subject{
+    private String subjectState;
+
+    public string getSubjectState(){
+        return subjectState;
+    }
+    public void setSubjectState(value) {
+        subjectState = value;
+    }
+}
+
+
+//Observer类，抽象观察者，为所有的具体观察者定义一个接口，在得到主题通知时更新自己。
+abstract class Observer{
+    @Override
+    public abstract void update();
+}
+
+//ConcreteObserver类，具体观察者，实现抽象观察者角色所要求的更新接口。
+class ConcreteObserver extends Observer
+{
+    private string name;
+    private string observerState;
+    private ConcreteSubject subject;
+
+    public ConcreteObserver(ConcreteSubject subject, String name) {
+        this.subject = subject;
+        this.name = name;
+    }
+
+    @Override
+    public void Update() {
+        ObserverState = subject.SubjectState;
+    }
+
+}
+
+//客户端代码
+class Main{
+    public static void main(String[]  args) {
+        ConcreteSubject s = new ConcreteSubject();
+        s.Attach(new ConcreteObserver(s, &quot;X&quot;));
+        s.Attach(new ConcreteObserver(s, &quot;Y&quot;));
+        s.Attach(new ConcreteObserver(s, &quot;Z&quot;));
+
+        s.SubjectState = &quot;ABC&quot;;
+        s.Notify();
+
+    }
+}
+
+</code></pre><p><strong>当一个对象的改变需要同时改变其它对象的时候，而且它不知道具体有多少对象有待改变时，应该考虑适用观察者模式。</strong></p>
+<p>学到这里，我越来越觉得设计模式的产生是代码耦合性的提高，一个类依赖另一个类本身就是一种耦合，然而从另一方面来说，设计模式又增加了代码的扩展性。</p>
+<h4 id="中介者模式">中介者模式</h4>
+<p><strong>用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显示地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</strong></p>
+<p><img src="http://o6uo0abyf.bkt.clouddn.com/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<pre><code>//Mediator 抽象中介者类
+abstract class Mediator
+{
+    public abstract void Send(String message, Colleague colleague);
+}
+//Colleague 抽象同事类
+abstract class 
+{
+    protected Mediator mediator;
+    pubic Colleague(Mediator meditaor) {
+        this.mediator = mediator;
+    }
+}
+
+//ConcreteMediator 具体中介者类
+class ConcreteMediator extends Meidator{
+    private ConcreteColleague1 colleague1;
+    private ConcreteColleague2 colleague2;
+
+    public void setConcreteColleague1(value) {
+        colleague1 = value;
+    }
+
+    public void setConcreteColleague2(value) {
+        colleague2 = value;
+    }
+
+    @Override
+    public void Send(String message, Colleague colleague) {
+        if(colleagu == colleague1) {
+            colleague2.Notify(message);
+        }
+        else colleague1.Notify(message);
+    }
+
+}
+
+
+//ConcreteColleague1等同事对象
+class ConcreteCollegue1 extends Colleague{
+    public ConcreteColleagu1(Mediator mediator) {
+        super(mediator);
+    }
+
+    public void Send(String message) {
+        mediator.Send(message, this) 发送给信息通常都是中介者发送出去
+    }
+
+    public void Notify(String message) {
+
+    }
+}
+
+//客户端调用
+class Main{
+    public static void main(String[] args) {
+        ConcreteMediator m = new ConcreteMediator();
+
+        ConcreteMediator c1 = new ConcreteColleague1(m);
+        COncreteMediator c2 = new ConcreteColleague2(m);
+
+        m.Colleague1 = c1;
+        m.Colleague2 = c2;
+
+        c1.Send(&quot;吃饭了吗?&quot;);
+        c2.Send(&quot;没有呢，你打算请客?&quot;);
+    }
+}
+</code></pre><p><strong>中介者模式很容易在系统中应用，也容易在系统中误用。当系统出现了“多对多”交互复杂的对象时，不要基于适用中介者模式，要先反思系统设计上是否合理。</strong></p>
+<p>由于ConcreteMediator控制了集中化，于是就把交互复杂性变为了中介者的复杂性。中介者的复杂性比任何一个ConcreteColleague都复杂。</p>
+<h3 id="其它几个常用的设计模式">其它几个常用的设计模式</h3>
+<h4 id="单例模式">单例模式</h4>
+<p><strong>保证一个类只有一个实例，并提供一个访问它的全局访问点。</strong> 单例模式是我最早接触的一个设计模式，在Java语言中，我认为的一个类只有一个实例是在一个JVM中。
+<img src="http://o6uo0abyf.bkt.clouddn.com/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F.png" alt="">
+由于单例模式比较简单，下面直接给出代码。</p>
+<ul>
+<li>懒汉式</li>
+</ul>
+<pre><code>public class Singleton{
+    private static final Singleton instance = new Singleton();
+    private Singleton(){
+
+    }
+    public static Singleton getInstance(){
+        return instance;
+    }
+}
+
+</code></pre><ul>
+<li>饿汉式</li>
+</ul>
+<pre><code>public class Singleon{  //非线程安全
+    private static Singleton instance;
+
+    private Singleton(){
+
+    }
+
+    public static Singleton getInstance(){
+        if(instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+
+
+}
+</code></pre><ul>
+<li>双重检验锁</li>
+</ul>
+<pre><code>public class Singleton{
+    private volatie static Singleton instance;
+
+    private Singleton(){
+
+    }
+    public static Singleton getInstance() {
+        if(instance == null) {
+            synchronized(Singleton.class) {
+                if(instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+
+</code></pre><h4 id="代理模式">代理模式</h4>
+<p><strong>为其它对象提供一种代理以控制对这个对象的访问。</strong>
+下面是代理模式的UML图。
+<img src="http://o6uo0abyf.bkt.clouddn.com/%E4%BB%A3%E7%90%86%E6%91%A9%E4%B8%9D.png" alt=""></p>
+<pre><code>abstract class Subject {
+    public abstract void Request();
+}
+
+class RealSubject extends Subject {
+    @Override
+    public void Request() {
+
+    }
+}
+
+class Proxy extends Subject{
+    RealSubject realSubject;
+    public void Request() {
+        if(realSubject == null) realSubject = new RealSubject();
+        realSubject.Request();
+    }
+}
+
+class Main{
+    public static void main(String[] args) {
+        Proxy proxy = new Proxy();
+        proxy.Request();
+    }
+}
+</code></pre><p>第一次接触代理模式就是再Java反射那里，然而第一次接触反射加上动态代理，学的很懵比。现在学设计模式，终于把代理模式搞懂了一点。
+<em>代理模式就是在访问对象的时候引入一定程度的间接性，因为这种间接性，可以附加很多用途。</em></p>
+<h4 id="原型模式">原型模式</h4>
+<p><strong>用原型实例制定创建对象的种类，并通过拷贝这些原型创建新的对象。</strong>
+下面是UML图。
+<img src="http://o6uo0abyf.bkt.clouddn.com/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%9E%8B.png" alt=""></p>
+<pre><code>abstract class Prototype{
+    private string id;
+
+    public Prototype(string id) {
+        this.id = id;
+    }
+    public string get(){
+        return id;
+    }
+
+    public abstract Protype Clone();
+}
+
+class ConcreateProtype extends Protype{
+    public ConcreateProtype1(String id) {
+        super(id);
+    }
+
+    @Override
+    public Protype Clone() {
+        return this.clone(); //创建当前对象的浅表副本。
+    }
+
+}
+
+class Main{
+    public static void main(String[] args) {
+        ConcreateProtype1 p1 = new ConcreateProtype1(&quot;1&quot;);
+        ConcreateProtype1 q1 = new (ConcreateProtype1)p1.Clone();
+    }
+}
+</code></pre><p><em>原型模型就是从一个对象再创建另外一个可定制的对象，而且不需要知道任何创建的细节。</em></p>
+<h2 id="备注">备注</h2>
+<h3 id="设计模式的四境界">设计模式的四境界</h3>
+<p>以下来自&laquo;大话设计模式&raquo;。</p>
+<blockquote>
+<ol>
+<li>没学之前想不到设计模式，代码很糟糕。</li>
+<li>学了几个模式后很开心，到处想着用自己学过的设计模式，时常造成误用模式而不自知。</li>
+<li>学完几个设计模式后，感觉设计模式很相似，有困惑，深知误用之害，应用时有所犹豫。</li>
+<li>灵活应用设计模式，甚至不需要应用具体的某种模式也能设计出非常优秀的代码，无剑胜有剑。</li>
+</ol>
+</blockquote>
+<h3 id="关于">关于</h3>
+<ul>
+<li>这篇文章偏重于总结，而不是讲解，不适合新手。</li>
+<li>文章中大部分代码来自&laquo;大话设计模式&raquo;，书中代码为C#，在用Java写的过程中可能有所纰漏。</li>
+</ul>
+    </article>
+
+    <nav class="site-nav">
+  
+
+  
+
+  
+</nav>
+
+
+    <footer class="site-footer">
+
+  
+
+  <!-- Build date: Tue, 04 May 2021 00:14:28 CST -->
+</footer>
+
+
+  </main>
+
+  
+<script src="https://blog.nzooherd.me/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+
+</html>

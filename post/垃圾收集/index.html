@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="">
+  <meta name="generator" content="Hugo 0.68.3" />
+  <title>垃圾收集 — nzooherd 写字的地方</title>
+
+  <meta name="description" content="">
+  <link rel="shortcut icon" href="https://blog.nzooherd.me/favicon.ico" type="image/x-icon" />
+  <link href="" rel="alternate"
+    type="application/rss+xml" title="nzooherd 写字的地方">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Arvo:400,700">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/highlight.css">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/paperback.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.css" integrity="sha384-L+Gq2Cso/Y2x8fX4wausgiZT8z0QPZz7OqPuz4YqAycQJyrJT9NRLpjFBD6zlOia" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.js" integrity="sha384-z64WtjpyrKFsxox9eI4SI8eM9toXdoYeWb5Qh+8PO+eG54Bv9BZqf9xNhlcLf/sA" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          renderMathInElement(document.body, {
+            
+            
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            
+            throwOnError : false
+          });
+      });
+  </script>
+</head>
+
+
+<body>
+  <main class="container">
+
+    <header>
+  <h1></h1>
+  <p>垃圾收集</p>
+
+  
+  <time datetime="2017-06-12 17:38:12 &#43;0000 UTC">2017/06/12</time>
+  
+
+  
+</header>
+
+
+    <article>
+      <h3 id="垃圾收集">垃圾收集</h3>
+<p>未能释放已分配的块是一种<strong>编程错误</strong>。如下代码</p>
+<pre><code>void garbage()
+{
+	int *p = (int *)malloc(15213);
+    return ;
+}
+</code></pre><p>程序员忘记释放p，导致p占用本来可以满足后面分配请求的堆空间。
+<em>垃圾收集器</em>(garbage collector)是一种动态存储分配器，自动释放不再需要的称为<em>垃圾</em>的块，自动回收堆存储过程叫做<em>垃圾收集</em>，垃圾收集器定期识别垃圾块，并相应的调动free，将这些块放回到空闲链表中。
+我们主要讨论标记清除法</p>
+<h4 id="基本知识">基本知识</h4>
+<p>垃圾收集器将存储器视为一张有向<em>可达图</em>，如下图所示
+<img src="http://img.blog.csdn.net/20130524173457990" alt="">
+垃圾收集器的角色是维护可达图的某种表示，并通过释放不可达节点将它们返回给空闲链表，来定期回收它们。
+像ML和Java对应用如何创建和使用指针有很严格的控制，能彀维护可达图的一种精确表示，可以回收所有的垃圾，然而C和C++通常步能维持可达图的精确表示，这样的收集器叫做<em>保守的垃圾收集器</em>，每个可达块都被正确的表示为可达，而一些不可达节点错误的被标记位可达。</p>
+<h5 id="marksweep垃圾收集器">Mark&amp;Sweep垃圾收集器</h5>
+<p>Mark&amp;Sweep垃圾收集器由标记(Mark)阶段和清除阶段组成，标记阶段标记出根节点的所有可达和已分配的后继，后面的清除阶段释放每个未被标记的已分配块。典型地，块头部中空闲的低位中的一位来表示这个块是否被标记了。</p>
+<pre><code>typedef void* ptr
+ptr isPtr(ptr p) //如果p指向一个已分配的字，就返回一个指向这个块的起始位置的指针p，否则返回NULL
+int blockMarked(ptr b) //如果已经标记了块b，就返回true
+int blockAllocated() //如果块b是已分配的，就返回true
+void markBlock(ptr b) //标记块b
+int length(ptr b) //返回块b的以字为单位的长度(包括头部)
+void unmarkBlock(prt b) //将块b的状态由已标记改为未标记
+ptr nextBlock(ptr b) //返回堆中b的后继
+</code></pre><p>标记阶段调用下图所示的Mark函数</p>
+<pre><code>void mark(ptr p) {
+	if((b = isPtr(p)) == NULL) 
+    	return;
+    if (blockMarked(b)) 
+    	return;
+   	markBlock(b);
+    len = length(b);
+    for(int i = 0; i &lt; len; i++)
+    	mark(b[i]);
+    return;
+}
+</code></pre><p>在标记阶段的末尾，任何未标记的已分配块都被认定为不可达的，是垃圾
+Sweep函数如下所示</p>
+<pre><code>void sweep(prt b, ptr end) {
+	while (b &lt; end) {
+    	if (blockMarked(b))
+        	unmarkBlock(b);
+        else if (blockAllocated(b))
+        	free(b);
+        b = nextBlock(b);
+    }
+    return;
+}
+</code></pre><p>下图展示了一个小堆的Mark&amp;Sweep图形化解释
+<img src="http://upload-images.jianshu.io/upload_images/3010486-56799cbd53ca612b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
+<img src="http://upload-images.jianshu.io/upload_images/3010486-2df0215532d30391.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
+<img src="http://upload-images.jianshu.io/upload_images/3010486-b6fc3a3c4d9970af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
+C语言GC有以下两点问题</p>
+<ul>
+<li>C不会用任何类型信息来标记存储器位置，对isPtr没有一种明显的方式来判断参数p是否为指针</li>
+<li>对isPtr没有明显的方式来判断p是否指向一个已分配块的有效载荷中的某个位置</li>
+</ul>
+<p>对第二个问题的解决方法是将已分配块集合维护成一颗平衡二叉树，这颗树保持这样一个属性:左子树的所有块都放在较小的地址处，而右子树的所有块都放在较大的地址处。
+idPtr(ptr p) 函数用树来执行对已分配块的二分查找。平衡树方法会保证标记所有从根节点可达的节点，单它是保守的。</p>
+    </article>
+
+    <nav class="site-nav">
+  
+
+  
+
+  
+</nav>
+
+
+    <footer class="site-footer">
+
+  
+
+  <!-- Build date: Tue, 04 May 2021 00:14:28 CST -->
+</footer>
+
+
+  </main>
+
+  
+<script src="https://blog.nzooherd.me/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+
+</html>

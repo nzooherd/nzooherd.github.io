@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="">
+  <meta name="generator" content="Hugo 0.68.3" />
+  <title>粗谈Tcp/Ip协议 — nzooherd 写字的地方</title>
+
+  <meta name="description" content="">
+  <link rel="shortcut icon" href="https://blog.nzooherd.me/favicon.ico" type="image/x-icon" />
+  <link href="" rel="alternate"
+    type="application/rss+xml" title="nzooherd 写字的地方">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Arvo:400,700">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/highlight.css">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/paperback.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.css" integrity="sha384-L+Gq2Cso/Y2x8fX4wausgiZT8z0QPZz7OqPuz4YqAycQJyrJT9NRLpjFBD6zlOia" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.js" integrity="sha384-z64WtjpyrKFsxox9eI4SI8eM9toXdoYeWb5Qh+8PO+eG54Bv9BZqf9xNhlcLf/sA" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          renderMathInElement(document.body, {
+            
+            
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            
+            throwOnError : false
+          });
+      });
+  </script>
+</head>
+
+
+<body>
+  <main class="container">
+
+    <header>
+  <h1></h1>
+  <p>粗谈Tcp/Ip协议</p>
+
+  
+  <time datetime="2017-07-06 10:37:18 &#43;0000 UTC">2017/07/06</time>
+  
+
+  
+</header>
+
+
+    <article>
+      <p>最近在学习Tcp-Ip协议，这种东西怎么说，不知道学哪，不知道学完有什么用，不知道哪些是重点，而且对于各个协议的细节，根本记不住。缕一下，方便以后学习。
+首先通常所说的Tcp-ip协议是一个协议簇，不仅有Tcp-Ip协议。从计算机网络中的五个分层来说，Tcp-Ip协议簇在各个层次都有不同的协议，应用层的http,ftp等，传输层的tcp,udp,网络层的ip，链路层的apr协议，还有物理层的协议等。计算机网络作为一个系统，不仅要有硬件，还要有软件。就比如一条高速公路，公路，服务区，收费站等就是硬件，汽车需要遵守的交通规则就是软件，即我们所说的Tcp-Ip协议，两者缺一不可。</p>
+
+    </article>
+
+    <nav class="site-nav">
+  
+
+  
+
+  
+</nav>
+
+
+    <footer class="site-footer">
+
+  
+
+  <!-- Build date: Tue, 04 May 2021 00:14:28 CST -->
+</footer>
+
+
+  </main>
+
+  
+<script src="https://blog.nzooherd.me/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+
+</html>

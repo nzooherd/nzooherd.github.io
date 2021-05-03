@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="">
+  <meta name="generator" content="Hugo 0.68.3" />
+  <title>JavaWeb和SSM — nzooherd 写字的地方</title>
+
+  <meta name="description" content="">
+  <link rel="shortcut icon" href="https://blog.nzooherd.me/favicon.ico" type="image/x-icon" />
+  <link href="" rel="alternate"
+    type="application/rss+xml" title="nzooherd 写字的地方">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Arvo:400,700">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/highlight.css">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/paperback.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.css" integrity="sha384-L+Gq2Cso/Y2x8fX4wausgiZT8z0QPZz7OqPuz4YqAycQJyrJT9NRLpjFBD6zlOia" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.js" integrity="sha384-z64WtjpyrKFsxox9eI4SI8eM9toXdoYeWb5Qh+8PO+eG54Bv9BZqf9xNhlcLf/sA" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          renderMathInElement(document.body, {
+            
+            
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            
+            throwOnError : false
+          });
+      });
+  </script>
+</head>
+
+
+<body>
+  <main class="container">
+
+    <header>
+  <h1></h1>
+  <p>JavaWeb和SSM</p>
+
+  
+  <time datetime="2017-10-28 12:21:40 &#43;0000 UTC">2017/10/28</time>
+  
+
+  
+</header>
+
+
+    <article>
+      <p>近一个月的时间都在做一个B/S架构的在线聊天工具，从最初的的命令行再到Jsp最后用SSM框架重构，到目前就先告一段落吧，记录一下学习过程中的感想，以便查阅。</p>
+<h4 id="ssm是什么">SSM是什么</h4>
+<p>Spring+Spring MVC+Mybatis是目前最流行的JavaWeb开发框架，SSM的核心就是Spring，所谓框架这些东西就跟IDE一样，帮助你做一些已经有固定模板的东西，真正核心的东西还是要自己写的。Spring MVC是Spring的一部分， Spring的核心是DI和AOP，Mybatis是Java持久化框架。</p>
+<h4 id="ssm可以做什么">SSM可以做什么</h4>
+<p>SSM可以做什么，刚接触Spring框架的时候，我也这么想，SSM可以做什么。我觉得无论是什么框架，最终目的无非就是帮助你把代码写的更优雅，何谓优雅呢，高内聚，低耦合，代码复用率高，等等。例如，在代码执行过程中，尽量不要去实例化一个自定义的类，这就有效降低了耦合性。Spring就是这样，它不会帮你实现一个具体的功能，但是它可以帮助把代码写的更好。</p>
+<h4 id="ssm从入门到放弃">SSM从入门到放弃</h4>
+<p><strong>学习SSM之前，一定要先学习JSP和Servlet，并且用这些基本的东西搭建一个稍微有点难度的网站</strong>。这样才可以明白SSM到底是干什么的，然后开始学习SSM。
+首先推荐Spring In Action书，这本书很适合新手入门，在看这本书的过程中，我就会时不时的冒出一点想法，如果用了Spring，我原来的网站可以这样这样写，建议先看完依赖注入和AOP章节，然后看Spring MVC，尝试用Spring MVC搭建一个简单的网站，弄懂Spring MVC的逻辑。
+然后开始学习Mybatis，Mybatis是一个Java持久化框架，就是帮助你操纵数据库的，先搞清楚Mybatis的配置，然后写一个简单的程序，一定要让Mybatis可以跑起来。
+现在整合SSM框架，Spring MVC　是Spring 的一部分，所以这两个框架很容易整合在一起，难的是Mybatis，这里推荐一个网站讲的非常清除，！<a href="https://github.com/liyifeng1994/ssm">SSM</a>，LZ就是在这个网站的帮助下用IDEA搭建了一个SSM框架的Java Web项目。
+然后就开始重构你之前写的网站，写的时候，你猛然间就会发现这里可以用Spring的DI或AOP, 写完之后对比之前的代码，就会发现Spring好屌。
+最后重新学习Spring的DI和AOP，搞清原理，甚至自己实现一个。</p>
+<h4 id="后记">后记</h4>
+<p>从学习JSP开始差不多用了五个星期，这是在每天都有将近3大节课的情况下，所以学习SSM框架用不了多少时间，难的是把SSM精通。LZ现在也是半斤八两的水平，以此记录SSM的学习过程，共勉。</p>
+    </article>
+
+    <nav class="site-nav">
+  
+
+  
+
+  
+</nav>
+
+
+    <footer class="site-footer">
+
+  
+
+  <!-- Build date: Tue, 04 May 2021 00:14:28 CST -->
+</footer>
+
+
+  </main>
+
+  
+<script src="https://blog.nzooherd.me/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+
+</html>

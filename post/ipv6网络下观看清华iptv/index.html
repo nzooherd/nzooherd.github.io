@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="">
+  <meta name="generator" content="Hugo 0.68.3" />
+  <title>ipv6网络下观看清华iptv — nzooherd 写字的地方</title>
+
+  <meta name="description" content="">
+  <link rel="shortcut icon" href="https://blog.nzooherd.me/favicon.ico" type="image/x-icon" />
+  <link href="" rel="alternate"
+    type="application/rss+xml" title="nzooherd 写字的地方">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Arvo:400,700">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/highlight.css">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/paperback.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.css" integrity="sha384-L+Gq2Cso/Y2x8fX4wausgiZT8z0QPZz7OqPuz4YqAycQJyrJT9NRLpjFBD6zlOia" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.js" integrity="sha384-z64WtjpyrKFsxox9eI4SI8eM9toXdoYeWb5Qh+8PO+eG54Bv9BZqf9xNhlcLf/sA" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          renderMathInElement(document.body, {
+            
+            
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            
+            throwOnError : false
+          });
+      });
+  </script>
+</head>
+
+
+<body>
+  <main class="container">
+
+    <header>
+  <h1></h1>
+  <p>ipv6网络下观看清华iptv</p>
+
+  
+  <time datetime="2016-12-26 11:01:34 &#43;0000 UTC">2016/12/26</time>
+  
+
+  
+</header>
+
+
+    <article>
+      <h3 id="深夜看球">深夜看球</h3>
+<p>在校园网环境下，ipv6不仅不限制流量，晚间还不断网，简直就是为晚间看球赛而生的。于是想到了我理的iptv。我理的iptv应该是走的ipv6通道，但是夜晚却不能使用。后来就在ipv6资源中看到了北邮iptv和清华iptv。最终当然是选择清华iptv了，五道口财大气粗，基本上各卫视都有高清，这带宽不用就是浪费。<br>
+1 首先就是确定自己有ipv6地址咯，Linux和Mac 终端里面</p>
+<pre><code>ping6 2001:4860:4860::8888
+</code></pre><p>windows 将ping6 改为 ping -6 收到回复就说明可以了。</p>
+<p>2 添加DNS。默认情况下电脑中是没有ipv6DNS的，就无法解析清华iptv的地址，所以要添加DNS服务器，各个系统都不一样，这里放一张我的Linux系统截图，其他的系统同理设置即可。<br>
+<img src="http://o6uo0abyf.bkt.clouddn.com/network.png" alt=""></p>
+<h4 id="关于dns服务器">关于DNS服务器</h4>
+<p><em>DNS服务器就是用来解析域名的服务器</em>，这里稍微说一下关于DNS服务器的选择。<br>
+DNS服务器有用于ipv4地址和ipv6地址的。其中最有名的就是谷歌的两组公共服务器。</p>
+<pre><code>8.8.4.4   8.8.8.8
+2001:4860:4860::8888  2001:4860:4860::8844
+</code></pre><p>如上图，我就是使用的狗哥家的ipv6DNS服务器。同样还有许多其他公共的DNS服务器，（你问我是啥？自己找啊，）当然如果你强的话自己弄DNS服务器啊，还不怕被劫持，弄好了记得教教我。<br>
+3 添加完dns之后，就开始了。
+这个是清华<a href="https://iptv.tsinghua.edu.cn/"><em>iptv</em></a>地址。不得不说这个界面设计就远超其他院校。
+<img src="http://o6uo0abyf.bkt.clouddn.com/2016-12-26%2011-50-47%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt=""></p>
+    </article>
+
+    <nav class="site-nav">
+  
+
+  
+
+  
+</nav>
+
+
+    <footer class="site-footer">
+
+  
+
+  <!-- Build date: Tue, 04 May 2021 00:14:28 CST -->
+</footer>
+
+
+  </main>
+
+  
+<script src="https://blog.nzooherd.me/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+
+</html>

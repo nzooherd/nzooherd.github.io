@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="">
+  <meta name="generator" content="Hugo 0.68.3" />
+  <title>通过ngrok实现内网穿透 — nzooherd 写字的地方</title>
+
+  <meta name="description" content="">
+  <link rel="shortcut icon" href="https://blog.nzooherd.me/favicon.ico" type="image/x-icon" />
+  <link href="" rel="alternate"
+    type="application/rss+xml" title="nzooherd 写字的地方">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Arvo:400,700">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/highlight.css">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/paperback.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.css" integrity="sha384-L+Gq2Cso/Y2x8fX4wausgiZT8z0QPZz7OqPuz4YqAycQJyrJT9NRLpjFBD6zlOia" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.js" integrity="sha384-z64WtjpyrKFsxox9eI4SI8eM9toXdoYeWb5Qh+8PO+eG54Bv9BZqf9xNhlcLf/sA" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          renderMathInElement(document.body, {
+            
+            
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            
+            throwOnError : false
+          });
+      });
+  </script>
+</head>
+
+
+<body>
+  <main class="container">
+
+    <header>
+  <h1></h1>
+  <p>通过ngrok实现内网穿透</p>
+
+  
+  <time datetime="2017-10-20 22:41:44 &#43;0000 UTC">2017/10/20</time>
+  
+
+  
+</header>
+
+
+    <article>
+      <h3 id="通过ngrok实现ssh连接本机电脑">通过ngrok实现ssh连接本机电脑</h3>
+<p>从树莓派开始就一直想着有没有一种方法可以通过外网ssh连接内网中的树莓派，之前知道一个大概的思路，就是通过花生壳的类似内网穿透的服务。然而好几次尝试都失败了，最后直接知乎，搜到了ngrok这个神器，一次搞定。不得不感叹一下国外的开源环境确实比国内好很多，一些用中文怎么搜索都找不到答案的问题，换成英文搜索就会发现，老外早就给你写好解决办法了，就看你会不会用Google了。</p>
+<h4 id="关于ngrok">关于ngrok</h4>
+<p>ngrok是国外的一个开源项目，可以把内网主机暴露在公网中，可以直接下载ngrok客户端版本，不过这样反向代理服务器在国外，所以ssh会比较慢。由于开源的原因，如果我们有一个公网的服务器，可以自己编译源码，将服务器部署到公网上，经过自己测试，延迟和普通的ssh基本一致。</p>
+<h4 id="解析域名">解析域名</h4>
+<pre><code>ngrok.shiwenhao.gq   -----&gt; A记录到你的公网服务器
+*.ngrok.shiwenhao.gq -----&gt; CNAME记录到ngrok.shiwenhao.gq 
+</code></pre><p>这里需要提一下，*.ngrok.shiwenhao.gq是三级泛域名，一般的域名的解析商的免费服务可能不支持三级泛域名解析，LZ使用的是腾讯的云解析服务，后果就是腾讯云封了我未备案的网站。</p>
+<h4 id="下载源码">下载源码</h4>
+<p><strong>ngrok分为服务端和客户端,请将源码下载在服务器上</strong>
+github上下载源码，不说了。</p>
+<h4 id="生成证书">生成证书</h4>
+<p>这部分不懂，借鉴别人的blog。</p>
+<pre><code>openssl genrsa -out rootCA.key 2048
+openssl req -x509 -new -nodes -key rootCA.key -subj &quot;/CN=$NGROK_DOMAIN&quot; -days 36500 -out rootCA.pem
+openssl genrsa -out device.key 2048
+openssl req -new -key device.key -subj &quot;/CN=$NGROK_DOMAIN&quot; -out device.csr
+openssl x509 -req -in device.csr -days 36500 -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out device.crt 
+cp rootCA.pem assets/client/tls/ngrokroot.crt
+cp device.crt assets/server/tls/snakeoil.crt 
+cp device.key assets/server/tls/snakeoil.key
+</code></pre><h4 id="编译">编译</h4>
+<p>由于ngrok是用go语言编写的，所以需要安装GO语言，ubuntu安装如下,安装完查看版本。</p>
+<pre><code>sudo apt-get install golang
+go version
+</code></pre><p>开始编译，<strong>服务器端一定是Linux版的，所以如果是在服务器上编译源码的话，如下</strong></p>
+<pre><code>make release-server
+</code></pre><p>客户端请选择对应的对应的客户端，如下</p>
+<pre><code>$ GOOS=linux GOARCH=amd64 make release-client
+$ GOOS=windows GOARCH=amd64 make release-client
+$ GOOS=linux GOARCH=arm make release-client
+</code></pre><p>编译需要一段时间，来杯cafe吧。</p>
+<h4 id="部署">部署</h4>
+<p>编译完成后，会生成ngrok和ngrokd执行文件，ngrokd对应服务器端，ngrok对应客户端。ngrokd在bin目录下，ngrok在不知道在bin的哪个子目录下，自己找吧。
+<em>通过rcp命令之类的东西将ngrok拉到客户端上</em></p>
+<ul>
+<li>服务器，可以通过nohup命令设置ngrok，避免退出终端后结束，具体请搜索nohup</li>
+</ul>
+<pre><code>./ngrokd -h
+Usage of ./ngrokd:
+  -domain string
+        Domain where the tunnels are hosted (default &quot;ngrok.com&quot;)
+  -httpAddr string
+        Public address for HTTP connections, empty string to disable (default &quot;:80&quot;)
+  -httpsAddr string
+        Public address listening for HTTPS connections, emptry string to disable (default &quot;:443&quot;)
+  -log string
+        Write log messages to this file. 'stdout' and 'none' have special meanings (default &quot;stdout&quot;)
+  -log-level string
+        The level of messages to log. One of: DEBUG, INFO, WARNING, ERROR (default &quot;DEBUG&quot;)
+  -tlsCrt string
+        Path to a TLS certificate file
+  -tlsKey string
+        Path to a TLS key file
+  -tunnelAddr string
+        Public address listening for ngrok client (default &quot;:4443&quot;)
+
+./ngrokd -domain=$NGROK_DOMAIN 
+./ngrokd -domain=$NGROK_DOMAIN -httpAddr=&quot;:8080&quot; -httpsAddr=&quot;:8081&quot;
+</code></pre><ul>
+<li>客户端</li>
+</ul>
+<pre><code>vim ngrok.cfg
+
+# 添加以下两行
+# 第一行是将要绑定的域名+4443端口
+
+server_addr: &quot;ngrok.phpgao.com:4443&quot;
+trust_host_root_certs: true
+
+# 帮助信息
+./ngrok -h
+Examples:
+    ngrok 80
+    ngrok -subdomain=example 8080
+    ngrok -proto=tcp 22
+    ngrok -hostname=&quot;example.com&quot; -httpauth=&quot;user:password&quot; 10.0.0.1
+
+# 8080就是我们要转发的端口了
+./ngrok -config=./ngrok.cfg 8080
+
+# 指定协议和端口，不指定默认是 http+https
+./ngrok -config=./ngrok.cfg -proto=tcp 22
+
+# 指定子域名，不指定就会随机生成
+./ngrok -config=./ngrok.cfg -subdomain=test 8080
+</code></pre><p>如上，要是用ssh,请运行倒数第二个命令。
+运行成功后截图,
+<img src="https://pic1.zhimg.com/50/5905b632ce968e3ba1d773b18f6c92d4_hd.jpg" alt="">
+然后</p>
+<pre><code>ssh user@ngrok.com -p36756
+</code></pre><p>可以愉快的在家撸代码了。额
+<img src="http://ws4.sinaimg.cn/large/9150e4e5ly1fk18ib42hbj208s0513yq.jpg" alt=""></p>
+    </article>
+
+    <nav class="site-nav">
+  
+
+  
+
+  
+</nav>
+
+
+    <footer class="site-footer">
+
+  
+
+  <!-- Build date: Tue, 04 May 2021 00:14:28 CST -->
+</footer>
+
+
+  </main>
+
+  
+<script src="https://blog.nzooherd.me/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+
+</html>

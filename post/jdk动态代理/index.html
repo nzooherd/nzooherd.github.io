@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="">
+  <meta name="generator" content="Hugo 0.68.3" />
+  <title>JDK动态代理 — nzooherd 写字的地方</title>
+
+  <meta name="description" content="">
+  <link rel="shortcut icon" href="https://blog.nzooherd.me/favicon.ico" type="image/x-icon" />
+  <link href="" rel="alternate"
+    type="application/rss+xml" title="nzooherd 写字的地方">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Arvo:400,700">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/highlight.css">
+  <link rel="stylesheet" href="https://blog.nzooherd.me/css/paperback.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.css" integrity="sha384-L+Gq2Cso/Y2x8fX4wausgiZT8z0QPZz7OqPuz4YqAycQJyrJT9NRLpjFBD6zlOia" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/katex.min.js" integrity="sha384-z64WtjpyrKFsxox9eI4SI8eM9toXdoYeWb5Qh+8PO+eG54Bv9BZqf9xNhlcLf/sA" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.5/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          renderMathInElement(document.body, {
+            
+            
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            
+            throwOnError : false
+          });
+      });
+  </script>
+</head>
+
+
+<body>
+  <main class="container">
+
+    <header>
+  <h1></h1>
+  <p>JDK动态代理</p>
+
+  
+  <time datetime="2018-05-20 10:07:45 &#43;0000 UTC">2018/05/20</time>
+  
+
+  
+</header>
+
+
+    <article>
+      <p>最近复习了一下JDK自带的动态代理，在Java技术中，和动态代理连接最紧密的就是Spring中的AOP，所谓的面向切面技术。</p>
+<h2 id="静态代理">静态代理</h2>
+<h3 id="代理模式">代理模式</h3>
+<p><img src="http://o6uo0abyf.bkt.clouddn.com/%E4%BB%A3%E7%90%86%E6%91%A9%E4%B8%9D.png" alt=""></p>
+<p>根据此UML类图可以写出如下代码</p>
+<pre><code>interface Subject{  //UML图中的Subject
+    void sayHelloWorld();
+}
+
+class RealSubject implements Subject{ //UML图中RealSubject
+    @Override
+    public void sayHelloWorld(){
+        System.out.println(&quot;HelloWorld&quot;);
+    }
+}
+
+class Proxy implements Subject{ //UML图中的Proxy
+    private Subject helloWorld;
+    public Proxy(Subject helloWorld) {
+        this.helloWorld = helloWorld;
+    }
+
+    @Override
+    public void sayHello(){
+        System.out.println(&quot;Proxy start&quot;);
+        helloWorld.sayHelloWorld();
+        System.out.println(&quot;Proxy end&quot;);
+    }
+}
+
+public class Main{ //客户端
+    public static void main(){
+        Subject helloWorld = new Subject();
+        Proxy proxy = new Proxy(helloWorld);
+        proxy.sayHello();
+    }
+}
+</code></pre><p>代理模式的作用就在于动态的给类添加功能。
+现在假如有另一个类和接口，<em>同样要实现在方法调用前打印start，方法结束后打印end</em>，只能添加如下代码</p>
+<pre><code>interface SubjectT{
+    void sayHelloWorldT();
+}
+
+class RealSubjectT implements SubjectT{
+    @Override
+    public void sayHelloT(){
+        System.out.println(&quot;HelloWorldT&quot;);
+    }
+}
+
+class ProxyT implements SubjectT{
+    private SubjectT helloWorld;
+    Public Proxy(SubjectT helloWorld) {
+        this.helloWorld = helloWorld;
+    }
+
+    @Override
+    public void sayHello(){
+        System.out.println(&quot;Proxy start&quot;);
+        helloWorld.sayHelloWorldT();
+        System.out.println(&quot;Proxy end&quot;);
+    }
+}
+//客户端代码同理
+</code></pre><p>所以若要给另一个接口添加相同的功能，需要程序员取另写实现类ProxyT，动态代理就是为了解决这个问题。</p>
+<h2 id="jdk动态代理">JDK动态代理</h2>
+<p>先来看一下代码,注意观察和静态代理方法的异同.</p>
+<pre><code>import java.lang.reflect.*;
+interface Subject{  //同静态代理
+    void sayHelloWorld();
+}
+class RealSubject implements Subject{ //同静态代理
+    @Override
+    public void sayHelloWorld(){
+        System.out.println(&quot;HelloWorld&quot;);
+    }
+}
+interface SubjectT{
+    void sayHelloWorldT();
+}
+class RealSubjectT implements SubjectT{
+    @Override
+    public void sayHelloWorldT(){
+        System.out.println(&quot;HelloWorldT&quot;);
+    }
+}
+
+class InvokeProxy implements InvocationHandler{ //比较和Proxy的异处，两类不可类比
+    private Object object;
+    public InvokeProxy(Object object){
+        this.object = object;
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable{
+        System.out.println(&quot;Proxy start&quot;);
+        return method.invoke(object, args);
+    }
+}
+
+public class Main{
+    public static void main(String[] args) {
+        Subject realSubject = new RealSubject();
+        InvokeProxy invokeProxy = new InvokeProxy(realSubject);
+        Subject proxy = (Subject)Proxy.newProxyInstance(Subject.class.getClassLoader(), new Class[] {Subject.class}, invokeProxy);//此处proxy对比静态代理类中的proxy
+        proxy.sayHelloWorld();
+
+
+        SubjectT realSubjectT = new RealSubjectT();
+        InvokeProxy invokeProxyT = new InvokeProxy(realSubjectT);
+        SubjectT proxyT = (SubjectT)Proxy.newProxyInstance(SubjectT.class.getClassLoader(), new Class[] {SubjectT.class}, invokeProxyT);//proxyT 对比 proxyT
+        proxyT.sayHelloWorldT();
+    }
+}
+</code></pre><p>这样只需要写一个InvokeProxy来生成代理类，大大减少了程序猿的工作量。</p>
+<h2 id="原理">原理</h2>
+<p>来看除了客户端之外的三个类, Subject, RealSubject, InvokeProxy，发现Subject和RealSubject同静态代理的代理，所以重点来看InvokeProxy和Main类。
+Main类中有一行注释，<em>生成的proxy可以对应静态代理中的proxy类</em>,所以用如下方法将此类名打印出来，</p>
+<pre><code>public class Main{
+    public static void main(String[] args) {
+        Subject realSubject = new RealSubject();
+        InvokeProxy invokeProxy = new InvokeProxy(realSubject);
+        Subject proxy = (Subject)Proxy.newProxyInstance(Subject.class.getClassLoader(), new Class[] {Subject.class}, invokeProxy);//此处 Proxy对比静态代理类中的proxy
+        System.out.println(proxy.getClass().getName());
+        proxy.sayHelloWorld();
+    }
+}
+</code></pre><p>输出的是一个&quot;$Proxy0&quot;的类,很明显这个类并不是代码中写的，是Java自己生成的。
+所以来分析一下Proxy.newProxyInstance()函数,去看Proxy源码，额由于源码过长，这里精简一下。</p>
+<pre><code>public static Object newProxyInstance(ClassLoader classLoader, Class&lt;?&gt;[] interfaces, InvokcationHandler h){
+    //所有要实现的业务接口
+    final Class&lt;?&gt; intfs = interfaces.clone();
+
+    //寻找(从缓存中)或者生成代理类
+    Class&lt;?&gt; cl = getProxy(loader, intfs);
+
+    //通过Class获取Consturctor
+    Constructor&lt;?&gt; cons = cl.getConstructor(constructorParams);
+
+    //通过Constructor返回代理类
+    return cons.newInstance(new Objcer[] {h});
+}
+</code></pre><p>下面来看一下生成字节码文件的代码</p>
+<pre><code>//不是太想贴，精简一下吧，一方面是因为懒，另一方面是没看太懂
+private static Class&lt;?&gt; getProxyClass0(ClassLoader loader, Class&lt;?&gt;... interfaces){
+    //如果缓存里面有，去缓存里面取,没有就生成，下面是生成的代码
+    String proxyName = proxyPkg + proxyClassNamePrefix + num;
+    byte[] proxyClassFile = ProxyGenerator.generateProxyClass(
+                    proxyName, interfaces);
+    //前面已经知道了类名叫&quot;$Proxy0&quot;，所以下面直接得到这个class文件吧。
+
+}
+</code></pre><pre><code>import java.lang.reflect.*;
+import java.io.*;
+import sun.misc.ProxyGenerator;
+
+public class GetProxy{
+    public static void main(String[] args) throws IOException{
+        Subject subject = new RealSubject();
+        InvokeProxy invokeProxy = new InvokeProxy(subject);
+        Subject proxy = (Subject)Proxy.newProxyInstance(Subject.class.getClassLoader(), new Class[] {Subject.class}, invokeProxy);
+
+        byte[] bytes = ProxyGenerator.generateProxyClass(&quot;$Proxy0&quot;, new Class[] {Subject.class});
+
+        File file = new File(&quot;/home/cat/Desktop/$Proxy0.class&quot;);
+        FileOutputStream output = new FileOutputStream(file);
+        output.write(bytes);
+        output.flush();
+    }
+}
+</code></pre><p>得到$Proxy0类之后，反编译看一下(什么，你问我怎么反编译，拖到IDEA里就可以了),贴代码了</p>
+<pre><code>public final class $Proxy0
+  extends Proxy
+  implements Subject
+{
+  private static Method m1;
+  private static Method m2;
+  private static Method m3;
+  private static Method m0;
+  
+  public $Proxy0(InvocationHandler paramInvocationHandler)
+  {
+    super(paramInvocationHandler);
+  }
+  
+  public final boolean equals(Object paramObject)
+  {
+    try
+    {
+      return ((Boolean)this.h.invoke(this, m1, new Object[] { paramObject })).booleanValue();
+    }
+    catch (Error|RuntimeException localError)
+    {
+      throw localError;
+    }
+    catch (Throwable localThrowable)
+    {
+      throw new UndeclaredThrowableException(localThrowable);
+    }
+  }
+  
+  public final String toString()
+  {
+    try
+    {
+      return (String)this.h.invoke(this, m2, null);
+    }
+    catch (Error|RuntimeException localError)
+    {
+      throw localError;
+    }
+    catch (Throwable localThrowable)
+    {
+      throw new UndeclaredThrowableException(localThrowable);
+    }
+  }
+  
+  public final void sayHelloWorld()
+  {
+    try
+    {
+      this.h.invoke(this, m3, null);
+      return;
+    }
+    catch (Error|RuntimeException localError)
+    {
+      throw localError;
+    }
+    catch (Throwable localThrowable)
+    {
+      throw new UndeclaredThrowableException(localThrowable);
+    }
+  }
+  
+  public final int hashCode()
+  {
+    try
+    {
+      return ((Integer)this.h.invoke(this, m0, null)).intValue();
+    }
+    catch (Error|RuntimeException localError)
+    {
+      throw localError;
+    }
+    catch (Throwable localThrowable)
+    {
+      throw new UndeclaredThrowableException(localThrowable);
+    }
+  }
+  
+  static
+  {
+    try
+    {
+      m1 = Class.forName(&quot;java.lang.Object&quot;).getMethod(&quot;equals&quot;, new Class[] { Class.forName(&quot;java.lang.Object&quot;) });
+      m2 = Class.forName(&quot;java.lang.Object&quot;).getMethod(&quot;toString&quot;, new Class[0]);
+      m3 = Class.forName(&quot;Subject&quot;).getMethod(&quot;sayHelloWorld&quot;, new Class[0]);
+      m0 = Class.forName(&quot;java.lang.Object&quot;).getMethod(&quot;hashCode&quot;, new Class[0]);
+      return;
+    }
+    catch (NoSuchMethodException localNoSuchMethodException)
+    {
+      throw new NoSuchMethodError(localNoSuchMethodException.getMessage());
+    }
+    catch (ClassNotFoundException localClassNotFoundException)
+    {
+      throw new NoClassDefFoundError(localClassNotFoundException.getMessage());
+    }
+  }
+}
+
+</code></pre><p>重点看SayHelloWorld方法</p>
+<pre><code>  m3 = Class.forName(&quot;Subject&quot;).getMethod(&quot;sayHelloWorld&quot;, new Class[0]);
+  public final void sayHelloWorld()
+  {
+    try
+    {
+      this.h.invoke(this, m3, null);
+      return;
+    }
+    catch (Error|RuntimeException localError)
+    {
+      throw localError;
+    }
+    catch (Throwable localThrowable)
+    {
+      throw new UndeclaredThrowableException(localThrowable);
+    }
+  }
+
+</code></pre><p>可知调用了InvokeProxy.invoke($Proxy0, m3, null)，回到InvokeProxy类。</p>
+    </article>
+
+    <nav class="site-nav">
+  
+
+  
+
+  
+</nav>
+
+
+    <footer class="site-footer">
+
+  
+
+  <!-- Build date: Tue, 04 May 2021 00:14:28 CST -->
+</footer>
+
+
+  </main>
+
+  
+<script src="https://blog.nzooherd.me/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+
+</html>
