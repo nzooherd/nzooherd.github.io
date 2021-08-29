@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="author" content="">
-  <meta name="generator" content="Hugo 0.68.3" />
+  <meta name="author" content="nzooherd">
+  <meta name="generator" content="Hugo 0.83.1" />
   <title>JVM中的常用参数 — nzooherd 写字的地方</title>
 
   <meta name="description" content="">
@@ -134,10 +134,23 @@
 </tbody>
 </table>
 <h4 id="直接内存">直接内存</h4>
-<p>直接内存缺省值同Java堆最大值相同
-commond|explain|example
-&mdash;&mdash;-|&mdash;&mdash;-|&mdash;&mdash;-
-XX:MAxDirectMemorySize|直接内存最大值|-XX:MaxDirectMemorySize=10M</p>
+<p>直接内存缺省值同Java堆最大值相同</p>
+<table>
+<thead>
+<tr>
+<th>commond</th>
+<th>explain</th>
+<th>example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XX:MAxDirectMemorySize</td>
+<td>直接内存最大值</td>
+<td>-XX:MaxDirectMemorySize=10M</td>
+</tr>
+</tbody>
+</table>
 <h4 id="其他">其他</h4>
 <p>-XX:+HeapDumpOnOutOfMemoryError 出现OOM时Dump出当前的内存转储快照
 -Xnoclassgc 禁用垃圾回收</p>
@@ -156,7 +169,7 @@ XX:MAxDirectMemorySize|直接内存最大值|-XX:MaxDirectMemorySize=10M</p>
 
   
 
-  <!-- Build date: Tue, 04 May 2021 00:14:28 CST -->
+  <!-- Build date: Tue, 01 Jun 2021 20:07:21 CST -->
 </footer>
 
 

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>读书笔记 on nzooherd&#39;s blog</title>
+    <link>https://blog.nzooherd.me/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>
+    <description>Recent content in 读书笔记 on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 10 Jul 2018 21:29:54 +0000</lastBuildDate><atom:link href="https://blog.nzooherd.me/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>谈谈RPC</title>
+      <link>https://blog.nzooherd.me/posts/%E8%B0%88%E8%B0%88rpc/</link>
+      <pubDate>Tue, 10 Jul 2018 21:29:54 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E8%B0%88%E8%B0%88rpc/</guid>
+      <description>&lt;p&gt;RPC(Remote Procedure Call)字面意思就是远程过程调用，RPC框架的作用就是将远程过程调用封装成本地过程调用。所以Rpc-Framework要封装的就是以下这些东西。
+&lt;img src=&#34;http://o6uo0abyf.bkt.clouddn.com/20171102105005322.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;在美团实习用到了Thrift，Thrift作为一个跨语言RPC，美团内部通过jar包将其接入Spring，屏蔽了复杂的Thrift连接操作，而且RPC框架可以很非常方便的将一个单机服务转变为分布式架构的。
+不由得让我想起了刚来美团时接手的一个纯C写的分段式语音传输系统，Socket通信加上各种内存复制着实让人恶心。用Java重构后，加上Thrift框架，仅仅两个实习生就多快好省的搞好了这个分布式系统。RPC的强大可见一斑。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ZAB协议和Zookeeper分布式服务框架</title>
+      <link>https://blog.nzooherd.me/posts/zab%E5%8D%8F%E8%AE%AE%E5%92%8Czookeeper%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/</link>
+      <pubDate>Sun, 13 May 2018 21:20:52 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/zab%E5%8D%8F%E8%AE%AE%E5%92%8Czookeeper%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/</guid>
+      <description>&lt;p&gt;What is ZooKeeper?
+ZooKeeper是一个开放源代码的分布式协调服务,出自&amp;laquo;分布式一致性原理与实践&amp;raquo;。对于像我这样的新手来说，这句话就是在扯淡。
+还记得当初刚学Spring，网上各种都在说的Spring的IOC,AOP的优越，但是讲半天也没有说明Spring到底是做什么的。在&amp;laquo;Spring实战&amp;raquo;中，开门见山的讲明了Spring就是用来解隅的。带着这个目的去学习Spring，就有了方向，你就会逐渐明白Spring如何解隅，IOC和AOP。这就是好书给人的感觉。本文适合菜鸟，高手止步。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>统计学习方法(1)-感知机</title>
+      <link>https://blog.nzooherd.me/posts/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A01-%E6%84%9F%E7%9F%A5%E6%9C%BA/</link>
+      <pubDate>Wed, 04 Apr 2018 22:02:05 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A01-%E6%84%9F%E7%9F%A5%E6%9C%BA/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;http://o6uo0abyf.bkt.clouddn.com/1009183469.jpg&#34; alt=&#34;&#34;&gt;
+初雪 2018-4-4 晚&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;找了近一个月的时间都没有找到一款合适的笔记，最终我选择了Visual Code + Vim + Markdown + Mega。笔记内容链接在个人描述页面&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;忽然想学一波大数据方面的东西，但是我不想搞人工智能，例如NLU, CV等，这些对于人来说很简单的事。关于人工智能，我仍然坚持当前基于统计的方法无法实现真正的人工智能，不如花时间来玩一玩大数据的东西。以下内容参考李航的&amp;laquo;统计学习方法&amp;raquo;，重在理解。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>MySQL索引</title>
+      <link>https://blog.nzooherd.me/posts/mysql%E7%B4%A2%E5%BC%95/</link>
+      <pubDate>Sun, 25 Feb 2018 10:13:53 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/mysql%E7%B4%A2%E5%BC%95/</guid>
+      <description>&lt;p&gt;在阅读&amp;laquo;高性能MySQL&amp;raquo;时，开始就被灌输了一个索引很重要的概念。最近在读第五章，&amp;ldquo;创建高性能的索引&amp;rdquo;，用于记录。&lt;/p&gt;
+&lt;h2 id=&#34;索引基础&#34;&gt;索引基础&lt;/h2&gt;
+&lt;p&gt;理解索引最简单的办法就查字典，小时候查汉语大词典就是最典型的索引思想。通过索引可以将查询的效率提高几个数量级。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>杂谈设计模式</title>
+      <link>https://blog.nzooherd.me/posts/%E6%9D%82%E8%B0%88%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Sat, 03 Feb 2018 23:16:13 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E6%9D%82%E8%B0%88%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
+      <description>&lt;p&gt;最近在读程杰的&amp;laquo;大话设计模式&amp;raquo;，学了十几个设计模式后感觉每个都很相似，下面虽然写了一堆，但是要真正理解还有写代码才可以，实践是检验真理的唯一标准。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>UML类图</title>
+      <link>https://blog.nzooherd.me/posts/uml%E7%B1%BB%E5%9B%BE/</link>
+      <pubDate>Wed, 31 Jan 2018 22:29:29 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/uml%E7%B1%BB%E5%9B%BE/</guid>
+      <description>&lt;p&gt;最近在读大话设计模式，其中的UML类图尚不熟悉，特此记录。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>JVM中的常用参数</title>
+      <link>https://blog.nzooherd.me/posts/jvm%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0/</link>
+      <pubDate>Mon, 30 Oct 2017 21:58:52 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/jvm%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0/</guid>
+      <description>&lt;p&gt;不得不说&amp;laquo;深入理解Java虚拟机&amp;raquo;真的是一本很神奇的书籍，每次读都有一种醍醐灌顶的效果，像这种书不是读一遍放下就可以了，而是要放在手边，随时查阅，直到真正的融会贯通，达到人书合一的效果。
+这是一篇记录JVM中常用参数的帖子，可能会不定时更新。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>垃圾收集</title>
+      <link>https://blog.nzooherd.me/posts/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86/</link>
+      <pubDate>Mon, 12 Jun 2017 17:38:12 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86/</guid>
+      <description>&lt;h3 id=&#34;垃圾收集&#34;&gt;垃圾收集&lt;/h3&gt;
+&lt;p&gt;未能释放已分配的块是一种&lt;strong&gt;编程错误&lt;/strong&gt;。如下代码&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;void garbage()
+{
+	int *p = (int *)malloc(15213);
+    return ;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;程序员忘记释放p，导致p占用本来可以满足后面分配请求的堆空间。
+&lt;em&gt;垃圾收集器&lt;/em&gt;(garbage collector)是一种动态存储分配器，自动释放不再需要的称为&lt;em&gt;垃圾&lt;/em&gt;的块，自动回收堆存储过程叫做&lt;em&gt;垃圾收集&lt;/em&gt;，垃圾收集器定期识别垃圾块，并相应的调动free，将这些块放回到空闲链表中。
+我们主要讨论标记清除法&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
