@@ -8,15 +8,15 @@
     <language>en-us</language>
     <lastBuildDate>Sat, 19 Jun 2021 12:06:55 +0800</lastBuildDate><atom:link href="https://blog.nzooherd.me/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Artifically Create a Connection Timemout</title>
+      <title>Artificially create connection timemout</title>
       <link>https://blog.nzooherd.me/posts/artifically-create-a-connection-timemout/</link>
       <pubDate>Sat, 19 Jun 2021 12:06:55 +0800</pubDate>
       
       <guid>https://blog.nzooherd.me/posts/artifically-create-a-connection-timemout/</guid>
       <description>从三年前第一次接触TCP backlog开始，TCP建连时到底时两个队列还是一个队列就一直作为一个问题存在脑子了，没想到三年过去了才终于搞明白。
- 上图摘自&amp;laquo;TCP/IP详解卷1&amp;raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。
-  无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。
- 原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列
+上图摘自&amp;laquo;TCP/IP详解卷1&amp;raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。
+无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。
+原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列
   一个队列: 此场景下要将处于SYNC_RECV和ESTABLISHED的状态全部放入其中
   两个队列: SYNC_RECV一个队列，ESTABLISHED一个队列
   准确来说两种实现都是正确的，因为这不属于TCP协议的范畴。
@@ -28,16 +28,7 @@
     </item>
     
     <item>
-      <title>随想</title>
-      <link>https://blog.nzooherd.me/posts/twitter-1399692373353930758/</link>
-      <pubDate>Tue, 01 Jun 2021 12:07:21 +0800</pubDate>
-      
-      <guid>https://blog.nzooherd.me/posts/twitter-1399692373353930758/</guid>
-      <description>毕业之后，对北京夏天的回忆之一就是🌈，年年不落。 </description>
-    </item>
-    
-    <item>
-      <title>随想</title>
+      <title>PhotoShop与理科生</title>
       <link>https://blog.nzooherd.me/posts/twitter-1398601018691051521/</link>
       <pubDate>Sat, 29 May 2021 12:09:39 +0800</pubDate>
       
@@ -47,50 +38,13 @@
     </item>
     
     <item>
-      <title>随想</title>
-      <link>https://blog.nzooherd.me/posts/twitter-1398527434589302784/</link>
-      <pubDate>Sat, 29 May 2021 07:08:11 +0800</pubDate>
-      
-      <guid>https://blog.nzooherd.me/posts/twitter-1398527434589302784/</guid>
-      <description>这破小区每天咚咚的过地铁也就算了，今天才知道不仅过地铁，还过高铁</description>
-    </item>
-    
-    <item>
-      <title>随想</title>
-      <link>https://blog.nzooherd.me/posts/twitter-1397569914362159110/</link>
-      <pubDate>Wed, 26 May 2021 15:07:34 +0800</pubDate>
-      
-      <guid>https://blog.nzooherd.me/posts/twitter-1397569914362159110/</guid>
-      <description>只要肯花钱，想不好看都难。 </description>
-    </item>
-    
-    <item>
-      <title>随想</title>
-      <link>https://blog.nzooherd.me/posts/twitter-1396505908327305219/</link>
-      <pubDate>Sun, 23 May 2021 17:07:37 +0800</pubDate>
-      
-      <guid>https://blog.nzooherd.me/posts/twitter-1396505908327305219/</guid>
-      <description>想知道如果张一鸣和梁汝波15年之后才上大学，他们创业会做点什么。亦或像现在的我一样躺平。</description>
-    </item>
-    
-    <item>
-      <title>随想</title>
-      <link>https://blog.nzooherd.me/posts/twitter-1396087096167735297/</link>
-      <pubDate>Sat, 22 May 2021 13:07:58 +0800</pubDate>
-      
-      <guid>https://blog.nzooherd.me/posts/twitter-1396087096167735297/</guid>
-      <description>已经可以不管几点睡都能在八点半准时醒来了，
-一时竟不知该😢还是😊。</description>
-    </item>
-    
-    <item>
-      <title>随想</title>
+      <title>文字与图片</title>
       <link>https://blog.nzooherd.me/posts/twitter-1396001741536063493/</link>
       <pubDate>Sat, 22 May 2021 07:15:46 +0800</pubDate>
       
       <guid>https://blog.nzooherd.me/posts/twitter-1396001741536063493/</guid>
       <description>大脑对信息有成瘾性，而思考应该是一个让大脑感到痛苦的行为。
-所以从信息量来看，文字是抽象的，更适合逻辑思考，图片是形象的，更适合感情表达</description>
+所以从信息量来看，文字是抽象的，更适合逻辑思考，图片是形象的，更适合感情表达。</description>
     </item>
     
     <item>

@@ -21,9 +21,9 @@
            "@id": "https:\/\/blog.nzooherd.me\/"
       },
       "articleSection" : "posts",
-      "name" : "Artifically Create a Connection Timemout",
-      "headline" : "Artifically Create a Connection Timemout",
-      "description" : "从三年前第一次接触TCP backlog开始，TCP建连时到底时两个队列还是一个队列就一直作为一个问题存在脑子了，没想到三年过去了才终于搞明白。\n 上图摘自\u0026laquo;TCP\/IP详解卷1\u0026raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。\n  无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。\n 原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列\n  一个队列: 此场景下要将处于SYNC_RECV和ESTABLISHED的状态全部放入其中\n  两个队列: SYNC_RECV一个队列，ESTABLISHED一个队列\n  准确来说两种实现都是正确的，因为这不属于TCP协议的范畴。\n  BSD选择了第一种，当队列满时，仅仅是丢弃收到的SYN，让客户端重试。\n  Linux2.2之后选择了第二种，存在两个队列。因此对于绝大多数程序员来说，记住下图就可以应用100%的场景了。\n    When SYN Queue is Full\n if net.ipv4.tcp_syncookies=0, 丢弃SYN if net.ipv4.tcp_syncookies=1,  if ACP Queue is Full and req_young_len \u0026gt; 1，丢弃SYN。req_young_len是指SYN队列中没有被重传的SYN\/ACK pakcet的数量 否则对这个SYNC packet生成syncookies。      When Accept Queue is Full\n if tcp_abort_on_overflow=1, 返回 RST packet，并且从SYN Queue中移除。 if tcp_abort_on_overflow=0, 仅仅标记此连接为acked，并不从SYN Queue中移除。一段时间后，服务端会因为[假装]没有收到ACK而重发SYN\u002bACK packet.",
+      "name" : "Artificially create connection timemout",
+      "headline" : "Artificially create connection timemout",
+      "description" : "从三年前第一次接触TCP backlog开始，TCP建连时到底时两个队列还是一个队列就一直作为一个问题存在脑子了，没想到三年过去了才终于搞明白。\n上图摘自\u0026laquo;TCP\/IP详解卷1\u0026raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。\n无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。\n原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列\n  一个队列: 此场景下要将处于SYNC_RECV和ESTABLISHED的状态全部放入其中\n  两个队列: SYNC_RECV一个队列，ESTABLISHED一个队列\n  准确来说两种实现都是正确的，因为这不属于TCP协议的范畴。\n  BSD选择了第一种，当队列满时，仅仅是丢弃收到的SYN，让客户端重试。\n  Linux2.2之后选择了第二种，存在两个队列。因此对于绝大多数程序员来说，记住下图就可以应用100%的场景了。\n    When SYN Queue is Full\n if net.ipv4.tcp_syncookies=0, 丢弃SYN if net.ipv4.tcp_syncookies=1,  if ACP Queue is Full and req_young_len \u0026gt; 1，丢弃SYN。req_young_len是指SYN队列中没有被重传的SYN\/ACK pakcet的数量 否则对这个SYNC packet生成syncookies。      When Accept Queue is Full\n if tcp_abort_on_overflow=1, 返回 RST packet，并且从SYN Queue中移除。 if tcp_abort_on_overflow=0, 仅仅标记此连接为acked，并不从SYN Queue中移除。一段时间后，服务端会因为[假装]没有收到ACK而重发SYN\u002bACK packet.",
       "inLanguage" : "en-US",
       "author" : "nzooherd",
       "creator" : "nzooherd",
@@ -37,13 +37,13 @@
       "keywords" : [ "network", ]
   }
 </script>
-<title>Artifically Create a Connection Timemout</title>
-  <meta property="og:title" content="Artifically Create a Connection Timemout" />
+<title>Artificially create connection timemout</title>
+  <meta property="og:title" content="Artificially create connection timemout" />
   <meta property="og:type" content="article" />
   <meta property="og:description" content="从三年前第一次接触TCP backlog开始，TCP建连时到底时两个队列还是一个队列就一直作为一个问题存在脑子了，没想到三年过去了才终于搞明白。
- 上图摘自&amp;laquo;TCP/IP详解卷1&amp;raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。
-  无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。
- 原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列
+上图摘自&amp;laquo;TCP/IP详解卷1&amp;raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。
+无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。
+原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列
   一个队列: 此场景下要将处于SYNC_RECV和ESTABLISHED的状态全部放入其中
   两个队列: SYNC_RECV一个队列，ESTABLISHED一个队列
   准确来说两种实现都是正确的，因为这不属于TCP协议的范畴。
@@ -53,9 +53,9 @@
  if net.ipv4.tcp_syncookies=0, 丢弃SYN if net.ipv4.tcp_syncookies=1,  if ACP Queue is Full and req_young_len &amp;gt; 1，丢弃SYN。req_young_len是指SYN队列中没有被重传的SYN/ACK pakcet的数量 否则对这个SYNC packet生成syncookies。      When Accept Queue is Full
  if tcp_abort_on_overflow=1, 返回 RST packet，并且从SYN Queue中移除。 if tcp_abort_on_overflow=0, 仅仅标记此连接为acked，并不从SYN Queue中移除。一段时间后，服务端会因为[假装]没有收到ACK而重发SYN&#43;ACK packet." />
   <meta name="description" content="从三年前第一次接触TCP backlog开始，TCP建连时到底时两个队列还是一个队列就一直作为一个问题存在脑子了，没想到三年过去了才终于搞明白。
- 上图摘自&amp;laquo;TCP/IP详解卷1&amp;raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。
-  无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。
- 原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列
+上图摘自&amp;laquo;TCP/IP详解卷1&amp;raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。
+无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。
+原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列
   一个队列: 此场景下要将处于SYNC_RECV和ESTABLISHED的状态全部放入其中
   两个队列: SYNC_RECV一个队列，ESTABLISHED一个队列
   准确来说两种实现都是正确的，因为这不属于TCP协议的范畴。
@@ -115,11 +115,11 @@
   </div>
   
   <div class="header-item">
-    <a href="https://github.nzooherd.me" target="_blank">Github</a>
+    <a href="https://github.com/nzooherd" target="_blank">Github</a>
   </div>
   
   <div class="header-item">
-    <a href="https://sspai.nzooherd.me" target="_blank">Sspai</a>
+    <a href="https://sspai.com/u/vmhwvppx" target="_blank">Sspai</a>
   </div>
   
 </div>
@@ -130,7 +130,7 @@
 
         </div>
         <header class="post-header">
-          <h1 class="post-title">Artifically Create a Connection Timemout</h1>
+          <h1 class="post-title">Artificially create connection timemout</h1>
           
           <div class="row post-desc">
             <div class="col-xs-6">
@@ -155,12 +155,8 @@
           
           <p>从三年前第一次接触TCP backlog开始，TCP建连时到底时两个队列还是一个队列就一直作为一个问题存在脑子了，没想到三年过去了才终于搞明白。</p>
 <p><img src="https://firstbucket-1252073904.cos.ap-nanjing.myqcloud.com/1624077332_20210618192043031_2081.jpg" alt=""></p>
-<blockquote>
-<p>上图摘自&laquo;TCP/IP详解卷1&raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。</p>
-</blockquote>
-<blockquote>
+<p><em>上图摘自&laquo;TCP/IP详解卷1&raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。</em></p>
 <p>无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。</p>
-</blockquote>
 <h2 id="原理">原理</h2>
 <p>首先看一下经典老图，
 <img src="https://firstbucket-1252073904.cos.ap-nanjing.myqcloud.com/1624077335_20210618194537061_9608.png" alt=""></p>

@@ -8,15 +8,15 @@
     <language>en-us</language>
     <lastBuildDate>Sat, 19 Jun 2021 12:06:55 +0800</lastBuildDate><atom:link href="https://blog.nzooherd.me/tags/network/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Artifically Create a Connection Timemout</title>
+      <title>Artificially create connection timemout</title>
       <link>https://blog.nzooherd.me/posts/artifically-create-a-connection-timemout/</link>
       <pubDate>Sat, 19 Jun 2021 12:06:55 +0800</pubDate>
       
       <guid>https://blog.nzooherd.me/posts/artifically-create-a-connection-timemout/</guid>
       <description>从三年前第一次接触TCP backlog开始，TCP建连时到底时两个队列还是一个队列就一直作为一个问题存在脑子了，没想到三年过去了才终于搞明白。
- 上图摘自&amp;laquo;TCP/IP详解卷1&amp;raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。
-  无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。
- 原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列
+上图摘自&amp;laquo;TCP/IP详解卷1&amp;raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。
+无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。
+原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列
   一个队列: 此场景下要将处于SYNC_RECV和ESTABLISHED的状态全部放入其中
   两个队列: SYNC_RECV一个队列，ESTABLISHED一个队列
   准确来说两种实现都是正确的，因为这不属于TCP协议的范畴。
@@ -25,6 +25,15 @@
     When SYN Queue is Full
  if net.ipv4.tcp_syncookies=0, 丢弃SYN if net.ipv4.tcp_syncookies=1,  if ACP Queue is Full and req_young_len &amp;gt; 1，丢弃SYN。req_young_len是指SYN队列中没有被重传的SYN/ACK pakcet的数量 否则对这个SYNC packet生成syncookies。      When Accept Queue is Full
  if tcp_abort_on_overflow=1, 返回 RST packet，并且从SYN Queue中移除。 if tcp_abort_on_overflow=0, 仅仅标记此连接为acked，并不从SYN Queue中移除。一段时间后，服务端会因为[假装]没有收到ACK而重发SYN+ACK packet.</description>
+    </item>
+    
+    <item>
+      <title>Java NIO易错点</title>
+      <link>https://blog.nzooherd.me/posts/java-nio%E6%98%93%E9%94%99%E7%82%B9/</link>
+      <pubDate>Wed, 29 Nov 2017 19:22:03 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/java-nio%E6%98%93%E9%94%99%E7%82%B9/</guid>
+      <description>&lt;p&gt;最近在和同学写一个Android端的类微信项目，不过非常简单，只有添加好友，设置备注，通话等功能。我主要负责服务器端的开发，在开发过程中，使用了Spring框架和Java NIO。有些东西，确实不写代码根本就学不会，在学习过程中，发现Java NIO中的一些易错点，特此记录，以备查询。(可能会不定时更新)&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -44,6 +53,23 @@
       
       <guid>https://blog.nzooherd.me/posts/%E7%B2%97%E8%B0%88tcp-ip%E5%8D%8F%E8%AE%AE/</guid>
       <description>最近在学习Tcp-Ip协议，这种东西怎么说，不知道学哪，不知道学完有什么用，不知道哪些是重点，而且对于各个协议的细节，根本记不住。缕一下，方便以后学习。 首先通常所说的Tcp-ip协议是一个协议簇，不仅有Tcp-Ip协议。从计算机网络中的五个分层来说，Tcp-Ip协议簇在各个层次都有不同的协议，应用层的http,ftp等，传输层的tcp,udp,网络层的ip，链路层的apr协议，还有物理层的协议等。计算机网络作为一个系统，不仅要有硬件，还要有软件。就比如一条高速公路，公路，服务区，收费站等就是硬件，汽车需要遵守的交通规则就是软件，即我们所说的Tcp-Ip协议，两者缺一不可。</description>
+    </item>
+    
+    <item>
+      <title>IO多路复用</title>
+      <link>https://blog.nzooherd.me/posts/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/</link>
+      <pubDate>Thu, 06 Jul 2017 10:36:54 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/</guid>
+      <description>&lt;h3 id=&#34;阻塞同步非阻塞异步&#34;&gt;阻塞，同步，非阻塞，异步&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;同步和异步&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;同步和异步关注点是&lt;em&gt;消息通信机制&lt;/em&gt;，同步模型下消息的处理者主动去等待消息的提供者，异步模型下由消息提供者来通知消息处理者。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;阻塞和非阻塞&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;阻塞和非阻塞关注的是&lt;em&gt;消息处理者在等待调用结果消息结果时的状态&lt;/em&gt;。&lt;/p&gt;</description>
     </item>
     
     <item>

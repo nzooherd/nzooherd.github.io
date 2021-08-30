@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>机器学习 on nzooherd&#39;s blog</title>
+    <link>https://blog.nzooherd.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</link>
+    <description>Recent content in 机器学习 on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 04 Apr 2018 22:02:05 +0000</lastBuildDate><atom:link href="https://blog.nzooherd.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>统计学习方法(1)-感知机</title>
+      <link>https://blog.nzooherd.me/posts/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A01-%E6%84%9F%E7%9F%A5%E6%9C%BA/</link>
+      <pubDate>Wed, 04 Apr 2018 22:02:05 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A01-%E6%84%9F%E7%9F%A5%E6%9C%BA/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;http://o6uo0abyf.bkt.clouddn.com/1009183469.jpg&#34; alt=&#34;&#34;&gt;
+初雪 2018-4-4 晚&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;找了近一个月的时间都没有找到一款合适的笔记，最终我选择了Visual Code + Vim + Markdown + Mega。笔记内容链接在个人描述页面&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;忽然想学一波大数据方面的东西，但是我不想搞人工智能，例如NLU, CV等，这些对于人来说很简单的事。关于人工智能，我仍然坚持当前基于统计的方法无法实现真正的人工智能，不如花时间来玩一玩大数据的东西。以下内容参考李航的&amp;laquo;统计学习方法&amp;raquo;，重在理解。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

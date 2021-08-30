@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Review on nzooherd&#39;s blog</title>
+    <link>https://blog.nzooherd.me/categories/review/</link>
+    <description>Recent content in Review on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 14 Sep 2018 21:57:50 +0000</lastBuildDate><atom:link href="https://blog.nzooherd.me/categories/review/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>校招总结</title>
+      <link>https://blog.nzooherd.me/posts/%E6%A0%A1%E6%8B%9B%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Fri, 14 Sep 2018 21:57:50 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E6%A0%A1%E6%8B%9B%E6%80%BB%E7%BB%93/</guid>
+      <description>&lt;p&gt;9.11号 阴
+坐在宿舍的我实在闲的发慌，在这个即将发霉的日子里实在找不到什么来打发时间，极不情愿的打开VS Code来记录一下我的秋招历程。先说结果吧，投了二十来家，挂了许多，放弃了五六家，现在手里面有三，四个意向通知书，估计不会继续投了，毕竟BAT已经全部凉凉! 所以每天做的事情就是混吃等死。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>美团实习小记</title>
+      <link>https://blog.nzooherd.me/posts/%E7%BE%8E%E5%9B%A2%E5%AE%9E%E4%B9%A0%E5%B0%8F%E8%AE%B0/</link>
+      <pubDate>Fri, 20 Jul 2018 21:44:15 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E7%BE%8E%E5%9B%A2%E5%AE%9E%E4%B9%A0%E5%B0%8F%E8%AE%B0/</guid>
+      <description>&lt;p&gt;3.12~7.20，四个月左右的美团实习今天就结束了，细细回想工作时的一点一滴，想要说些什么，确不知从何说起。&lt;/p&gt;
+&lt;p&gt;这些日子，在美团AI孵化器语音组负责后台开发工作，可以说是见证了一个后台服务系统的重构-&amp;gt;推到-&amp;gt;重新设计-&amp;gt;逐渐成形的全过程，在完成第一个可用版本之后，离职滚蛋，也是没有任何遗憾了。从这段实习中，确实学到了非常非常多的东西，强烈推荐在本科期间一定要实习一下，尤其是在大公司里面，你会发现许多东西其实并不是你想象的样子的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>我的2017</title>
+      <link>https://blog.nzooherd.me/posts/%E6%88%91%E7%9A%842017/</link>
+      <pubDate>Thu, 15 Feb 2018 18:04:20 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E6%88%91%E7%9A%842017/</guid>
+      <description>&lt;p&gt;2017就这样在外面的鞭炮声中结束了，细细品味这一年了，发现自己好像确实没干什么，或许我在逐渐的接受自己也是个平凡人的事实。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>大二暑假</title>
+      <link>https://blog.nzooherd.me/posts/%E5%A4%A7%E4%BA%8C%E6%9A%91%E5%81%87/</link>
+      <pubDate>Mon, 21 Aug 2017 10:50:21 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E5%A4%A7%E4%BA%8C%E6%9A%91%E5%81%87/</guid>
+      <description>大二暑假马上也要结束了。细细想来，果然是如同往日的假期一样，计划做了一项又一项，然而呢。自大让我觉得我什么都可以做，幸亏懒惰阻止了我。 如果说真的完成了什么的话，应该就是驾照了，一个本应该在高考完完成的事情，却拖到了现在。Tcp/Ip协议就是一个坑，这种东西一个人很难学下去，如果只是看书的话，绝对是看完一章忘一章。还是一句老话，学而不思则罔，思而不学则殆。假期买了不少书，Unix环境高级编程和Unix网络编程就是内功心法，学会之后可以打通任督二脉，然而只有先打通任督二脉才可以学得会，可怜我一个Java狗怎么都看不进去。此外还读了一点淘宝架构组曾宪杰大大的《大型网站系统与Java中间件实践》,了解大型网站架构的大概。除此之外，好像真的没有什么了。 成功有两种方法，一种是看别人成功，一种是看别人失败。看到昔日的同窗好友如今在各自的岗位上渐行渐远，心里没有些想法是不可能的。浮躁的社会，一句诗来结尾:我自横刀向天笑，去留肝胆两昆仑。</description>
+    </item>
+    
+    <item>
+      <title>年终总结</title>
+      <link>https://blog.nzooherd.me/posts/2016%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Fri, 30 Dec 2016 15:14:45 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/2016%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</guid>
+      <description>&lt;h3 id=&#34;2016年终总结&#34;&gt;2016年终总结&lt;/h3&gt;
+&lt;h4 id=&#34;ipv6&#34;&gt;ipv6&lt;/h4&gt;
+&lt;p&gt;一年下来，对于ipv6的一些研究，也许就是今年最大的收获了。现在想想，还清晰的记得突然之间就登录了谷歌账号的惊讶。随后大概一个月左右的时间真的有一种废寝忘食的感觉。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

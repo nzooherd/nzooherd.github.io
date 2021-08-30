@@ -5,6 +5,43 @@
     <link>https://blog.nzooherd.me/categories/</link>
     <description>Recent content in Categories on nzooherd&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://blog.nzooherd.me/categories/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Sat, 19 Jun 2021 12:06:55 +0800</lastBuildDate><atom:link href="https://blog.nzooherd.me/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tech</title>
+      <link>https://blog.nzooherd.me/categories/tech/</link>
+      <pubDate>Sat, 19 Jun 2021 12:06:55 +0800</pubDate>
+      
+      <guid>https://blog.nzooherd.me/categories/tech/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Thought</title>
+      <link>https://blog.nzooherd.me/categories/thought/</link>
+      <pubDate>Sat, 29 May 2021 12:09:39 +0800</pubDate>
+      
+      <guid>https://blog.nzooherd.me/categories/thought/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Review</title>
+      <link>https://blog.nzooherd.me/categories/review/</link>
+      <pubDate>Fri, 14 Sep 2018 21:57:50 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/categories/review/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Init</title>
+      <link>https://blog.nzooherd.me/categories/init/</link>
+      <pubDate>Sun, 30 Oct 2016 15:14:45 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/categories/init/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
