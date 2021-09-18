@@ -6,7 +6,35 @@
     <description>Recent content on nzooherd&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 16 Sep 2021 21:53:09 +0800</lastBuildDate><atom:link href="https://blog.nzooherd.me/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 18 Sep 2021 12:57:11 +0000</lastBuildDate><atom:link href="https://blog.nzooherd.me/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>熔断限流与隔板</title>
+      <link>https://blog.nzooherd.me/posts/%E7%86%94%E6%96%AD%E9%99%90%E6%B5%81%E4%B8%8E%E9%9A%94%E6%9D%BF/</link>
+      <pubDate>Sat, 18 Sep 2021 12:57:11 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E7%86%94%E6%96%AD%E9%99%90%E6%B5%81%E4%B8%8E%E9%9A%94%E6%9D%BF/</guid>
+      <description>熔断，限流与隔板 公司的对象存储服务上线至今仍没有限流模块。
+8月份一次 CDN 事故中所有流量直接打到源站，导致 CPU 和内存使用率突增。 为防止服务雪崩， 紧急申请了一批资源才避免引发更大的事故。
+于是9月份我就有了这个限流组件的 OKR。
+动手之前，发现对微服务中的 熔断, 限流, 隔板 三者的理解有一定的误区，搜索一些资料记录于此。
+熔断 - Circuite Breaker   问题背景
+如果被调方由于某些问题挂掉，但是并没有从服务发现节点摘除。
+主调方仍然会发起请求，虽然被调方已经无法提供服务，但由于超时时间的配置，主调不会立即失败。
+如果在流量非常大的情况下，主调方会由于请求hang住占用大量资源，进而导致主调方挂掉。
+  解决方案
+主调挂掉的原因是等待响应的请求占用了大量的资源。而熔断器的原理就是在发生此类情况时对于调用立即返回失败。
+熔断器的一种实现方式是利用状态机，通过滑动窗口计算每个周期的状态，如下图。
+  适用场景
+ 避免因为被调服务挂掉引起自身挂掉    限流 - Throttling   问题背景
+客户端请求可能由于某些问题突发爆炸性增长，服务端压力陡增。
+此时如果流量继续增长，很有可能导致服务挂掉，例如因为内存占用过大被操作系统kill等。
+为避免发生此类场景，就需要对请求限流。
+  解决方案
+限流的常用方式如下:
+ 拒绝服务。对于某些请求直接返回失败 服务降级。停止提供低优先级功能，降低资源占用 使用负载均衡组件平滑请求量，例如消息队列等，常见于异步请求。    适用场景
+ 保护自己避免因为流量突增雪崩 防止单一租户占用大量资源    隔板 - Bulkhead   问题背景</description>
+    </item>
+    
     <item>
       <title>饺子</title>
       <link>https://blog.nzooherd.me/posts/%E9%A5%BA%E5%AD%90/</link>
