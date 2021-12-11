@@ -6,7 +6,19 @@
     <description>Recent content on nzooherd&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 13 Nov 2021 20:32:43 +0800</lastBuildDate><atom:link href="https://blog.nzooherd.me/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 11 Dec 2021 13:43:08 +0000</lastBuildDate><atom:link href="https://blog.nzooherd.me/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>深入Http Read Timeout</title>
+      <link>https://blog.nzooherd.me/posts/%E6%B7%B1%E5%85%A5http-read-timeout/</link>
+      <pubDate>Sat, 11 Dec 2021 13:43:08 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E6%B7%B1%E5%85%A5http-read-timeout/</guid>
+      <description>海外的对象存储底层直接使用公有云，由于某些莫名其妙的原因，客户端不定期出现大量的 Read timed out 异常，部分异常栈如下。在和公有云的技术支持人员沟通过程中，我发现双方都不能很明确的指出到底是哪个环节超时了。
+java.net.SocketTimeoutException: Read timed out at java.base/java.net.SocketInputStream.socketRead0(Native Method) ~[na:na] at java.base/java.net.SocketInputStream.socketRead(SocketInputStream.java:115) ~[na:na] at java.base/java.net.SocketInputStream.read(SocketInputStream.java:168) ~[na:na] at java.base/java.net.SocketInputStream.read(SocketInputStream.java:140) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:478) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.readHeader(SSLSocketInputRecord.java:472) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.bytesInCompletePacket(SSLSocketInputRecord.java:70) ~[na:na] at java.base/sun.security.ssl.SSLSocketImpl.readApplicationRecord(SSLSocketImpl.java:1374) ~[na:na] at java.base/sun.security.ssl.SSLSocketImpl$AppInputStream.read(SSLSocketImpl.java:986) ~[na:na] at org.apache.http.impl.io.SessionInputBufferImpl.streamRead(SessionInputBufferImpl.java:137) ~[httpcore-4.4.13.jar!/:4.4.13] 众所周知，Http1.1 协议可以分成两个过程
+ 客户端向服务端发送数据 客户端从服务端读取数据  所以 Http Read Timeout 的具体范围可能是指
+ 上图 2-3 的时间 ? 上图 2-4 的时间 ? 上图 3-4 的时间 ? Tcp 层任意两个 Segment 的间隔时间 ? Tcp 层任意两个 Receive Segment 的间隔时间 ?</description>
+    </item>
+    
     <item>
       <title>再读《斗破苍穹》</title>
       <link>https://blog.nzooherd.me/posts/%E5%86%8D%E8%AF%BB%E6%96%97%E7%A0%B4%E8%8B%8D%E7%A9%B9/</link>
