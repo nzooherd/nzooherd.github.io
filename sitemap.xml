@@ -3,16 +3,25 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://blog.nzooherd.me/categories/</loc>
-    <lastmod>2021-12-11T13:43:08+00:00</lastmod>
+    <lastmod>2021-12-25T12:34:52+00:00</lastmod>
   </url><url>
     <loc>https://blog.nzooherd.me/</loc>
-    <lastmod>2021-12-11T13:43:08+00:00</lastmod>
+    <lastmod>2021-12-25T12:34:52+00:00</lastmod>
   </url><url>
     <loc>https://blog.nzooherd.me/posts/</loc>
-    <lastmod>2021-12-11T13:43:08+00:00</lastmod>
+    <lastmod>2021-12-25T12:34:52+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.nzooherd.me/tags/python/</loc>
+    <lastmod>2021-12-25T12:34:52+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.nzooherd.me/tags/</loc>
+    <lastmod>2021-12-25T12:34:52+00:00</lastmod>
   </url><url>
     <loc>https://blog.nzooherd.me/categories/tech/</loc>
-    <lastmod>2021-12-11T13:43:08+00:00</lastmod>
+    <lastmod>2021-12-25T12:34:52+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.nzooherd.me/posts/%E8%AE%BA%E8%A3%85%E9%A5%B0%E5%99%A8%E7%9A%84%E5%9B%9B%E7%A7%8D%E5%86%99%E6%B3%95/</loc>
+    <lastmod>2021-12-25T12:34:52+00:00</lastmod>
   </url><url>
     <loc>https://blog.nzooherd.me/posts/%E6%B7%B1%E5%85%A5http-read-timeout/</loc>
     <lastmod>2021-12-11T13:43:08+00:00</lastmod>
@@ -39,9 +48,6 @@
     <lastmod>2021-06-19T12:06:55+08:00</lastmod>
   </url><url>
     <loc>https://blog.nzooherd.me/tags/network/</loc>
-    <lastmod>2021-06-19T12:06:55+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.nzooherd.me/tags/</loc>
     <lastmod>2021-06-19T12:06:55+08:00</lastmod>
   </url><url>
     <loc>https://blog.nzooherd.me/posts/twitter-1398601018691051521/</loc>
