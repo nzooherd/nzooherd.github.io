@@ -14,7 +14,7 @@
       
       <guid>https://blog.nzooherd.me/posts/%E8%B0%88%E8%B0%88rpc/</guid>
       <description>&lt;p&gt;RPC(Remote Procedure Call)字面意思就是远程过程调用，RPC框架的作用就是将远程过程调用封装成本地过程调用。所以Rpc-Framework要封装的就是以下这些东西。
-&lt;img src=&#34;http://o6uo0abyf.bkt.clouddn.com/20171102105005322.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20171102105005322.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;在美团实习用到了Thrift，Thrift作为一个跨语言RPC，美团内部通过jar包将其接入Spring，屏蔽了复杂的Thrift连接操作，而且RPC框架可以很非常方便的将一个单机服务转变为分布式架构的。
 不由得让我想起了刚来美团时接手的一个纯C写的分段式语音传输系统，Socket通信加上各种内存复制着实让人恶心。用Java重构后，加上Thrift框架，仅仅两个实习生就多快好省的搞好了这个分布式系统。RPC的强大可见一斑。&lt;/p&gt;</description>
     </item>
