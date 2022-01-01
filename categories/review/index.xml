@@ -6,7 +6,28 @@
     <description>Recent content in Review on nzooherd&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 14 Sep 2018 21:57:50 +0000</lastBuildDate><atom:link href="https://blog.nzooherd.me/categories/review/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 01 Jan 2022 12:19:02 +0800</lastBuildDate><atom:link href="https://blog.nzooherd.me/categories/review/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2021 风雨有时</title>
+      <link>https://blog.nzooherd.me/posts/2021-%E9%A3%8E%E9%9B%A8%E6%9C%89%E6%97%B6/</link>
+      <pubDate>Sat, 01 Jan 2022 12:19:02 +0800</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/2021-%E9%A3%8E%E9%9B%A8%E6%9C%89%E6%97%B6/</guid>
+      <description>2021-风雨有时 年末将至，在各社交平台断断续续的看到年终总结，大同小异，不免显得些许无趣。
+其中印象最深的是 V2ex 的一篇，一是总结时间实在过卷，12 月上旬就已过完一年。 二是因为先前的帖子对楼主印象深刻。 楼主尚未毕业，但字里行间透露的技术水平相当不错，比我优秀的多。 后生可畏，我的大学又做了些什么呢?
+翻翻过往的博客，零散着一些东拼西凑的技术教程，穿插着两三篇杂文，剩下的就是强说愁的感悟了，实在是水了些。既然内容不够，总结来凑，年终总结还是能写则写吧，就当是记录些什么。
+年初一场大病，被迫思考死亡。 住院第二天，一个人孤零零的站在检查室外的走廊中，四周望去尽是上年纪的老人，从未有过的孤独。 不是很懂为什么走廊的灯要开的如此昏暗，我竟无法看清半年后我是否仍会存在于这个世界。 七天之后，我出院了，窗外的天很蓝，却仍无法明确病因。 那是我今年睡的最舒服的七天，谢谢护士姐姐们的照顾，同时我也认真思考了一次体制内的可能性。
+年中开始做正畸，中间各种请假跑医院，排了两个月终于带上了牙套。 现在已经接近一百天了，不适感远小于预期，也算是了结了人生的一项 TODO。 未来有一天，我可以在婚礼上自信的笑出来。
+十一过后，万万没想到因为熬夜打游戏，患上结膜炎。 这种慢性病最重要的一点就是少看手机电脑，因此开始听博客，听小说&amp;hellip; 三个月来，病况时好时坏，各种纠结是否要辞职养病，焦虑将来是否要回家转行&amp;hellip;好在接近年末，基本已经痊愈。
+自认一直有注意身体健康，但这一年仍被各种困饶，工作实在是疾病的源头，我终于下定决定逃离 996。
+原计划21年年末时可以存七十万，可是现在左拼右拼仍然凑不出六十万&amp;hellip;我明明记得上年年年末时我就有五十万了&amp;hellip;
+原有主要有三点
+  花销大幅增长。 翻了一下账本，21 年支出 16.5w，这个数字在上一年是 9.6w。 住房支出 6w，主要是因为交租日期挪动导致交了五次，其中一次应算作20年的开销。 正畸各种杂七杂八的费用交了 4w，22 年还有 1.5w 的尾款。 电器数码类支出 3.6w，今年购入无反+镜头，顶配 NUC + 64G 内存，电视机，Switch，装备基本算是凑齐了，明年除一个长焦镜头外无其他的心愿。 明年整体预算控制在 8w ，最低不超过 10w。
+  投资亏损。 股票方面全投了中概互联，恰逢玩期权，本金亏损 95%，总亏损约 6w。 支付宝基金收益约 1.3w，此外买了点 btc 和 eth，竟然没什么波动&amp;hellip;
+  收入不达预期。 今年后半年公司取消了加班，平均每月薪资降 4k，整年到手 34w，算上各种补贴股票年终奖，此外还有大概 7w 的公积金，稍低于预期，然而明年收入大抵不会超过这个树了。
+  工作上有两件出乎意料的事 1.</description>
+    </item>
+    
     <item>
       <title>校招总结</title>
       <link>https://blog.nzooherd.me/posts/%E6%A0%A1%E6%8B%9B%E6%80%BB%E7%BB%93/</link>
@@ -25,6 +46,16 @@
       <guid>https://blog.nzooherd.me/posts/%E7%BE%8E%E5%9B%A2%E5%AE%9E%E4%B9%A0%E5%B0%8F%E8%AE%B0/</guid>
       <description>&lt;p&gt;3.12~7.20，四个月左右的美团实习今天就结束了，细细回想工作时的一点一滴，想要说些什么，确不知从何说起。&lt;/p&gt;
 &lt;p&gt;这些日子，在美团AI孵化器语音组负责后台开发工作，可以说是见证了一个后台服务系统的重构-&amp;gt;推到-&amp;gt;重新设计-&amp;gt;逐渐成形的全过程，在完成第一个可用版本之后，离职滚蛋，也是没有任何遗憾了。从这段实习中，确实学到了非常非常多的东西，强烈推荐在本科期间一定要实习一下，尤其是在大公司里面，你会发现许多东西其实并不是你想象的样子的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>美团面试小记</title>
+      <link>https://blog.nzooherd.me/posts/%E7%BE%8E%E5%9B%A2%E9%9D%A2%E8%AF%95/</link>
+      <pubDate>Tue, 06 Mar 2018 20:44:44 +0000</pubDate>
+      
+      <guid>https://blog.nzooherd.me/posts/%E7%BE%8E%E5%9B%A2%E9%9D%A2%E8%AF%95/</guid>
+      <description>&lt;p&gt;最近同学帮我内推了美团，本来想投的是Java后台研发，阴差阳错之间帮我推到了一个AI语言部门，昨天面试了一下，问的比较浅，但是还是有许多问题回答的不好，简单记录了一下。现在还不知道结果，&lt;del&gt;最蛋疼的是同学无意间帮你问了一下结果，面试官说还行，结果最后被据了。&lt;/del&gt;
+&lt;img src=&#34;http://img.youbiaoqing.com/u/ed7b0b1e2446cf109526928a2ac11ad7.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
