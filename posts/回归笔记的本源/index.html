@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.123.7">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="nzooherd" />
+  <meta property="og:url" content="http://nzooherd.github.io/posts/%E5%9B%9E%E5%BD%92%E7%AC%94%E8%AE%B0%E7%9A%84%E6%9C%AC%E6%BA%90/" />
+  <link rel="canonical" href="http://nzooherd.github.io/posts/%E5%9B%9E%E5%BD%92%E7%AC%94%E8%AE%B0%E7%9A%84%E6%9C%AC%E6%BA%90/" /><link rel="apple-touch-icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="shortcut" href="/favicon.ico" /><link rel="alternate" type="application/atom+xml" href="http://nzooherd.github.io/index.xml" title="nzooherd&#39;s blog">
+
+  <script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "http:\/\/nzooherd.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "回归笔记的本源",
+      "headline" : "回归笔记的本源",
+      "description" : "回归笔记的本源 前言 这是一个笔记软件比笔记多的时代。\n从最初靠笔记发家的 Evernote，到中期的网红软件 Notion，还有最近爆火的 Obsidian。各种新概念也层出不穷，双链，块存储，网状，卢曼卡片盒\u0026hellip;，不少人的知识没有多少，软件却换了一茬又一茬。\n大学开始接触笔记软件的我，当然也属于上文中那些换了一茬又一茬的一员。 市面上所有支持 Vim 模式的软件基本尝了个遍。\n然而当我又一次因为笔记迁移的数据兼容性折腾到半夜时，忽然在想是不是太过于痴迷软件本身，而忘记了笔记的初衷。重新思考之后，我决定放弃软件的形态，以此回归笔记本源。\n经过详细的需求分析与产品调研，并且认真使用了一年时间后，我认为我已经找到了笔记管理的最终形态。下文先回顾我的笔记软件变迁，之后详细介绍我自称为 VSNote 的工具，最后谈一谈我理解的生产力。\n各种Note SimpleNote SimpleNote是我第一款笔记软件。\n那时刚踏入大学不久，受限于繁重的大学课程压力，需要一个简单的工具来记录每天的作业 TODO。\n此时的笔记软件的作用更类似于一个桌面便笺，无需大量的文字编辑工作，SimlpeNote 简洁的 UI 和全平台同步的功能十分切合我的需求。\nWizNote 大三之后，开始为工作做准备。 此时我的笔记内容偏不再仅仅是每日 TODO，开始侧重于复习总结，知识整理等，需要大量的编辑。 SimpleNote 简陋的功能限制了其使用场景。 WizNote 的 Vim 编辑功能吸引了我。\n相比于 SimpleNote，WizNote 是一个真正的知识管理软件，也是在它的陪伴下，18年秋招顺利上岸。\nVNote 步入工作，生活琐事日益繁冗，积累学习亦不可懈怠。 恰巧为知笔记试用期结束，数据无法同步云端，遂寻找一款新的软件来支撑我的需求。\n闲杂摸鱼之际，在 V2EX 发现作者推广这款名叫 VNote 的开源笔记软件。 深入调查一番，发现各方面都比较切合我的使用场景。\nVNote 的一些主要 Feature :\n可选 Vim 编辑模式。 基于 C\u002b\u002b QT 开发，跨平台无性能问题。 无服务端，无需担心数据泄露。 可以无限嵌套的笔记目录。 支持 PlantUML，Mermaid, LaTeX 插件。 主题，样式，快捷键高度可定制。 开源! 用着不爽，自己开发。 虽然 VNote 没有云端同步，但实际 Vnote 的笔记内容完全基于本地文件。只需要同步笔记文件夹，可以保证数据一致性。",
+      "inLanguage" : "en-US",
+      "author" : "nzooherd",
+      "creator" : "nzooherd",
+      "publisher": "nzooherd",
+      "accountablePerson" : "nzooherd",
+      "copyrightHolder" : "nzooherd",
+      "copyrightYear" : "2021",
+      "datePublished": "2021-09-07 21:30:09 \u002b0800 \u002b0800",
+      "dateModified" : "2021-09-07 21:30:09 \u002b0800 \u002b0800",
+      "url" : "http:\/\/nzooherd.github.io\/posts\/%E5%9B%9E%E5%BD%92%E7%AC%94%E8%AE%B0%E7%9A%84%E6%9C%AC%E6%BA%90\/",
+      "keywords" : [  ]
+  }
+</script>
+<title>回归笔记的本源</title>
+  <meta property="og:title" content="回归笔记的本源" />
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="回归笔记的本源 前言 这是一个笔记软件比笔记多的时代。
+从最初靠笔记发家的 Evernote，到中期的网红软件 Notion，还有最近爆火的 Obsidian。各种新概念也层出不穷，双链，块存储，网状，卢曼卡片盒&amp;hellip;，不少人的知识没有多少，软件却换了一茬又一茬。
+大学开始接触笔记软件的我，当然也属于上文中那些换了一茬又一茬的一员。 市面上所有支持 Vim 模式的软件基本尝了个遍。
+然而当我又一次因为笔记迁移的数据兼容性折腾到半夜时，忽然在想是不是太过于痴迷软件本身，而忘记了笔记的初衷。重新思考之后，我决定放弃软件的形态，以此回归笔记本源。
+经过详细的需求分析与产品调研，并且认真使用了一年时间后，我认为我已经找到了笔记管理的最终形态。下文先回顾我的笔记软件变迁，之后详细介绍我自称为 VSNote 的工具，最后谈一谈我理解的生产力。
+各种Note SimpleNote SimpleNote是我第一款笔记软件。
+那时刚踏入大学不久，受限于繁重的大学课程压力，需要一个简单的工具来记录每天的作业 TODO。
+此时的笔记软件的作用更类似于一个桌面便笺，无需大量的文字编辑工作，SimlpeNote 简洁的 UI 和全平台同步的功能十分切合我的需求。
+WizNote 大三之后，开始为工作做准备。 此时我的笔记内容偏不再仅仅是每日 TODO，开始侧重于复习总结，知识整理等，需要大量的编辑。 SimpleNote 简陋的功能限制了其使用场景。 WizNote 的 Vim 编辑功能吸引了我。
+相比于 SimpleNote，WizNote 是一个真正的知识管理软件，也是在它的陪伴下，18年秋招顺利上岸。
+VNote 步入工作，生活琐事日益繁冗，积累学习亦不可懈怠。 恰巧为知笔记试用期结束，数据无法同步云端，遂寻找一款新的软件来支撑我的需求。
+闲杂摸鱼之际，在 V2EX 发现作者推广这款名叫 VNote 的开源笔记软件。 深入调查一番，发现各方面都比较切合我的使用场景。
+VNote 的一些主要 Feature :
+可选 Vim 编辑模式。 基于 C&#43;&#43; QT 开发，跨平台无性能问题。 无服务端，无需担心数据泄露。 可以无限嵌套的笔记目录。 支持 PlantUML，Mermaid, LaTeX 插件。 主题，样式，快捷键高度可定制。 开源! 用着不爽，自己开发。 虽然 VNote 没有云端同步，但实际 Vnote 的笔记内容完全基于本地文件。只需要同步笔记文件夹，可以保证数据一致性。" />
+  <meta name="description" content="回归笔记的本源 前言 这是一个笔记软件比笔记多的时代。
+从最初靠笔记发家的 Evernote，到中期的网红软件 Notion，还有最近爆火的 Obsidian。各种新概念也层出不穷，双链，块存储，网状，卢曼卡片盒&amp;hellip;，不少人的知识没有多少，软件却换了一茬又一茬。
+大学开始接触笔记软件的我，当然也属于上文中那些换了一茬又一茬的一员。 市面上所有支持 Vim 模式的软件基本尝了个遍。
+然而当我又一次因为笔记迁移的数据兼容性折腾到半夜时，忽然在想是不是太过于痴迷软件本身，而忘记了笔记的初衷。重新思考之后，我决定放弃软件的形态，以此回归笔记本源。
+经过详细的需求分析与产品调研，并且认真使用了一年时间后，我认为我已经找到了笔记管理的最终形态。下文先回顾我的笔记软件变迁，之后详细介绍我自称为 VSNote 的工具，最后谈一谈我理解的生产力。
+各种Note SimpleNote SimpleNote是我第一款笔记软件。
+那时刚踏入大学不久，受限于繁重的大学课程压力，需要一个简单的工具来记录每天的作业 TODO。
+此时的笔记软件的作用更类似于一个桌面便笺，无需大量的文字编辑工作，SimlpeNote 简洁的 UI 和全平台同步的功能十分切合我的需求。
+WizNote 大三之后，开始为工作做准备。 此时我的笔记内容偏不再仅仅是每日 TODO，开始侧重于复习总结，知识整理等，需要大量的编辑。 SimpleNote 简陋的功能限制了其使用场景。 WizNote 的 Vim 编辑功能吸引了我。
+相比于 SimpleNote，WizNote 是一个真正的知识管理软件，也是在它的陪伴下，18年秋招顺利上岸。
+VNote 步入工作，生活琐事日益繁冗，积累学习亦不可懈怠。 恰巧为知笔记试用期结束，数据无法同步云端，遂寻找一款新的软件来支撑我的需求。
+闲杂摸鱼之际，在 V2EX 发现作者推广这款名叫 VNote 的开源笔记软件。 深入调查一番，发现各方面都比较切合我的使用场景。
+VNote 的一些主要 Feature :
+可选 Vim 编辑模式。 基于 C&#43;&#43; QT 开发，跨平台无性能问题。 无服务端，无需担心数据泄露。 可以无限嵌套的笔记目录。 支持 PlantUML，Mermaid, LaTeX 插件。 主题，样式，快捷键高度可定制。 开源! 用着不爽，自己开发。 虽然 VNote 没有云端同步，但实际 Vnote 的笔记内容完全基于本地文件。只需要同步笔记文件夹，可以保证数据一致性。" />
+  <meta property="og:locale" content="en-us" />
+
+  
+    <style>body{font-family:bree serif,sans-serif;-webkit-font-smoothing:antialiased;margin:0 20px}article{max-width:800px;margin-left:auto;margin-right:auto}a{color:#000;text-decoration:none}a:hover{font-weight:600;text-decoration:underline}.post-ads{margin:50px 0}.markdown-body{font-size:18px;max-width:100%}.markdown-body a{text-decoration:underline;text-decoration-color:#000}.markdown-body pre{padding:16px;overflow:auto;border-radius:10px}.markdown-body code{padding:.2em .4em;font-size:85%;background-color:#f6f8fa;border-radius:6px}.markdown-body pre>code{padding:0;font-size:100%;background-color:inherit;border:0}.Chinese .markdown-body{line-height:200%}.site-date-catalog{font-size:2rem}.header-title{font-size:2rem;font-weight:700;margin-top:32px;font-family:bungee shade,sans-serif}.header-title a{text-decoration:none}.header-subtitle{color:#666}.header-items{margin:10px 0}.header-item{margin:0 5px}.header-line{width:100%;border-width:2px;border-color:#482936;border-style:solid none none none}.lang-switch{font-weight:600}#posts-list{min-height:600px}.posts-line{font-size:1.2rem;margin:12px 0}.posts-categories{font-size:.8rem;margin:auto;text-align:center}.posts-category{padding:3px 0;border:#000 2px solid;border-radius:5px}.site-footer{}.site-footer-item{margin-right:12px}.post-content img{max-width:100%;display:block;margin-right:auto;margin-top:12px}.post-header{margin-bottom:50px}.post-title{font-size:2rem;font-weight:600}.post-tags{display:inline;font-weight:600;padding:2px 5px;margin-right:6px;border:#000 2px solid;border-radius:5px}.post-date{font-weight:800;font-style:italic}.post-author{float:right;font-weight:600}.page-content{min-height:60%}.post-content{margin-bottom:50px}.post-content p{hyphens:auto;line-height:1.8;text-justify:ideographic;margin-bottom:1em}.related-content{border-width:3px;border-style:solid;border-color:#000;padding:0 10px;margin-bottom:50px;margin-top:100px}.related-content li{margin:5px 0}.taxonomy-term{font-size:3rem}.gallery-img{text-align:center}.gallery-img span{text-align:center}.gallery-img-desc{font-size:.8em;font-weight:800}#disqus_thread{position:relative}#disqus_thread:after{content:"";display:block;height:55px;width:100%;position:absolute;bottom:0;background:#fff}@media screen and (max-width:600px){.header-title,.header-subtitle,.header-items{text-align:center}.posts-line{font-size:16px}.markdown-body{font-size:16px}.post-title{font-size:2rem}.post-content p{letter-spacing:.05em}}@media screen and (max-width:48em){.posts-category{display:none}}table{border-spacing:0;border-collapse:collapse}table th{padding:6px 13px;border:1px solid #dfe2e5;font-size:large}table td{padding:6px 13px;border:1px solid #dfe2e5}</style>
+  
+  
+    <style>.container,.container-fluid{margin-right:auto;margin-left:auto}.container-fluid{padding-right:2rem;padding-left:2rem}.row{box-sizing:border-box;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-flex:0;-ms-flex:0 1 auto;flex:initial;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-.5rem;margin-left:-.5rem}.row.reverse{-webkit-box-orient:horizontal;-webkit-box-direction:reverse;-ms-flex-direction:row-reverse;flex-direction:row-reverse}.col.reverse{-webkit-box-orient:vertical;-webkit-box-direction:reverse;-ms-flex-direction:column-reverse;flex-direction:column-reverse}.col-xs,.col-xs-1,.col-xs-10,.col-xs-11,.col-xs-12,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-offset-0,.col-xs-offset-1,.col-xs-offset-10,.col-xs-offset-11,.col-xs-offset-12,.col-xs-offset-2,.col-xs-offset-3,.col-xs-offset-4,.col-xs-offset-5,.col-xs-offset-6,.col-xs-offset-7,.col-xs-offset-8,.col-xs-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-xs{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-xs-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-xs-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-xs-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-xs-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-xs-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-xs-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-xs-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-xs-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-xs-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-xs-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-xs-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-xs-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-xs-offset-0{margin-left:0}.col-xs-offset-1{margin-left:8.33333333%}.col-xs-offset-2{margin-left:16.66666667%}.col-xs-offset-3{margin-left:25%}.col-xs-offset-4{margin-left:33.33333333%}.col-xs-offset-5{margin-left:41.66666667%}.col-xs-offset-6{margin-left:50%}.col-xs-offset-7{margin-left:58.33333333%}.col-xs-offset-8{margin-left:66.66666667%}.col-xs-offset-9{margin-left:75%}.col-xs-offset-10{margin-left:83.33333333%}.col-xs-offset-11{margin-left:91.66666667%}.start-xs{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-xs{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-xs{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-xs{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-xs{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-xs{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-xs{-ms-flex-pack:distribute;justify-content:space-around}.between-xs{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-xs{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-xs{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}@media only screen and (min-width:48em){.container{width:49rem}.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-offset-0,.col-sm-offset-1,.col-sm-offset-10,.col-sm-offset-11,.col-sm-offset-12,.col-sm-offset-2,.col-sm-offset-3,.col-sm-offset-4,.col-sm-offset-5,.col-sm-offset-6,.col-sm-offset-7,.col-sm-offset-8,.col-sm-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-sm{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-sm-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-sm-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-sm-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-sm-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-sm-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-sm-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-sm-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-sm-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-sm-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-sm-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-sm-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-sm-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-sm-offset-0{margin-left:0}.col-sm-offset-1{margin-left:8.33333333%}.col-sm-offset-2{margin-left:16.66666667%}.col-sm-offset-3{margin-left:25%}.col-sm-offset-4{margin-left:33.33333333%}.col-sm-offset-5{margin-left:41.66666667%}.col-sm-offset-6{margin-left:50%}.col-sm-offset-7{margin-left:58.33333333%}.col-sm-offset-8{margin-left:66.66666667%}.col-sm-offset-9{margin-left:75%}.col-sm-offset-10{margin-left:83.33333333%}.col-sm-offset-11{margin-left:91.66666667%}.start-sm{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-sm{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-sm{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-sm{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-sm{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-sm{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-sm{-ms-flex-pack:distribute;justify-content:space-around}.between-sm{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-sm{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-sm{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:64em){.container{width:65rem}.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-offset-0,.col-md-offset-1,.col-md-offset-10,.col-md-offset-11,.col-md-offset-12,.col-md-offset-2,.col-md-offset-3,.col-md-offset-4,.col-md-offset-5,.col-md-offset-6,.col-md-offset-7,.col-md-offset-8,.col-md-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-md{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-md-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-md-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-md-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-md-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-md-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-md-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-md-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-md-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-md-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-md-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-md-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-md-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-md-offset-0{margin-left:0}.col-md-offset-1{margin-left:8.33333333%}.col-md-offset-2{margin-left:16.66666667%}.col-md-offset-3{margin-left:25%}.col-md-offset-4{margin-left:33.33333333%}.col-md-offset-5{margin-left:41.66666667%}.col-md-offset-6{margin-left:50%}.col-md-offset-7{margin-left:58.33333333%}.col-md-offset-8{margin-left:66.66666667%}.col-md-offset-9{margin-left:75%}.col-md-offset-10{margin-left:83.33333333%}.col-md-offset-11{margin-left:91.66666667%}.start-md{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-md{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-md{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-md{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-md{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-md{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-md{-ms-flex-pack:distribute;justify-content:space-around}.between-md{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-md{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-md{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:75em){.container{width:76rem}.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-offset-0,.col-lg-offset-1,.col-lg-offset-10,.col-lg-offset-11,.col-lg-offset-12,.col-lg-offset-2,.col-lg-offset-3,.col-lg-offset-4,.col-lg-offset-5,.col-lg-offset-6,.col-lg-offset-7,.col-lg-offset-8,.col-lg-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-lg{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-lg-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-lg-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-lg-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-lg-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-lg-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-lg-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-lg-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-lg-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-lg-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-lg-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-lg-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-lg-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-lg-offset-0{margin-left:0}.col-lg-offset-1{margin-left:8.33333333%}.col-lg-offset-2{margin-left:16.66666667%}.col-lg-offset-3{margin-left:25%}.col-lg-offset-4{margin-left:33.33333333%}.col-lg-offset-5{margin-left:41.66666667%}.col-lg-offset-6{margin-left:50%}.col-lg-offset-7{margin-left:58.33333333%}.col-lg-offset-8{margin-left:66.66666667%}.col-lg-offset-9{margin-left:75%}.col-lg-offset-10{margin-left:83.33333333%}.col-lg-offset-11{margin-left:91.66666667%}.start-lg{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-lg{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-lg{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-lg{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-lg{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-lg{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-lg{-ms-flex-pack:distribute;justify-content:space-around}.between-lg{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-lg{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-lg{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}</style>
+  
+
+  
+
+  <link href="/index.xml" rel="alternate" type="application/rss+xml"
+    title="nzooherd&#39;s blog">
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Bree+Serif|Bungee+Shade" rel="stylesheet">
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <meta name="referrer" content="no-referrer-when-downgrade"><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="回归笔记的本源"/>
+<meta name="twitter:description" content="回归笔记的本源 前言 这是一个笔记软件比笔记多的时代。
+从最初靠笔记发家的 Evernote，到中期的网红软件 Notion，还有最近爆火的 Obsidian。各种新概念也层出不穷，双链，块存储，网状，卢曼卡片盒&hellip;，不少人的知识没有多少，软件却换了一茬又一茬。
+大学开始接触笔记软件的我，当然也属于上文中那些换了一茬又一茬的一员。 市面上所有支持 Vim 模式的软件基本尝了个遍。
+然而当我又一次因为笔记迁移的数据兼容性折腾到半夜时，忽然在想是不是太过于痴迷软件本身，而忘记了笔记的初衷。重新思考之后，我决定放弃软件的形态，以此回归笔记本源。
+经过详细的需求分析与产品调研，并且认真使用了一年时间后，我认为我已经找到了笔记管理的最终形态。下文先回顾我的笔记软件变迁，之后详细介绍我自称为 VSNote 的工具，最后谈一谈我理解的生产力。
+各种Note SimpleNote SimpleNote是我第一款笔记软件。
+那时刚踏入大学不久，受限于繁重的大学课程压力，需要一个简单的工具来记录每天的作业 TODO。
+此时的笔记软件的作用更类似于一个桌面便笺，无需大量的文字编辑工作，SimlpeNote 简洁的 UI 和全平台同步的功能十分切合我的需求。
+WizNote 大三之后，开始为工作做准备。 此时我的笔记内容偏不再仅仅是每日 TODO，开始侧重于复习总结，知识整理等，需要大量的编辑。 SimpleNote 简陋的功能限制了其使用场景。 WizNote 的 Vim 编辑功能吸引了我。
+相比于 SimpleNote，WizNote 是一个真正的知识管理软件，也是在它的陪伴下，18年秋招顺利上岸。
+VNote 步入工作，生活琐事日益繁冗，积累学习亦不可懈怠。 恰巧为知笔记试用期结束，数据无法同步云端，遂寻找一款新的软件来支撑我的需求。
+闲杂摸鱼之际，在 V2EX 发现作者推广这款名叫 VNote 的开源笔记软件。 深入调查一番，发现各方面都比较切合我的使用场景。
+VNote 的一些主要 Feature :
+可选 Vim 编辑模式。 基于 C&#43;&#43; QT 开发，跨平台无性能问题。 无服务端，无需担心数据泄露。 可以无限嵌套的笔记目录。 支持 PlantUML，Mermaid, LaTeX 插件。 主题，样式，快捷键高度可定制。 开源! 用着不爽，自己开发。 虽然 VNote 没有云端同步，但实际 Vnote 的笔记内容完全基于本地文件。只需要同步笔记文件夹，可以保证数据一致性。"/>
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-217390416-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-217390416-1');
+</script>
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="site-header">
+          
+<header>
+  
+  
+  
+  <div class="header-title">
+    <a href="/"
+      >nzooherd 写字的地方</a
+    >
+  </div>
+  <div class="header-subtitle">In real life.</div>
+</header>
+<div class="row end-md center-xs header-items">
+  
+  <div class="header-item">
+    <a href="https://nzooherd.github.io/about" target="_blank">About</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://twitter.com/zmxnv123" target="_blank">Twitter</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="http://nzooherd.github.io/gallery/" target="_blank">Gallery</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://github.com/nzooherd" target="_blank">Github</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://sspai.com/u/vmhwvppx" target="_blank">Sspai</a>
+  </div>
+  
+</div>
+<div class="row end-xs">
+   
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">回归笔记的本源</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2021-09-07 21:30:09 &#43;0800">
+                07 Sep 2021
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+              <div class="post-author">
+                <a target="_blank" href="http://nzooherd.github.io/">@nzooherd</a>
+              </div>
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          
+          <h1 id="回归笔记的本源">回归笔记的本源</h1>
+<h2 id="前言">前言</h2>
+<p>这是一个<strong>笔记软件比笔记多</strong>的时代。</p>
+<p>从最初靠笔记发家的 Evernote，到中期的网红软件 Notion，还有最近爆火的 Obsidian。各种新概念也层出不穷，双链，块存储，网状，卢曼卡片盒&hellip;，不少人的知识没有多少，软件却换了一茬又一茬。</p>
+<p>大学开始接触笔记软件的我，当然也属于上文中那些换了一茬又一茬的一员。
+市面上所有支持 <em>Vim</em> 模式的软件基本尝了个遍。</p>
+<p>然而当我又一次因为笔记迁移的数据兼容性折腾到半夜时，忽然在想<strong>是不是太过于痴迷软件本身，而忘记了笔记的初衷</strong>。重新思考之后，<strong>我决定放弃软件的形态，以此回归笔记本源</strong>。</p>
+<p>经过详细的需求分析与产品调研，并且认真使用了一年时间后，我认为我已经找到了笔记管理的最终形态。下文先回顾我的笔记软件变迁，之后详细介绍我自称为 <em>VSNote</em> 的工具，最后谈一谈我理解的生产力。</p>
+<h2 id="各种note">各种Note</h2>
+<h3 id="simplenotehttpssimplenotecom"><a href="https://simplenote.com/">SimpleNote</a></h3>
+<p>SimpleNote是我第一款笔记软件。</p>
+<p>那时刚踏入大学不久，受限于繁重的大学课程压力，需要一个简单的工具来记录每天的作业 TODO。</p>
+<p><img src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20210907140941.png" alt="20210907140941"></p>
+<p>此时的笔记软件的作用更类似于一个桌面便笺，无需大量的文字编辑工作，SimlpeNote 简洁的 UI 和全平台同步的功能十分切合我的需求。</p>
+<h3 id="wiznotehttpswwwwizcnzh-cn"><a href="https://www.wiz.cn/zh-cn">WizNote</a></h3>
+<p>大三之后，开始为工作做准备。
+此时我的笔记内容偏不再仅仅是每日 TODO，开始侧重于复习总结，知识整理等，需要大量的编辑。
+SimpleNote 简陋的功能限制了其使用场景。
+WizNote 的 Vim 编辑功能吸引了我。</p>
+<p><img src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20210907141243.png" alt="20210907141243"></p>
+<p>相比于 SimpleNote，WizNote 是一个真正的知识管理软件，也是在它的陪伴下，18年秋招顺利上岸。</p>
+<h3 id="vnotehttpsgithubcomvnotexvnote"><a href="https://github.com/vnotex/vnote">VNote</a></h3>
+<p>步入工作，生活琐事日益繁冗，积累学习亦不可懈怠。
+恰巧为知笔记试用期结束，数据无法同步云端，遂寻找一款新的软件来支撑我的需求。</p>
+<p>闲杂摸鱼之际，在 V2EX 发现作者推广这款名叫 VNote 的开源笔记软件。
+深入调查一番，发现各方面都比较切合我的使用场景。</p>
+<p>VNote 的一些主要 Feature :</p>
+<ol>
+<li>可选 Vim 编辑模式。</li>
+<li>基于 C++ QT 开发，跨平台无性能问题。</li>
+<li>无服务端，无需担心数据泄露。</li>
+<li>可以无限嵌套的笔记目录。</li>
+<li>支持 PlantUML，Mermaid, LaTeX 插件。</li>
+<li>主题，样式，快捷键高度可定制。</li>
+<li>开源! 用着不爽，自己开发。</li>
+</ol>
+<p><strong>虽然 VNote 没有云端同步，但实际 Vnote 的笔记内容完全基于本地文件。只需要同步笔记文件夹，可以保证数据一致性。</strong></p>
+<p>毕业后的一年内，我一直在使用 VNote。用它写每日TODO，会议纪要，做学习笔记，甚至管理简历和面试记录。</p>
+<p><img src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20210904215456.png" alt="20210904215456"></p>
+<p>如果你属于程序员群体，十分推荐尝试下这款笔记。</p>
+<h2 id="vsnote">VSNote</h2>
+<p>VNote 版本从 2.x 向 3.x 升级的过程是无法向前兼容的，即 2.x 版本软件无法读取 3.x 版本的数据。
+由于我使用用第三方软件同步笔记内容，在升级过程中新版本的数据目录并不会覆盖旧目录，只会覆盖旧目录中同名文件。
+升级完成后，另一台终端无法导入笔记。这次事故，让我萌生了放弃笔记软件的想法。</p>
+<p><strong>从零梳理我的核心诉求:</strong></p>
+<ol>
+<li>支持 Vim 编辑文档</li>
+<li>支持多种格式渲染</li>
+<li>支持多终端同步数据</li>
+</ol>
+<p>我发现需要的不是一个笔记软件，而是一个文本编辑器，一个格式渲染器，一个数据同步软件。</p>
+<p><strong>编辑 + 渲染 + 同步，这就是笔记工具仅有的三个核心。</strong></p>
+<p>整理以上要素后，方向也很明确了。
+我最终决定 <strong>使用本地文件夹存放笔记内容，使用 Visual Studio Code 作编辑器+渲染器，使用 MEGA 同步数据。</strong>
+我将其命名为 <strong>VSNote</strong> 。</p>
+<p>本地文件夹作为笔记目录的最大优势是<strong>解耦</strong>，在此基础上可以很容易的开发各种流水线，解放生产力，后文会详细描述。</p>
+<p>VS Code 作为宇宙最强编辑器，各种插件让笔记不在局限于 Markdown。PlantUML，Mermaid, 思维导图&hellip; 只要存在的文件格式都可以渲染。</p>
+<p><a href="https://mega.nz/">MEGA</a> 是我非常喜爱的文件同步软件，免费用户有 50GB 的空间，而且没有速度限制 (PS: 和百度云盘非一类产品)。
+支持自定义同步内容，支持文件共享，各平台均有GUI。</p>
+<p>在将 VNote 中的历史笔记分类整理后，保存到我的 VSNote 目录中，开启 MEGA 同步，至此我的&quot;笔记软件&quot;就完成了。
+使用一段时间后，我发现没有了软件的限制，可以在 VSNote 中记录任何可记录的东西。</p>
+<ul>
+<li>
+<p>每日TODO</p>
+<p>不少人可能会将 TODO 软件和笔记软件分开。
+大多数电脑或手机上的 TODO 软件免不了鼠标点来点去之后用键盘输入，然而从键盘到鼠标再到键盘的切换操作也是一种广义上的上下文切换，比较影响效率
+如果通过 VSNote 记录 TODO，是无需鼠标的。通过键盘驱动一切，一种行云流水般的感觉。</p>
+<p><img src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/123.png" alt="123"></p>
+<p>我一般会将每个月 TODO 整理到一个文件中，每三个月一个目录，方便检索。
+TODO 以文件的形式记录的另一个好处是基于此开发一些流水线，后文会详细提及。</p>
+</li>
+<li>
+<p>工作记录</p>
+<p>相对来说，工作记录是一块非常混乱的内容。里面夹杂着技术方案，需求收集，会议纪要，平台架构等各种乱七八糟的东西。</p>
+<p>这些内容通常不需要去复习整理，但在需要的时候一定要能便捷的搜索到。</p>
+<p>VS Note 自带全文搜索功能，只要几个模糊的关键字都可以很方便的检索。</p>
+</li>
+<li>
+<p>软件配置</p>
+<p>日常工作生活中，我会使用三个不同系统的桌面终端。
+一台公司发的 MBP 办公使用，家中有台式 PC 用业余办公和娱乐，还有一台 Ubuntu 的 NUC 作远程开发机。
+电脑多了之后，免不了的就是各系统上开发环境配置同步。</p>
+<p>我的 VSNote 有一个专门的目录存软件的配置文件，<strong>利用文件系统中的 Inode 直接硬链接到目录下</strong>，MEGA 会直接同步文件内容做到自动同步，无需手动复制粘贴。</p>
+</li>
+<li>
+<p>管理OKR</p>
+<p>互联网公司的同学会比较熟悉 <a href="https://en.wikipedia.org/wiki/OKR">OKR</a> 系统，每个季度制定 OKR 之后，需要自己规划各 Key 的时间进度。</p>
+<p>此时甘特图是一个非常有效的进度管理工具，得益于 VSNote 多样的渲染格式，可以直接利用 Mermaid 渲染 Markdown 来制作甘特图。</p>
+<p>如下是我利用 Mermaid “画”的某个季度的甘特图(信息已脱敏)。</p>
+<p><img src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20210907141430.png" alt="20210907141430"></p>
+</li>
+<li>
+<p>简历与面试</p>
+<p>我一般每年更新一次简历，不是为了找新的工作，而是了解在过去一年学到了什么，有什么还需要去学的。</p>
+<p>在 VSNote 有一个专用目录用管理简历和面试记录。
+简历会直接使用 Markdown 编写，利用 VS Code 的插件导出成 HTML，做一些简单格式润色后导出为 PDF。</p>
+<p>面试之后会用 VSNote 记录面经，吸取经验，同时管理每家公司的面试进度。</p>
+</li>
+<li>
+<p>源码笔记</p>
+<p>程序员免不了阅读优秀的开源工程源代码，利用 PlantUML 插件可以方便的绘制类图，架构设计图等。</p>
+<p><img src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20210907141955.png" alt="20210907141955"></p>
+<p>如上是我在阅读 backtrader 代码时用 PlantUML 写出来的一个类继承图。
+此时在图片的基础上再去理解各模块的含义，清晰很多。</p>
+</li>
+</ul>
+<p>借用 Evernote 的一句广告语，随时随地，记录一切。</p>
+<p><em>PS: 笔记管理使用的 VS Code 与敲代码的 VS Code 功能差异很大，引用的插件也几乎完全不同。为了提高软件响应速度，我会装两个版本的 VS Code。一个专门用于写代码，另一个记笔记。</em></p>
+<h2 id="流水线">流水线</h2>
+<p>软件工程中，存在一个 <a href="https://en.wikipedia.org/wiki/Dependency_inversion_principle">依赖反转</a> 设计原则。
+该原则规定:</p>
+<ol>
+<li>高层次的模块不应该依赖于低层次的模块，两者都应该依赖于抽象接口。</li>
+<li>抽象接口不应该依赖于具体实现，而具体实现则应该依赖于抽象接口。</li>
+</ol>
+<p>非专业的同学可能较难理解，用一个类似但可能不太恰当的例子解释:</p>
+<blockquote>
+<p>Windows 系统以其强大的硬件兼容性著称。虽然厂商的硬件设计各有差异，但是全都可以用于 Windows 中。</p>
+<p>其原因就是有专门的组织会为硬件制定规范，例如 IEEE 制定了无线网卡的标准，英特尔制定了 SATA 的规范。</p>
+<p>Microsoft 根据规范调用接口， 而硬件厂商在遵循规范的基础上实现自己的设计。如此有条不紊，系统运转正常。</p>
+<p>Microsoft 无需为每个硬件都做单独的适配，这可以看作一种更高级形式的依赖反转。</p>
+</blockquote>
+<p>Unix 在 &ldquo;<a href="https://en.wikipedia.org/wiki/Everything_is_a_file">Everything is a file</a>&rdquo; 的哲学基础上，创造性的引入了“管道”的概念。
+应用程序从实现依赖升级为抽象依赖，这应该软件工程学中最早的依赖反转思想。</p>
+<p>回到本文，VSNote 直接用文件的形式保存笔记，这种表现形式不仅人是可读的，程序依然是可读的。
+从之前的笔记软件 API 依赖变成本地文件依赖，基于笔记开发自定义流水线，从未如此简单。</p>
+<p>下面是我目前在使用的一些流水线:</p>
+<ul>
+<li>
+<p>每日TODO提醒</p>
+<p>此流水线会在每天早上通过 Telegram 发送今日要做的事情，效果图如下:</p>
+<p><img src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/456.png" alt="456"></p>
+<p>在 VSNote 中直接以文件的形式记录 TODO 后，每天通过定时任务解析文件，调用 Telegram API发送消息即可。</p>
+</li>
+<li>
+<p>自动生成周报</p>
+<p>此流水线会在每周五下班前自动生成工作周报。</p>
+<p>上文中提到将每日 TODO 记录在文件中，不仅是为了提醒自己今天要做什么，也可以记录自己昨天做过什么。通过脚本提取，汇总这一周的 TODO，稍加修饰，即可完成本周周报。省下宝贵的十分钟去做爱做的事。</p>
+</li>
+<li>
+<p>远程种子下载</p>
+<p>此流水线可以远程添加种子下载。</p>
+<p>家中宽带没有公网 IP ，在公司逛 PT 站时发现不错的资源可以将种子文件直接拖入已经定义好的目录中，MEGA 会直接将文件同步到家中服务器。
+对应的守护进程监听文件变化，调用 PT 软件的 API，资源开始下载。</p>
+<p>下班回到家就可以享用了。</p>
+</li>
+<li>
+<p>定时同步Blog</p>
+<p>此流水线的目的主要是简化我的 <a href="https://blog.nzooherd.me/">Blog</a> 和 <a href="https://blog.nzooherd.me/gallery/">Gallery</a> 发帖流程。</p>
+<p>尽管各种静态博客框架已经尽可能简化部署流程，但仍然免不了要输入几个繁杂且冗余的命令中。
+有了 VSNote 之后，只要文件夹中有新的博客文件或照片，后台程序都会执行 Deploy 流程。</p>
+<p>过几分钟后打开网站，即可看到最新内容。</p>
+</li>
+<li>
+<p>英语单词整理</p>
+<p>此流水线会在每天凌晨通过 Telegram 推送今日遇到的陌生单词。</p>
+<p>通过一个自己写的翻译程序查询单词后，单词会已追加的方式记录在笔记中。多终端使用时只要没有并发查询，不会产生冲突。类似 TODO 提醒，后台任务会在凌晨开始调度，通过 tg 发送消息，用作睡前复习。</p>
+</li>
+</ul>
+<h2 id="生产力">生产力</h2>
+<p>不知道从什么时候起，各大科技厂商也喜欢用生产力装饰自己的产品。
+Micosoft 为自家 Surface Studio 的生产力，配备了专用的“选色硬件”Surface Dial。
+Apple 为了标榜 iPad Pro 的生产力，甚至欺骗广大消费者“你的下一台电脑，何必是电脑”。
+任何电子产品，好像只要有了生产力，就不会被当做娱乐工具。</p>
+<p>普通人追捧的生产力更像是一种欺骗自己的假象。因为电子产品是生产力，所以用着父母的钱心安理得的购买。因为笔记软件是生产力，所以浪费大量时间不断尝试下一个。
+人类期待某种技术的革新能够颠覆性改善人类世界，但事实上，新的技术只是反过来再次强调了人类群体原生的缺陷。
+人类期待生产工具的进步掩盖刻在基因里的惰性，但事实上，新的生产力工具不是变成了娱乐工具就是在吃灰。</p>
+<p>我想说的是，生产力不是生产的银弹。
+固然其可以在一定程度上提高效率，但质变的产生从来都不是因为生产力。
+牛爵爷用纸和笔推导出太阳的运行轨迹，两弹元勋们靠算盘造出原子弹，NASA科学家让 4KB 内存的计算机驱动航天飞机。
+真正的生产力一直都是人。</p>
+<p>回到笔记软件的主题，本文的目的并不是向大家推销这个名为 VSNote 的工具。
+大多人的需求复杂度远远达不到需要用流水线来自动化的程度。
+我也认为 PlantUML, Mermaid 等工具非程序员几乎不会用到。
+与其追求一个完美的笔记软件，不如静下心来写一篇读书笔记。
+当然，笔记软件导致的生产力差异确实客观存在，希望各位同学都能找到适合自己的软件，但不要为了软件而软件，回归笔记的本源。</p>
+<h2 id="后语">后语</h2>
+<p>闲言碎语，博君一笑。才学疏浅，还望海涵。</p>
+
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+          </div>
+        </div>
+        
+          <div class="row">
+            <div class="col-xs-12">
+              
+            </div>
+          </div>
+
+          
+
+
+
+          
+          
+        
+
+        <div class="site-footer">
+  <div class="busuanzi-footer" hidden>
+    <span id="busuanzi_container_site_pv">
+      本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    <span id="busuanzi_container_site_uv">
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </span>
+    <span id="busuanzi_container_page_pv" >本文阅读量<span id="busuanzi_value_page_pv"></span>次</span>
+  </div>
+  
+</div>
+      </div>
+    </div>
+  </article>
+
+  <script src="https://utteranc.es/client.js"
+        repo="nzooherd/blog-talks"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+  </script>
+  
+
+
+
+  
+
+</body>
+
+</html>

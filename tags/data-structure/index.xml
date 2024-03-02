@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data Structure on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/tags/data-structure/</link>
+    <description>Recent content in Data Structure on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 11 Mar 2022 21:58:52 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/tags/data-structure/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>树状数组的证明</title>
+      <link>http://nzooherd.github.io/posts/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E8%AF%81%E6%98%8E/</link>
+      <pubDate>Fri, 11 Mar 2022 21:58:52 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E8%AF%81%E6%98%8E/</guid>
+      <description>&lt;!DOCTYPE html&gt; &amp;#x6811;&amp;#x72B6;&amp;#x6570;&amp;#x7EC4;&amp;#x7684;&amp;#x8BC1;&amp;#x660E; 树状数组的证明 树状数组 和 线段树 是解决区间问题常用的两种数据结构。其中线段树理解起来相对简单，而树状数组的代码实现则更简洁。&#xA;参考例题: 区域和检索-数组可修改，就是一个标准的树状数组题。更抽象的应用场景可以理解为:&#xA;假设存在数组 aia_iai​， 存在操作 ⨀(ai,ai+1,ai+2,⋯ ,ai+k)\bigodot(a_i, a_{i+1}, a_{i+2}, \cdots, a_{i+k})⨀(ai​,ai+1​,ai+2​,⋯,ai+k​)，并且 ⨀(ai,ai+1,⋯ ,ai+k)=⨀(⨀(ai,ai+1,⋯ ,ai+j),⨀(ai+j+1,ai+j+2,⋯ ,ai+k))(1)\bigodot(a_i, a_{i+1}, \cdots, a_{i+k}) =\bigodot( \bigodot(a_i, a_{i+1}, \cdots, a_{i+j}), \bigodot(a_{i+j+1}, a_{i+j+2}, \cdots, a_{i+k}) )\tag{1} ⨀(ai​,ai+1​,⋯,ai+k​)=⨀(⨀(ai​,ai+1​,⋯,ai+j​),⨀(ai+j+1​,ai+j+2​,⋯,ai+k​))(1)&#xA;⨀(aj,⨀(ak))=⨀(aj,aK)(2)\bigodot(a_j, \bigodot(a_k)) = \bigodot(a_j, a_K) \tag{2} ⨀(aj​,⨀(ak​))=⨀(aj​,aK​)(2)&#xA;树状数组可以 O(log⁡n)O(\log{}n)O(logn) 的时间复杂度求出 ⨀(a1,a2,a3,⋯ ,ai)\bigodot(a_1, a_{2}, a_{3}, \cdots, a_{i})⨀(a1​,a2​,a3​,⋯,ai​)的值。 这里的 ⨀\bigodot⨀ 可以是 ∑\sum∑, 也可以是 ∏\prod∏，或者是任意其他满足上述等式的操作。 楼主从大一就已学习树状数组，但一直断断续续的用，断断续续的忘，每次使用时都要翻出模板代码来。&#xA;最近尝试手推了一下树状数组，记录于下。&#xA;假设原数组是 aia_iai​，树状数组利用 aia_iai​ 构建了新数组 bib_ibi​。&#xA;bi=⨀i−2k+1iaib_i = \bigodot_{i-2^k+1}^{i}a_i bi​=i−2k+1⨀i​ai​</description>
+    </item>
+  </channel>
+</rss>

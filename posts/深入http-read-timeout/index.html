@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.123.7">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="nzooherd" />
+  <meta property="og:url" content="http://nzooherd.github.io/posts/%E6%B7%B1%E5%85%A5http-read-timeout/" />
+  <link rel="canonical" href="http://nzooherd.github.io/posts/%E6%B7%B1%E5%85%A5http-read-timeout/" /><link rel="apple-touch-icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="shortcut" href="/favicon.ico" /><link rel="alternate" type="application/atom+xml" href="http://nzooherd.github.io/index.xml" title="nzooherd&#39;s blog">
+
+  <script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "http:\/\/nzooherd.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "深入Http Read Timeout",
+      "headline" : "深入Http Read Timeout",
+      "description" : "海外的对象存储底层直接使用公有云，由于某些莫名其妙的原因，客户端不定期出现大量的 Read timed out 异常，部分异常栈如下。在和公有云的技术支持人员沟通过程中，我发现双方都不能很明确的指出到底是哪个环节超时了。\njava.net.SocketTimeoutException: Read timed out at java.base\/java.net.SocketInputStream.socketRead0(Native Method) ~[na:na] at java.base\/java.net.SocketInputStream.socketRead(SocketInputStream.java:115) ~[na:na] at java.base\/java.net.SocketInputStream.read(SocketInputStream.java:168) ~[na:na] at java.base\/java.net.SocketInputStream.read(SocketInputStream.java:140) ~[na:na] at java.base\/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:478) ~[na:na] at java.base\/sun.security.ssl.SSLSocketInputRecord.readHeader(SSLSocketInputRecord.java:472) ~[na:na] at java.base\/sun.security.ssl.SSLSocketInputRecord.bytesInCompletePacket(SSLSocketInputRecord.java:70) ~[na:na] at java.base\/sun.security.ssl.SSLSocketImpl.readApplicationRecord(SSLSocketImpl.java:1374) ~[na:na] at java.base\/sun.security.ssl.SSLSocketImpl$AppInputStream.read(SSLSocketImpl.java:986) ~[na:na] at org.apache.http.impl.io.SessionInputBufferImpl.streamRead(SessionInputBufferImpl.java:137) ~[httpcore-4.4.13.jar!\/:4.4.13] 众所周知，Http1.1 协议可以分成两个过程\n客户端向服务端发送数据 客户端从服务端读取数据 所以 Http Read Timeout 的具体范围可能是指\n上图 2-3 的时间 ? 上图 2-4 的时间 ? 上图 3-4 的时间 ? Tcp 层任意两个 Segment 的间隔时间 ? Tcp 层任意两个 Receive Segment 的间隔时间 ?",
+      "inLanguage" : "en-US",
+      "author" : "nzooherd",
+      "creator" : "nzooherd",
+      "publisher": "nzooherd",
+      "accountablePerson" : "nzooherd",
+      "copyrightHolder" : "nzooherd",
+      "copyrightYear" : "2021",
+      "datePublished": "2021-12-11 13:43:08 \u002b0000 UTC",
+      "dateModified" : "2021-12-11 13:43:08 \u002b0000 UTC",
+      "url" : "http:\/\/nzooherd.github.io\/posts\/%E6%B7%B1%E5%85%A5http-read-timeout\/",
+      "keywords" : [  ]
+  }
+</script>
+<title>深入Http Read Timeout</title>
+  <meta property="og:title" content="深入Http Read Timeout" />
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="海外的对象存储底层直接使用公有云，由于某些莫名其妙的原因，客户端不定期出现大量的 Read timed out 异常，部分异常栈如下。在和公有云的技术支持人员沟通过程中，我发现双方都不能很明确的指出到底是哪个环节超时了。
+java.net.SocketTimeoutException: Read timed out at java.base/java.net.SocketInputStream.socketRead0(Native Method) ~[na:na] at java.base/java.net.SocketInputStream.socketRead(SocketInputStream.java:115) ~[na:na] at java.base/java.net.SocketInputStream.read(SocketInputStream.java:168) ~[na:na] at java.base/java.net.SocketInputStream.read(SocketInputStream.java:140) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:478) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.readHeader(SSLSocketInputRecord.java:472) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.bytesInCompletePacket(SSLSocketInputRecord.java:70) ~[na:na] at java.base/sun.security.ssl.SSLSocketImpl.readApplicationRecord(SSLSocketImpl.java:1374) ~[na:na] at java.base/sun.security.ssl.SSLSocketImpl$AppInputStream.read(SSLSocketImpl.java:986) ~[na:na] at org.apache.http.impl.io.SessionInputBufferImpl.streamRead(SessionInputBufferImpl.java:137) ~[httpcore-4.4.13.jar!/:4.4.13] 众所周知，Http1.1 协议可以分成两个过程
+客户端向服务端发送数据 客户端从服务端读取数据 所以 Http Read Timeout 的具体范围可能是指
+上图 2-3 的时间 ? 上图 2-4 的时间 ? 上图 3-4 的时间 ? Tcp 层任意两个 Segment 的间隔时间 ? Tcp 层任意两个 Receive Segment 的间隔时间 ?" />
+  <meta name="description" content="海外的对象存储底层直接使用公有云，由于某些莫名其妙的原因，客户端不定期出现大量的 Read timed out 异常，部分异常栈如下。在和公有云的技术支持人员沟通过程中，我发现双方都不能很明确的指出到底是哪个环节超时了。
+java.net.SocketTimeoutException: Read timed out at java.base/java.net.SocketInputStream.socketRead0(Native Method) ~[na:na] at java.base/java.net.SocketInputStream.socketRead(SocketInputStream.java:115) ~[na:na] at java.base/java.net.SocketInputStream.read(SocketInputStream.java:168) ~[na:na] at java.base/java.net.SocketInputStream.read(SocketInputStream.java:140) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:478) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.readHeader(SSLSocketInputRecord.java:472) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.bytesInCompletePacket(SSLSocketInputRecord.java:70) ~[na:na] at java.base/sun.security.ssl.SSLSocketImpl.readApplicationRecord(SSLSocketImpl.java:1374) ~[na:na] at java.base/sun.security.ssl.SSLSocketImpl$AppInputStream.read(SSLSocketImpl.java:986) ~[na:na] at org.apache.http.impl.io.SessionInputBufferImpl.streamRead(SessionInputBufferImpl.java:137) ~[httpcore-4.4.13.jar!/:4.4.13] 众所周知，Http1.1 协议可以分成两个过程
+客户端向服务端发送数据 客户端从服务端读取数据 所以 Http Read Timeout 的具体范围可能是指
+上图 2-3 的时间 ? 上图 2-4 的时间 ? 上图 3-4 的时间 ? Tcp 层任意两个 Segment 的间隔时间 ? Tcp 层任意两个 Receive Segment 的间隔时间 ?" />
+  <meta property="og:locale" content="en-us" />
+
+  
+    <style>body{font-family:bree serif,sans-serif;-webkit-font-smoothing:antialiased;margin:0 20px}article{max-width:800px;margin-left:auto;margin-right:auto}a{color:#000;text-decoration:none}a:hover{font-weight:600;text-decoration:underline}.post-ads{margin:50px 0}.markdown-body{font-size:18px;max-width:100%}.markdown-body a{text-decoration:underline;text-decoration-color:#000}.markdown-body pre{padding:16px;overflow:auto;border-radius:10px}.markdown-body code{padding:.2em .4em;font-size:85%;background-color:#f6f8fa;border-radius:6px}.markdown-body pre>code{padding:0;font-size:100%;background-color:inherit;border:0}.Chinese .markdown-body{line-height:200%}.site-date-catalog{font-size:2rem}.header-title{font-size:2rem;font-weight:700;margin-top:32px;font-family:bungee shade,sans-serif}.header-title a{text-decoration:none}.header-subtitle{color:#666}.header-items{margin:10px 0}.header-item{margin:0 5px}.header-line{width:100%;border-width:2px;border-color:#482936;border-style:solid none none none}.lang-switch{font-weight:600}#posts-list{min-height:600px}.posts-line{font-size:1.2rem;margin:12px 0}.posts-categories{font-size:.8rem;margin:auto;text-align:center}.posts-category{padding:3px 0;border:#000 2px solid;border-radius:5px}.site-footer{}.site-footer-item{margin-right:12px}.post-content img{max-width:100%;display:block;margin-right:auto;margin-top:12px}.post-header{margin-bottom:50px}.post-title{font-size:2rem;font-weight:600}.post-tags{display:inline;font-weight:600;padding:2px 5px;margin-right:6px;border:#000 2px solid;border-radius:5px}.post-date{font-weight:800;font-style:italic}.post-author{float:right;font-weight:600}.page-content{min-height:60%}.post-content{margin-bottom:50px}.post-content p{hyphens:auto;line-height:1.8;text-justify:ideographic;margin-bottom:1em}.related-content{border-width:3px;border-style:solid;border-color:#000;padding:0 10px;margin-bottom:50px;margin-top:100px}.related-content li{margin:5px 0}.taxonomy-term{font-size:3rem}.gallery-img{text-align:center}.gallery-img span{text-align:center}.gallery-img-desc{font-size:.8em;font-weight:800}#disqus_thread{position:relative}#disqus_thread:after{content:"";display:block;height:55px;width:100%;position:absolute;bottom:0;background:#fff}@media screen and (max-width:600px){.header-title,.header-subtitle,.header-items{text-align:center}.posts-line{font-size:16px}.markdown-body{font-size:16px}.post-title{font-size:2rem}.post-content p{letter-spacing:.05em}}@media screen and (max-width:48em){.posts-category{display:none}}table{border-spacing:0;border-collapse:collapse}table th{padding:6px 13px;border:1px solid #dfe2e5;font-size:large}table td{padding:6px 13px;border:1px solid #dfe2e5}</style>
+  
+  
+    <style>.container,.container-fluid{margin-right:auto;margin-left:auto}.container-fluid{padding-right:2rem;padding-left:2rem}.row{box-sizing:border-box;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-flex:0;-ms-flex:0 1 auto;flex:initial;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-.5rem;margin-left:-.5rem}.row.reverse{-webkit-box-orient:horizontal;-webkit-box-direction:reverse;-ms-flex-direction:row-reverse;flex-direction:row-reverse}.col.reverse{-webkit-box-orient:vertical;-webkit-box-direction:reverse;-ms-flex-direction:column-reverse;flex-direction:column-reverse}.col-xs,.col-xs-1,.col-xs-10,.col-xs-11,.col-xs-12,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-offset-0,.col-xs-offset-1,.col-xs-offset-10,.col-xs-offset-11,.col-xs-offset-12,.col-xs-offset-2,.col-xs-offset-3,.col-xs-offset-4,.col-xs-offset-5,.col-xs-offset-6,.col-xs-offset-7,.col-xs-offset-8,.col-xs-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-xs{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-xs-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-xs-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-xs-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-xs-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-xs-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-xs-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-xs-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-xs-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-xs-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-xs-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-xs-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-xs-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-xs-offset-0{margin-left:0}.col-xs-offset-1{margin-left:8.33333333%}.col-xs-offset-2{margin-left:16.66666667%}.col-xs-offset-3{margin-left:25%}.col-xs-offset-4{margin-left:33.33333333%}.col-xs-offset-5{margin-left:41.66666667%}.col-xs-offset-6{margin-left:50%}.col-xs-offset-7{margin-left:58.33333333%}.col-xs-offset-8{margin-left:66.66666667%}.col-xs-offset-9{margin-left:75%}.col-xs-offset-10{margin-left:83.33333333%}.col-xs-offset-11{margin-left:91.66666667%}.start-xs{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-xs{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-xs{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-xs{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-xs{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-xs{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-xs{-ms-flex-pack:distribute;justify-content:space-around}.between-xs{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-xs{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-xs{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}@media only screen and (min-width:48em){.container{width:49rem}.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-offset-0,.col-sm-offset-1,.col-sm-offset-10,.col-sm-offset-11,.col-sm-offset-12,.col-sm-offset-2,.col-sm-offset-3,.col-sm-offset-4,.col-sm-offset-5,.col-sm-offset-6,.col-sm-offset-7,.col-sm-offset-8,.col-sm-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-sm{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-sm-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-sm-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-sm-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-sm-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-sm-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-sm-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-sm-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-sm-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-sm-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-sm-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-sm-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-sm-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-sm-offset-0{margin-left:0}.col-sm-offset-1{margin-left:8.33333333%}.col-sm-offset-2{margin-left:16.66666667%}.col-sm-offset-3{margin-left:25%}.col-sm-offset-4{margin-left:33.33333333%}.col-sm-offset-5{margin-left:41.66666667%}.col-sm-offset-6{margin-left:50%}.col-sm-offset-7{margin-left:58.33333333%}.col-sm-offset-8{margin-left:66.66666667%}.col-sm-offset-9{margin-left:75%}.col-sm-offset-10{margin-left:83.33333333%}.col-sm-offset-11{margin-left:91.66666667%}.start-sm{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-sm{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-sm{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-sm{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-sm{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-sm{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-sm{-ms-flex-pack:distribute;justify-content:space-around}.between-sm{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-sm{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-sm{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:64em){.container{width:65rem}.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-offset-0,.col-md-offset-1,.col-md-offset-10,.col-md-offset-11,.col-md-offset-12,.col-md-offset-2,.col-md-offset-3,.col-md-offset-4,.col-md-offset-5,.col-md-offset-6,.col-md-offset-7,.col-md-offset-8,.col-md-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-md{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-md-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-md-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-md-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-md-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-md-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-md-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-md-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-md-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-md-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-md-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-md-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-md-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-md-offset-0{margin-left:0}.col-md-offset-1{margin-left:8.33333333%}.col-md-offset-2{margin-left:16.66666667%}.col-md-offset-3{margin-left:25%}.col-md-offset-4{margin-left:33.33333333%}.col-md-offset-5{margin-left:41.66666667%}.col-md-offset-6{margin-left:50%}.col-md-offset-7{margin-left:58.33333333%}.col-md-offset-8{margin-left:66.66666667%}.col-md-offset-9{margin-left:75%}.col-md-offset-10{margin-left:83.33333333%}.col-md-offset-11{margin-left:91.66666667%}.start-md{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-md{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-md{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-md{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-md{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-md{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-md{-ms-flex-pack:distribute;justify-content:space-around}.between-md{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-md{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-md{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:75em){.container{width:76rem}.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-offset-0,.col-lg-offset-1,.col-lg-offset-10,.col-lg-offset-11,.col-lg-offset-12,.col-lg-offset-2,.col-lg-offset-3,.col-lg-offset-4,.col-lg-offset-5,.col-lg-offset-6,.col-lg-offset-7,.col-lg-offset-8,.col-lg-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-lg{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-lg-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-lg-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-lg-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-lg-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-lg-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-lg-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-lg-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-lg-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-lg-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-lg-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-lg-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-lg-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-lg-offset-0{margin-left:0}.col-lg-offset-1{margin-left:8.33333333%}.col-lg-offset-2{margin-left:16.66666667%}.col-lg-offset-3{margin-left:25%}.col-lg-offset-4{margin-left:33.33333333%}.col-lg-offset-5{margin-left:41.66666667%}.col-lg-offset-6{margin-left:50%}.col-lg-offset-7{margin-left:58.33333333%}.col-lg-offset-8{margin-left:66.66666667%}.col-lg-offset-9{margin-left:75%}.col-lg-offset-10{margin-left:83.33333333%}.col-lg-offset-11{margin-left:91.66666667%}.start-lg{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-lg{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-lg{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-lg{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-lg{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-lg{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-lg{-ms-flex-pack:distribute;justify-content:space-around}.between-lg{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-lg{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-lg{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}</style>
+  
+
+  
+
+  <link href="/index.xml" rel="alternate" type="application/rss+xml"
+    title="nzooherd&#39;s blog">
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Bree+Serif|Bungee+Shade" rel="stylesheet">
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <meta name="referrer" content="no-referrer-when-downgrade"><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="深入Http Read Timeout"/>
+<meta name="twitter:description" content="海外的对象存储底层直接使用公有云，由于某些莫名其妙的原因，客户端不定期出现大量的 Read timed out 异常，部分异常栈如下。在和公有云的技术支持人员沟通过程中，我发现双方都不能很明确的指出到底是哪个环节超时了。
+java.net.SocketTimeoutException: Read timed out at java.base/java.net.SocketInputStream.socketRead0(Native Method) ~[na:na] at java.base/java.net.SocketInputStream.socketRead(SocketInputStream.java:115) ~[na:na] at java.base/java.net.SocketInputStream.read(SocketInputStream.java:168) ~[na:na] at java.base/java.net.SocketInputStream.read(SocketInputStream.java:140) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:478) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.readHeader(SSLSocketInputRecord.java:472) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.bytesInCompletePacket(SSLSocketInputRecord.java:70) ~[na:na] at java.base/sun.security.ssl.SSLSocketImpl.readApplicationRecord(SSLSocketImpl.java:1374) ~[na:na] at java.base/sun.security.ssl.SSLSocketImpl$AppInputStream.read(SSLSocketImpl.java:986) ~[na:na] at org.apache.http.impl.io.SessionInputBufferImpl.streamRead(SessionInputBufferImpl.java:137) ~[httpcore-4.4.13.jar!/:4.4.13] 众所周知，Http1.1 协议可以分成两个过程
+客户端向服务端发送数据 客户端从服务端读取数据 所以 Http Read Timeout 的具体范围可能是指
+上图 2-3 的时间 ? 上图 2-4 的时间 ? 上图 3-4 的时间 ? Tcp 层任意两个 Segment 的间隔时间 ? Tcp 层任意两个 Receive Segment 的间隔时间 ?"/>
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-217390416-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-217390416-1');
+</script>
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="site-header">
+          
+<header>
+  
+  
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$','$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      processEnvironments: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+  };
+
+  window.addEventListener('load', (event) => {
+      document.querySelectorAll("mjx-container").forEach(function(x){
+        x.parentElement.classList += 'has-jax'})
+    });
+
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  
+  <div class="header-title">
+    <a href="/"
+      >nzooherd 写字的地方</a
+    >
+  </div>
+  <div class="header-subtitle">In real life.</div>
+</header>
+<div class="row end-md center-xs header-items">
+  
+  <div class="header-item">
+    <a href="https://nzooherd.github.io/about" target="_blank">About</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://twitter.com/zmxnv123" target="_blank">Twitter</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="http://nzooherd.github.io/gallery/" target="_blank">Gallery</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://github.com/nzooherd" target="_blank">Github</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://sspai.com/u/vmhwvppx" target="_blank">Sspai</a>
+  </div>
+  
+</div>
+<div class="row end-xs">
+   
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">深入Http Read Timeout</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2021-12-11 13:43:08 UTC">
+                11 Dec 2021
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+              <div class="post-author">
+                <a target="_blank" href="http://nzooherd.github.io/">@nzooherd</a>
+              </div>
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          
+          <p>海外的对象存储底层直接使用公有云，由于某些莫名其妙的原因，客户端不定期出现大量的 Read timed out 异常，部分异常栈如下。在和公有云的技术支持人员沟通过程中，我发现双方都不能很明确的指出到底是哪个环节超时了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>java.net.SocketTimeoutException: Read timed out
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.socketRead0(Native Method) ~[na:na]
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.socketRead(SocketInputStream.java:115) ~[na:na]
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.read(SocketInputStream.java:168) ~[na:na]
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.read(SocketInputStream.java:140) ~[na:na]
+</span></span><span style="display:flex;"><span>	at java.base/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:478) ~[na:na]
+</span></span><span style="display:flex;"><span>	at java.base/sun.security.ssl.SSLSocketInputRecord.readHeader(SSLSocketInputRecord.java:472) ~[na:na]
+</span></span><span style="display:flex;"><span>	at java.base/sun.security.ssl.SSLSocketInputRecord.bytesInCompletePacket(SSLSocketInputRecord.java:70) ~[na:na]
+</span></span><span style="display:flex;"><span>	at java.base/sun.security.ssl.SSLSocketImpl.readApplicationRecord(SSLSocketImpl.java:1374) ~[na:na]
+</span></span><span style="display:flex;"><span>	at java.base/sun.security.ssl.SSLSocketImpl$AppInputStream.read(SSLSocketImpl.java:986) ~[na:na]
+</span></span><span style="display:flex;"><span>	at org.apache.http.impl.io.SessionInputBufferImpl.streamRead(SessionInputBufferImpl.java:137) ~[httpcore-4.4.13.jar!/:4.4.13]
+</span></span></code></pre></div><p>众所周知，Http1.1 协议可以分成两个过程</p>
+<ol>
+<li>客户端向服务端发送数据</li>
+<li>客户端从服务端读取数据</li>
+</ol>
+<p><img src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/tcp.png.png" alt="tcp.png"></p>
+<p>所以 Http Read Timeout 的具体范围可能是指</p>
+<ul>
+<li>上图 2-3 的时间 ?</li>
+<li>上图 2-4 的时间 ?</li>
+<li>上图 3-4 的时间 ?</li>
+<li>Tcp 层任意两个 Segment 的间隔时间 ?</li>
+<li>Tcp 层任意两个 Receive Segment 的间隔时间 ?</li>
+<li>Tcp 层任意两个 Send Segment 的间隔时间 ?</li>
+</ul>
+<p>从 Http Client 的 ReadTimeout 参数看，
+我最开始认为是 $ 2-4的时间 $ ;
+后来想到 $2-4的时间$ 受下载对象的大小影响很大，但不论对象大小，该参数值都是一样的，所以应该是 $2-3的时间$ ;
+后来我看上面的异常栈时，才发现是 Socket 的 Timeout。咨询同事说此参数表示 $Tcp 任意两个Segment 的间隔时间$ ；
+我觉得他说的很有道理，直到有一天我看到了 WriteTimeout 这个参数。艹，如果 ReadTimeout 代表 $Tcp 层任意两个 Segement 的间隔时间$，那 WriteTimeout 和 ReadTimeout 有什么区别呢。
+所以 ReadTimeout 实际代表的是 $Tcp 层任意两个 Receive Segment 的间隔时间$?。对，一定是这样的&hellip;..吗？</p>
+<p>还是看看源码吧&hellip;</p>
+<p>首先复现一下问题，随便起个 Http Server</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-Java" data-lang="Java"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">// server</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#5c35cc;font-weight:bold">@GetMapping</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">path</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000;font-weight:bold">{</span><span style="color:#4e9a06">&#34;/testTimeout&#34;</span><span style="color:#000;font-weight:bold">})</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">public</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">String</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">testTimeout</span><span style="color:#000;font-weight:bold">(){</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#000">Thread</span><span style="color:#000;font-weight:bold">.</span><span style="color:#c4a000">sleep</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">10000L</span><span style="color:#000;font-weight:bold">);</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">return</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;YES&#34;</span><span style="color:#000;font-weight:bold">;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000;font-weight:bold">}</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span></code></pre></div><ol>
+<li>拿 OkHttp 试试</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">// client
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"></span><span style="color:#204a87;font-weight:bold">val</span> <span style="color:#000">okClient</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000">OkHttpClient</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span><span style="color:#000">newBuilder</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span><span style="color:#000">readTimeout</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">5000</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">TimeUnit</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">MILLISECONDS</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span><span style="color:#000">build</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000">okClient</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span><span style="color:#000">newCall</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">Request</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">.</span><span style="color:#000">Builder</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">.</span><span style="color:#000">url</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;http://127.0.0.1:8080/testTimeout&#34;</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">.</span><span style="color:#000">build</span><span style="color:#000;font-weight:bold">())</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span><span style="color:#000">execute</span><span style="color:#000;font-weight:bold">()</span>
+</span></span></code></pre></div><p>结果显而易见的超时了&hellip;</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Caused by: java.net.SocketTimeoutException: Read timed out
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.socketRead0(Native Method)
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.socketRead(SocketInputStream.java:115)
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.read(SocketInputStream.java:168)
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.read(SocketInputStream.java:140)
+</span></span><span style="display:flex;"><span>	at okio.Okio$2.read(Okio.java:140)
+</span></span><span style="display:flex;"><span>	at okio.AsyncTimeout$2.read(AsyncTimeout.java:237)
+</span></span><span style="display:flex;"><span>	... 20 more
+</span></span></code></pre></div><p>根据异常跳到源码中继续看一下</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-Java" data-lang="Java"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">SocketInputStream</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">extends</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">FileInputStream</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000;font-weight:bold">{</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#8f5902;font-style:italic">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"> * Reads into an array of bytes at the specified offset using
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"> * the received socket primitive.
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"> * @param fd the FileDescriptor
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"> * @param b the buffer into which the data is read
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"> * @param off the start offset of the data
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"> * @param len the maximum number of bytes read
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"> * @param timeout the read timeout in ms
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"> * @return the actual number of bytes read, -1 is
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"> *          returned when the end of the stream is reached.
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"> * @exception IOException If an I/O error has occurred.
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"> */</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">private</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">native</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">int</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">socketRead0</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">FileDescriptor</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">fd</span><span style="color:#000;font-weight:bold">,</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">                               </span><span style="color:#204a87;font-weight:bold">byte</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">b</span><span style="color:#ce5c00;font-weight:bold">[]</span><span style="color:#000;font-weight:bold">,</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">int</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">off</span><span style="color:#000;font-weight:bold">,</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">int</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">len</span><span style="color:#000;font-weight:bold">,</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">                               </span><span style="color:#204a87;font-weight:bold">int</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">timeout</span><span style="color:#000;font-weight:bold">)</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">throws</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">IOException</span><span style="color:#000;font-weight:bold">;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000;font-weight:bold">}</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span></code></pre></div><p>参数中有个 $Timeout$，但是源码没有说明其具体含义，猜测是<strong>从调用这个方法开始计时，如果经过 $Timeout$ 时间没有读到任何数据，就报超时异常。</strong>。听起来倒也河狸，继续看看其它的实现吧。</p>
+<ol start="2">
+<li>Apache HttpClient</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">// Apache HttpClient 没有看到 ReadTimeout 的参数，反而用 SocketTimeout 代替。
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"></span><span style="color:#204a87;font-weight:bold">val</span> <span style="color:#000">timeoutConfig</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000">RequestConfig</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">custom</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span><span style="color:#000">setSocketTimeout</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">5</span> <span style="color:#000;font-weight:bold">*</span> <span style="color:#0000cf;font-weight:bold">1000</span><span style="color:#000;font-weight:bold">).</span><span style="color:#000">build</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">val</span> <span style="color:#000">httpClient</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">HttpClient</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000">HttpClientBuilder</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">create</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span><span style="color:#000">setDefaultRequestConfig</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">timeoutConfig</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">.</span><span style="color:#000">build</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">httpClient</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">execute</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">HttpGet</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;http://127.0.0.1:8080/testTimeout&#34;</span><span style="color:#000;font-weight:bold">))</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Exception in thread &#34;main&#34; java.net.SocketTimeoutException: Read timed out
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.socketRead0(Native Method)
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.socketRead(SocketInputStream.java:115)
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.read(SocketInputStream.java:168)
+</span></span><span style="display:flex;"><span>	at java.base/java.net.SocketInputStream.read(SocketInputStream.java:140)
+</span></span><span style="display:flex;"><span>	at org.apache.http.impl.conn.LoggingInputStream.read(LoggingInputStream.java:84)
+</span></span><span style="display:flex;"><span>	at org.apache.http.impl.io.SessionInputBufferImpl.streamRead(SessionInputBufferImpl.java:137)
+</span></span></code></pre></div><p>同 OkHttp 一样的异常栈，再看一下 Python 的&hellip;</p>
+<ol start="3">
+<li>Python Requests</li>
+</ol>
+<p><img src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20211116204348.png" alt="20211116204348"></p>
+<p>如上图红色的部分，最核心的代码 $sock.settimeout(read_timeout)$ 设置了 socket 的 timeout。</p>
+<p><img src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20211116205156.png" alt="20211116205156"></p>
+<p>而 Socket 的 $recv$ 又是一个 native 方法。。。</p>
+<p><strong>以上种种看起来都像 Socket 有一个 timeout 的参数，设置参数后，如果在定义时间内没有读到数据，就会报超时异常。而且该时间不是和 Tcp 连接绑定的，否则在 Java 源码没必要在 $sockRead0$ 方法中传入此参数。反映到 Http 层，表现为 $2-3$ 的时间。</strong></p>
+<p>解释很合理，直到有一天写着代码的我想起，Tcp 有四个定时器。</p>
+<ol>
+<li>重传定时器: 超时后重新发送数据报文段</li>
+<li>坚持定时器: 超时后发送窗口探测报文段</li>
+<li>保活定时器: 超时后发送连接探测报文段</li>
+<li>时间等待计时器: 超时后断开连接</li>
+</ol>
+<p>Tcp 有四个定时器，但是没有用来实现上文超时后异常的 <em>超时定时器</em>。我理解 Socket 只是 Tcp 协议的具体实现，虽然有 Posix Sockets，有 Berkeley Sockets&hellip;，但他们都遵守 Tcp 协议，对于 Tcp 未规定的部分没必要做额外实现。</p>
+<p>想不通为什么，先找找 socket 的方法签名
+<img src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20211116233734.png" alt="20211116233734">
+我突然有点害怕，无论哪个重载都没有 timeout。我看着眼前的代码觉得好陌生，一定是哪里错了，我的后背不觉地渗出致密的汗水，双手止不住地发抖。连夜打车回到家里，战战兢兢翻开吃灰已久的《TCP/IP详解卷1：协议》，拿着放大镜仔细看了半夜，依然没有看到哪里有我的 <em>超时定时器</em>。如果 Tcp 层没有 Timeout，Socket 实现也没有 Timeout，那么 Timeout 是怎么做的呢？不会像 Java 一样另外开一个线程计时吧，不会吧，不会吧，那可太蠢了。</p>
+<ol>
+<li>
+<p>Python SocketTimeout</p>
+<p>略却各种 if 判断和边界条件后，Linux 机器上 recv 实现的核心如下</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">struct</span> <span style="color:#000">pollfd</span> <span style="color:#000">pollfd</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">pollfd</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">fd</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">sock_fd</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">pollfd</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">events</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">POLLIN</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">poll</span><span style="color:#000;font-weight:bold">(</span><span style="color:#ce5c00;font-weight:bold">&amp;</span><span style="color:#000">pollfd</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">timeout</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">recv</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">sock_fd</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">cbuf</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">len</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">flag</span><span style="color:#000;font-weight:bold">)</span>
+</span></span></code></pre></div><p>超时使用poll实现，意料之外，又好像清理之中。</p>
+</li>
+<li>
+<p>Java  SocketTimeout</p>
+<p>回过头再看 Java SocketTimeout 的实现，亦是同理，就不贴代码了。
+只是没想到对于 Java BIO，仍然可以借用 IO 多路复用实现超时机制。</p>
+</li>
+</ol>
+<p>到了这里，Read Timeout 的具体含义也已明晓。
+可以理解为<strong>客户端从每次调用 socket.read() 开始计时，若相应时间段内没有读取到数据，就会有 Timeout 的异常。</strong></p>
+<p>然而客户端怎么调用 socket.read() 却不是唯一的，但至少要调用两次。
+第一次读取到 Http Header 获取 Response 中的 Content-Length，第二次根据 Content-Length 读取相应大小的 Response Body，中间是否存在分段各客户端根据自己实现不尽相同。
+<strong>所以出现 Read Timeout 大概率是 Response Header 或者 Body 没有及时返回</strong></p>
+<p>socket.read() 超时很好理解，只要服务端没有及时发送数据就会出现，但 socket.write() 实际也会超时，这也是 Write Timeout 的含义，但超时的原因可就是另一回事了。</p>
+<p>问题已解，我奇怪的却是为啥我不继续看 epoll 的实现？
+程序员总是喜欢说钻研底层，那么多底才是底呢，为什么我看到 Java 中的 SocketTimeout 后会仍存疑问，看到 epoll 的调用却自认豁然开朗？
+我认为知识可以分为两种，<strong>知道自己知道的</strong> 和 <strong>知道自己不知道的。</strong>
+知道自己知道的知识如果遇到问题，总会刨根问底，差个明白，想必这应是每个人天生的好奇心。
+然知道自己不知道的知识遇到问题，若无仔细探究的计划，只会搁置一旁，由它不知道去吧。</p>
+
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+          </div>
+        </div>
+        
+          <div class="row">
+            <div class="col-xs-12">
+              
+            </div>
+          </div>
+
+          
+
+
+
+          
+          
+        
+
+        <div class="site-footer">
+  <div class="busuanzi-footer" hidden>
+    <span id="busuanzi_container_site_pv">
+      本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    <span id="busuanzi_container_site_uv">
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </span>
+    <span id="busuanzi_container_page_pv" >本文阅读量<span id="busuanzi_value_page_pv"></span>次</span>
+  </div>
+  
+</div>
+      </div>
+    </div>
+  </article>
+
+  <script src="https://utteranc.es/client.js"
+        repo="nzooherd/blog-talks"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+  </script>
+  
+
+
+
+  
+
+</body>
+
+</html>

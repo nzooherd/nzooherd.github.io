@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>多线程 on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+    <description>Recent content in 多线程 on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 01 Jul 2018 22:39:03 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>诡异的Integer</title>
+      <link>http://nzooherd.github.io/posts/%E8%AF%A1%E5%BC%82%E7%9A%84integer/</link>
+      <pubDate>Sun, 01 Jul 2018 22:39:03 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E8%AF%A1%E5%BC%82%E7%9A%84integer/</guid>
+      <description>&lt;h2 id=&#34;一个常见的面试题&#34;&gt;一个常见的面试题&lt;/h2&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Java语言实现两个线程交替输出1,2。&#xA;看到这个题就想起了生产者-消费者，进而想到了Synchorinzed, wait, notify。下面是我要写的代码&lt;/p&gt;&#xA;&lt;/blockquote&gt;</description>
+    </item>
+  </channel>
+</rss>

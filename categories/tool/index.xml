@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tool on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/categories/tool/</link>
+    <description>Recent content in Tool on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 07 Sep 2021 21:30:09 +0800</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/categories/tool/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>回归笔记的本源</title>
+      <link>http://nzooherd.github.io/posts/%E5%9B%9E%E5%BD%92%E7%AC%94%E8%AE%B0%E7%9A%84%E6%9C%AC%E6%BA%90/</link>
+      <pubDate>Tue, 07 Sep 2021 21:30:09 +0800</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E5%9B%9E%E5%BD%92%E7%AC%94%E8%AE%B0%E7%9A%84%E6%9C%AC%E6%BA%90/</guid>
+      <description>回归笔记的本源 前言 这是一个笔记软件比笔记多的时代。&#xA;从最初靠笔记发家的 Evernote，到中期的网红软件 Notion，还有最近爆火的 Obsidian。各种新概念也层出不穷，双链，块存储，网状，卢曼卡片盒&amp;hellip;，不少人的知识没有多少，软件却换了一茬又一茬。&#xA;大学开始接触笔记软件的我，当然也属于上文中那些换了一茬又一茬的一员。 市面上所有支持 Vim 模式的软件基本尝了个遍。&#xA;然而当我又一次因为笔记迁移的数据兼容性折腾到半夜时，忽然在想是不是太过于痴迷软件本身，而忘记了笔记的初衷。重新思考之后，我决定放弃软件的形态，以此回归笔记本源。&#xA;经过详细的需求分析与产品调研，并且认真使用了一年时间后，我认为我已经找到了笔记管理的最终形态。下文先回顾我的笔记软件变迁，之后详细介绍我自称为 VSNote 的工具，最后谈一谈我理解的生产力。&#xA;各种Note SimpleNote SimpleNote是我第一款笔记软件。&#xA;那时刚踏入大学不久，受限于繁重的大学课程压力，需要一个简单的工具来记录每天的作业 TODO。&#xA;此时的笔记软件的作用更类似于一个桌面便笺，无需大量的文字编辑工作，SimlpeNote 简洁的 UI 和全平台同步的功能十分切合我的需求。&#xA;WizNote 大三之后，开始为工作做准备。 此时我的笔记内容偏不再仅仅是每日 TODO，开始侧重于复习总结，知识整理等，需要大量的编辑。 SimpleNote 简陋的功能限制了其使用场景。 WizNote 的 Vim 编辑功能吸引了我。&#xA;相比于 SimpleNote，WizNote 是一个真正的知识管理软件，也是在它的陪伴下，18年秋招顺利上岸。&#xA;VNote 步入工作，生活琐事日益繁冗，积累学习亦不可懈怠。 恰巧为知笔记试用期结束，数据无法同步云端，遂寻找一款新的软件来支撑我的需求。&#xA;闲杂摸鱼之际，在 V2EX 发现作者推广这款名叫 VNote 的开源笔记软件。 深入调查一番，发现各方面都比较切合我的使用场景。&#xA;VNote 的一些主要 Feature :&#xA;可选 Vim 编辑模式。 基于 C++ QT 开发，跨平台无性能问题。 无服务端，无需担心数据泄露。 可以无限嵌套的笔记目录。 支持 PlantUML，Mermaid, LaTeX 插件。 主题，样式，快捷键高度可定制。 开源! 用着不爽，自己开发。 虽然 VNote 没有云端同步，但实际 Vnote 的笔记内容完全基于本地文件。只需要同步笔记文件夹，可以保证数据一致性。</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>机器学习 on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</link>
+    <description>Recent content in 机器学习 on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 15 Jan 2023 02:34:10 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>《深度学习》读书笔记(一)</title>
+      <link>http://nzooherd.github.io/posts/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B8%80/</link>
+      <pubDate>Sun, 15 Jan 2023 02:34:10 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B8%80/</guid>
+      <description>最近在读“花书”《Deep learning》，然而第一部分“应用数学与机器学习基础”就异常吃力。一方面高数等基础我大三开始就不再应用，另一方面这部分写得着实简陋，数学公式的证明充斥着大量的“不难得出，可以看到，因此可证…”。让我一个高考数学 145 的人常常怀疑自己的智商。&#xA;梯度负方向下降最快 每一篇介绍梯度下降的文章，几乎都会告诉你“梯度负方向下降最快”，但却不告诉你为什么。 而当你谷歌时，中文互联网上的资料大都是这两篇文章复制粘贴：&#xA;为什么梯度反方向是函数值局部下降最快的方向？ 为什么梯度的负方向是局部下降最快的方向？ 然而，就在《Deep Learning》这本书的 4.3 章节，用短短 10 行向读者敷衍得证明了下为什么。敷衍到我为了看懂查了一天资料…&#xA;先列一些定义:&#xA;偏导数 \(\frac{\partial}{\partial x_i}f(x)\) 衡量点 \(x\) 处对 \(x_i\) 的变化率。 梯度是相对一个向量求导的导数， \(f\) 的导数是包含所有偏导数的向量，记为 \(\nabla_xf(x)\)。 下降方向中的方向定义为 \(u\) (单位向量)。 \(u\) 方向的下降速度为 \(\frac{\partial}{\partial a}f(x+au)\) 在 a=0 时的值。 下面通过雅可比矩阵链式法则求导(向量求导不能直接应用链式法则): \[\frac{\partial{\boldsymbol{f(x+au)}}}{\partial{a}} = \frac{\partial \boldsymbol{f(x+au)}}{\partial{\boldsymbol{(x+au)}}}\frac{\partial{\boldsymbol{(x+au)}}}{\partial a} \]&#xA;注意这里是 \(\frac{\partial{\boldsymbol{f(x+au)}}}{\partial{a}}\) 而非 \(\frac{\partial{f(x+au)}}{\partial{a}}\)，等号左侧是粗体。&#xA;\(\frac{\partial{\boldsymbol{f}}}{\partial{\boldsymbol{x}}}, \frac{\partial{f}}{\partial{\boldsymbol{x}}}\) 是否相等需要结合分子分母的形态具体分析，以本题为例:&#xA;\(\frac{\partial{\boldsymbol{f(x+au)}}}{\partial{a}}\) 雅可比矩阵结果是 \(1 \times 1\)，而 \(\frac{\partial{f(x+au)}}{\partial{a}}\) 结果同样为 \(1\times 1\)，所以:&#xA;\[\frac{\partial{\boldsymbol{f(x+au)}}}{\partial{a}}=\frac{\partial{f(x+au)}}{\partial{a}}\]&#xA;假设 \(x \in R^n\), \(\frac{\partial \boldsymbol{f(x+au)}}{\partial{\boldsymbol{(x+au)}}}\) 雅可比矩阵结果是 \(1 \times n\)，而 \(\nabla_xf(x)a\) 通常记为 \(n \times 1\)，所以 \[\frac{\partial \boldsymbol{f(x+au)}}{\partial{\boldsymbol{(x+au)}}} ={\frac{\partial f(x+au)}{\partial{\boldsymbol{(x+au)}}}}^\intercal\]</description>
+    </item>
+    <item>
+      <title>统计学习方法(1)-感知机</title>
+      <link>http://nzooherd.github.io/posts/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A01-%E6%84%9F%E7%9F%A5%E6%9C%BA/</link>
+      <pubDate>Wed, 04 Apr 2018 22:02:05 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A01-%E6%84%9F%E7%9F%A5%E6%9C%BA/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/1009183469.jpg&#34; alt=&#34;&#34;&gt;&#xA;初雪 2018-4-4 晚&lt;/p&gt;&#xA;&lt;p&gt;&lt;em&gt;找了近一个月的时间都没有找到一款合适的笔记，最终我选择了Visual Code + Vim + Markdown + Mega。笔记内容链接在个人描述页面&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;忽然想学一波大数据方面的东西，但是我不想搞人工智能，例如NLU, CV等，这些对于人来说很简单的事。关于人工智能，我仍然坚持当前基于统计的方法无法实现真正的人工智能，不如花时间来玩一玩大数据的东西。以下内容参考李航的&amp;laquo;统计学习方法&amp;raquo;，重在理解。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

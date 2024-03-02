@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>总结 on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/tags/%E6%80%BB%E7%BB%93/</link>
+    <description>Recent content in 总结 on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 20 Jul 2018 21:44:15 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/tags/%E6%80%BB%E7%BB%93/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>美团实习小记</title>
+      <link>http://nzooherd.github.io/posts/%E7%BE%8E%E5%9B%A2%E5%AE%9E%E4%B9%A0%E5%B0%8F%E8%AE%B0/</link>
+      <pubDate>Fri, 20 Jul 2018 21:44:15 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E7%BE%8E%E5%9B%A2%E5%AE%9E%E4%B9%A0%E5%B0%8F%E8%AE%B0/</guid>
+      <description>&lt;p&gt;3.12~7.20，四个月左右的美团实习今天就结束了，细细回想工作时的一点一滴，想要说些什么，确不知从何说起。&lt;/p&gt;&#xA;&lt;p&gt;这些日子，在美团AI孵化器语音组负责后台开发工作，可以说是见证了一个后台服务系统的重构-&amp;gt;推到-&amp;gt;重新设计-&amp;gt;逐渐成形的全过程，在完成第一个可用版本之后，离职滚蛋，也是没有任何遗憾了。从这段实习中，确实学到了非常非常多的东西，强烈推荐在本科期间一定要实习一下，尤其是在大公司里面，你会发现许多东西其实并不是你想象的样子的。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>git命令总结</title>
+      <link>http://nzooherd.github.io/posts/git%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Sun, 02 Apr 2017 16:36:01 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/git%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid>
+      <description>&lt;p&gt;Java选修课上，老师建议采用git来管理自己的代码．其实很久以前就了解到这个linus大神编写的版本控制工具,也看过一些它的命令，现在抽个时间整理（抄袭）一下，大部分来自阮一峰大大．&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

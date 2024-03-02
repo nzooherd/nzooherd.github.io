@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/tags/python/</link>
+    <description>Recent content in Python on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 25 Dec 2021 12:34:52 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>论装饰器的四种写法</title>
+      <link>http://nzooherd.github.io/posts/%E8%AE%BA%E8%A3%85%E9%A5%B0%E5%99%A8%E7%9A%84%E5%9B%9B%E7%A7%8D%E5%86%99%E6%B3%95/</link>
+      <pubDate>Sat, 25 Dec 2021 12:34:52 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E8%AE%BA%E8%A3%85%E9%A5%B0%E5%99%A8%E7%9A%84%E5%9B%9B%E7%A7%8D%E5%86%99%E6%B3%95/</guid>
+      <description>面向切面编程在 Python 中一部分体现为装饰器。&#xA;由于 Python 中一切皆对象，装饰器的使用方法也因此多种多样，下文介绍装饰器的四种写法。&#xA;用函数装饰函数 def retry(func: Optional[Callable] = None, duration: timedelta = timedelta(seconds=2), limit: int = 10) -&amp;gt; Callable: if not func: return functools.partial(retry, duration=duration, limit=limit) @functools.wraps(func) def _func(*args, **kwargs): duration_seconds = duration.total_seconds() count = 1 while count &amp;lt;= limit: try: result = func(*args, **kwargs) return result except: count += 1 time.sleep(duration_seconds) continue return _func class TestRetry(unittest.TestCase): @staticmethod def generate_test_function(limit, retry_decorator): retry_count = [0] @retry_decorator(limit=5, duration=timedelta(seconds=0)) def my_test(): retry_count[0] += 1 if retry_count[0] &amp;lt; limit: raise Exception(&amp;#34;Test failed&amp;#34;) else: return retry_count return my_test def test_function_decoration(self): for i in range(100): exception_count = random.</description>
+    </item>
+  </channel>
+</rss>

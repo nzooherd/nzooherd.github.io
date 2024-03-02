@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Network on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/tags/network/</link>
+    <description>Recent content in Network on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 19 Jun 2021 12:06:55 +0800</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/tags/network/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Artificially create connection timemout</title>
+      <link>http://nzooherd.github.io/posts/artifically-create-a-connection-timemout/</link>
+      <pubDate>Sat, 19 Jun 2021 12:06:55 +0800</pubDate>
+      <guid>http://nzooherd.github.io/posts/artifically-create-a-connection-timemout/</guid>
+      <description>从三年前第一次接触TCP backlog开始，TCP建连时到底时两个队列还是一个队列就一直作为一个问题存在脑子了，没想到三年过去了才终于搞明白。&#xA;上图摘自&amp;laquo;TCP/IP详解卷1&amp;raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。&#xA;无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。&#xA;原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列&#xA;一个队列: 此场景下要将处于SYNC_RECV和ESTABLISHED的状态全部放入其中&#xA;两个队列: SYNC_RECV一个队列，ESTABLISHED一个队列&#xA;准确来说两种实现都是正确的，因为这不属于TCP协议的范畴。&#xA;BSD选择了第一种，当队列满时，仅仅是丢弃收到的SYN，让客户端重试。&#xA;Linux2.2之后选择了第二种，存在两个队列。因此对于绝大多数程序员来说，记住下图就可以应用100%的场景了。&#xA;When SYN Queue is Full&#xA;if net.ipv4.tcp_syncookies=0, 丢弃SYN if net.ipv4.tcp_syncookies=1, if ACP Queue is Full and req_young_len &amp;gt; 1，丢弃SYN。req_young_len是指SYN队列中没有被重传的SYN/ACK pakcet的数量 否则对这个SYNC packet生成syncookies。 When Accept Queue is Full&#xA;if tcp_abort_on_overflow=1, 返回 RST packet，并且从SYN Queue中移除。 if tcp_abort_on_overflow=0, 仅仅标记此连接为acked，并不从SYN Queue中移除。一段时间后，服务端会因为[假装]没有收到ACK而重发SYN+ACK packet. 重现 了解上述原理后，我们只需要将SYN Queue和ACK Queue设置的尽量小，就可以重现Connection Timeout，甚至重现Server discard syn的场景，本文会重现Server discard syn，这也是Connection Timeout的一种。&#xA;设置SYN Queue大小为1 关闭syncookies 设置系统级backlog最大值 打开/etc/sysctl.conf文件，加入以下内容&#xA;net.ipv4.tcp_max_syn_backlog = 1 net.</description>
+    </item>
+    <item>
+      <title>Java NIO易错点</title>
+      <link>http://nzooherd.github.io/posts/java-nio%E6%98%93%E9%94%99%E7%82%B9/</link>
+      <pubDate>Wed, 29 Nov 2017 19:22:03 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/java-nio%E6%98%93%E9%94%99%E7%82%B9/</guid>
+      <description>&lt;p&gt;最近在和同学写一个Android端的类微信项目，不过非常简单，只有添加好友，设置备注，通话等功能。我主要负责服务器端的开发，在开发过程中，使用了Spring框架和Java NIO。有些东西，确实不写代码根本就学不会，在学习过程中，发现Java NIO中的一些易错点，特此记录，以备查询。(可能会不定时更新)&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>通过ngrok实现内网穿透</title>
+      <link>http://nzooherd.github.io/posts/%E9%80%9A%E8%BF%87ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</link>
+      <pubDate>Fri, 20 Oct 2017 22:41:44 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E9%80%9A%E8%BF%87ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</guid>
+      <description>&lt;h3 id=&#34;通过ngrok实现ssh连接本机电脑&#34;&gt;通过ngrok实现ssh连接本机电脑&lt;/h3&gt;&#xA;&lt;p&gt;从树莓派开始就一直想着有没有一种方法可以通过外网ssh连接内网中的树莓派，之前知道一个大概的思路，就是通过花生壳的类似内网穿透的服务。然而好几次尝试都失败了，最后直接知乎，搜到了ngrok这个神器，一次搞定。不得不感叹一下国外的开源环境确实比国内好很多，一些用中文怎么搜索都找不到答案的问题，换成英文搜索就会发现，老外早就给你写好解决办法了，就看你会不会用Google了。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>粗谈Tcp/Ip协议</title>
+      <link>http://nzooherd.github.io/posts/%E7%B2%97%E8%B0%88tcp-ip%E5%8D%8F%E8%AE%AE/</link>
+      <pubDate>Thu, 06 Jul 2017 10:37:18 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E7%B2%97%E8%B0%88tcp-ip%E5%8D%8F%E8%AE%AE/</guid>
+      <description>最近在学习Tcp-Ip协议，这种东西怎么说，不知道学哪，不知道学完有什么用，不知道哪些是重点，而且对于各个协议的细节，根本记不住。缕一下，方便以后学习。 首先通常所说的Tcp-ip协议是一个协议簇，不仅有Tcp-Ip协议。从计算机网络中的五个分层来说，Tcp-Ip协议簇在各个层次都有不同的协议，应用层的http,ftp等，传输层的tcp,udp,网络层的ip，链路层的apr协议，还有物理层的协议等。计算机网络作为一个系统，不仅要有硬件，还要有软件。就比如一条高速公路，公路，服务区，收费站等就是硬件，汽车需要遵守的交通规则就是软件，即我们所说的Tcp-Ip协议，两者缺一不可。</description>
+    </item>
+    <item>
+      <title>IO多路复用</title>
+      <link>http://nzooherd.github.io/posts/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/</link>
+      <pubDate>Thu, 06 Jul 2017 10:36:54 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/</guid>
+      <description>&lt;h3 id=&#34;阻塞同步非阻塞异步&#34;&gt;阻塞，同步，非阻塞，异步&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;同步和异步&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;同步和异步关注点是&lt;em&gt;消息通信机制&lt;/em&gt;，同步模型下消息的处理者主动去等待消息的提供者，异步模型下由消息提供者来通知消息处理者。&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;阻塞和非阻塞&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;阻塞和非阻塞关注的是&lt;em&gt;消息处理者在等待调用结果消息结果时的状态&lt;/em&gt;。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>xx-net网络分享</title>
+      <link>http://nzooherd.github.io/posts/xx-net%E7%BD%91%E7%BB%9C%E5%88%86%E4%BA%AB/</link>
+      <pubDate>Mon, 06 Mar 2017 20:53:53 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/xx-net%E7%BD%91%E7%BB%9C%E5%88%86%E4%BA%AB/</guid>
+      <description>&lt;p&gt;趁着新学期开学的这段时间，抽时间搞了搞寒假遗留的东西。&lt;/p&gt;&#xA;&lt;h3 id=&#34;first&#34;&gt;First&lt;/h3&gt;&#xA;&lt;p&gt;第一件事就是树莓派，一直想着将树莓派刷成openwrt固件，最终在我的无限努力下，我完成了目标，尴尬的却发现根本不会使用，wan口和lan口完全混杂，最后只能放弃将树莓派当路由器的想法。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>ipv6网络下观看清华iptv</title>
+      <link>http://nzooherd.github.io/posts/ipv6%E7%BD%91%E7%BB%9C%E4%B8%8B%E8%A7%82%E7%9C%8B%E6%B8%85%E5%8D%8Eiptv/</link>
+      <pubDate>Mon, 26 Dec 2016 11:01:34 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/ipv6%E7%BD%91%E7%BB%9C%E4%B8%8B%E8%A7%82%E7%9C%8B%E6%B8%85%E5%8D%8Eiptv/</guid>
+      <description>&lt;h3 id=&#34;深夜看球&#34;&gt;深夜看球&lt;/h3&gt;&#xA;&lt;p&gt;在校园网环境下，ipv6不仅不限制流量，晚间还不断网，简直就是为晚间看球赛而生的。于是想到了我理的iptv。我理的iptv应该是走的ipv6通道，但是夜晚却不能使用。后来就在ipv6资源中看到了北邮iptv和清华iptv。最终当然是选择清华iptv了，五道口财大气粗，基本上各卫视都有高清，这带宽不用就是浪费。&lt;br&gt;&#xA;1 首先就是确定自己有ipv6地址咯，Linux和Mac 终端里面&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ping6 2001:4860:4860::8888&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;windows 将ping6 改为 ping -6 收到回复就说明可以了。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

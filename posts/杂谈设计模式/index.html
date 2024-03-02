@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.123.7">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="nzooherd" />
+  <meta property="og:url" content="http://nzooherd.github.io/posts/%E6%9D%82%E8%B0%88%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" />
+  <link rel="canonical" href="http://nzooherd.github.io/posts/%E6%9D%82%E8%B0%88%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" /><link rel="apple-touch-icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="shortcut" href="/favicon.ico" /><link rel="alternate" type="application/atom+xml" href="http://nzooherd.github.io/index.xml" title="nzooherd&#39;s blog">
+
+  <script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "http:\/\/nzooherd.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "杂谈设计模式",
+      "headline" : "杂谈设计模式",
+      "description" : "最近在读程杰的\u0026laquo;大话设计模式\u0026raquo;，学了十几个设计模式后感觉每个都很相似，下面虽然写了一堆，但是要真正理解还有写代码才可以，实践是检验真理的唯一标准。\n",
+      "inLanguage" : "en-US",
+      "author" : "nzooherd",
+      "creator" : "nzooherd",
+      "publisher": "nzooherd",
+      "accountablePerson" : "nzooherd",
+      "copyrightHolder" : "nzooherd",
+      "copyrightYear" : "2018",
+      "datePublished": "2018-02-03 23:16:13 \u002b0000 UTC",
+      "dateModified" : "2018-02-03 23:16:13 \u002b0000 UTC",
+      "url" : "http:\/\/nzooherd.github.io\/posts\/%E6%9D%82%E8%B0%88%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F\/",
+      "keywords" : [ "读书笔记", ]
+  }
+</script>
+<title>杂谈设计模式</title>
+  <meta property="og:title" content="杂谈设计模式" />
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="最近在读程杰的&amp;laquo;大话设计模式&amp;raquo;，学了十几个设计模式后感觉每个都很相似，下面虽然写了一堆，但是要真正理解还有写代码才可以，实践是检验真理的唯一标准。
+" />
+  <meta name="description" content="最近在读程杰的&amp;laquo;大话设计模式&amp;raquo;，学了十几个设计模式后感觉每个都很相似，下面虽然写了一堆，但是要真正理解还有写代码才可以，实践是检验真理的唯一标准。
+" />
+  <meta property="og:locale" content="en-us" />
+
+  
+    <style>body{font-family:bree serif,sans-serif;-webkit-font-smoothing:antialiased;margin:0 20px}article{max-width:800px;margin-left:auto;margin-right:auto}a{color:#000;text-decoration:none}a:hover{font-weight:600;text-decoration:underline}.post-ads{margin:50px 0}.markdown-body{font-size:18px;max-width:100%}.markdown-body a{text-decoration:underline;text-decoration-color:#000}.markdown-body pre{padding:16px;overflow:auto;border-radius:10px}.markdown-body code{padding:.2em .4em;font-size:85%;background-color:#f6f8fa;border-radius:6px}.markdown-body pre>code{padding:0;font-size:100%;background-color:inherit;border:0}.Chinese .markdown-body{line-height:200%}.site-date-catalog{font-size:2rem}.header-title{font-size:2rem;font-weight:700;margin-top:32px;font-family:bungee shade,sans-serif}.header-title a{text-decoration:none}.header-subtitle{color:#666}.header-items{margin:10px 0}.header-item{margin:0 5px}.header-line{width:100%;border-width:2px;border-color:#482936;border-style:solid none none none}.lang-switch{font-weight:600}#posts-list{min-height:600px}.posts-line{font-size:1.2rem;margin:12px 0}.posts-categories{font-size:.8rem;margin:auto;text-align:center}.posts-category{padding:3px 0;border:#000 2px solid;border-radius:5px}.site-footer{}.site-footer-item{margin-right:12px}.post-content img{max-width:100%;display:block;margin-right:auto;margin-top:12px}.post-header{margin-bottom:50px}.post-title{font-size:2rem;font-weight:600}.post-tags{display:inline;font-weight:600;padding:2px 5px;margin-right:6px;border:#000 2px solid;border-radius:5px}.post-date{font-weight:800;font-style:italic}.post-author{float:right;font-weight:600}.page-content{min-height:60%}.post-content{margin-bottom:50px}.post-content p{hyphens:auto;line-height:1.8;text-justify:ideographic;margin-bottom:1em}.related-content{border-width:3px;border-style:solid;border-color:#000;padding:0 10px;margin-bottom:50px;margin-top:100px}.related-content li{margin:5px 0}.taxonomy-term{font-size:3rem}.gallery-img{text-align:center}.gallery-img span{text-align:center}.gallery-img-desc{font-size:.8em;font-weight:800}#disqus_thread{position:relative}#disqus_thread:after{content:"";display:block;height:55px;width:100%;position:absolute;bottom:0;background:#fff}@media screen and (max-width:600px){.header-title,.header-subtitle,.header-items{text-align:center}.posts-line{font-size:16px}.markdown-body{font-size:16px}.post-title{font-size:2rem}.post-content p{letter-spacing:.05em}}@media screen and (max-width:48em){.posts-category{display:none}}table{border-spacing:0;border-collapse:collapse}table th{padding:6px 13px;border:1px solid #dfe2e5;font-size:large}table td{padding:6px 13px;border:1px solid #dfe2e5}</style>
+  
+  
+    <style>.container,.container-fluid{margin-right:auto;margin-left:auto}.container-fluid{padding-right:2rem;padding-left:2rem}.row{box-sizing:border-box;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-flex:0;-ms-flex:0 1 auto;flex:initial;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-.5rem;margin-left:-.5rem}.row.reverse{-webkit-box-orient:horizontal;-webkit-box-direction:reverse;-ms-flex-direction:row-reverse;flex-direction:row-reverse}.col.reverse{-webkit-box-orient:vertical;-webkit-box-direction:reverse;-ms-flex-direction:column-reverse;flex-direction:column-reverse}.col-xs,.col-xs-1,.col-xs-10,.col-xs-11,.col-xs-12,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-offset-0,.col-xs-offset-1,.col-xs-offset-10,.col-xs-offset-11,.col-xs-offset-12,.col-xs-offset-2,.col-xs-offset-3,.col-xs-offset-4,.col-xs-offset-5,.col-xs-offset-6,.col-xs-offset-7,.col-xs-offset-8,.col-xs-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-xs{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-xs-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-xs-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-xs-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-xs-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-xs-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-xs-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-xs-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-xs-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-xs-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-xs-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-xs-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-xs-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-xs-offset-0{margin-left:0}.col-xs-offset-1{margin-left:8.33333333%}.col-xs-offset-2{margin-left:16.66666667%}.col-xs-offset-3{margin-left:25%}.col-xs-offset-4{margin-left:33.33333333%}.col-xs-offset-5{margin-left:41.66666667%}.col-xs-offset-6{margin-left:50%}.col-xs-offset-7{margin-left:58.33333333%}.col-xs-offset-8{margin-left:66.66666667%}.col-xs-offset-9{margin-left:75%}.col-xs-offset-10{margin-left:83.33333333%}.col-xs-offset-11{margin-left:91.66666667%}.start-xs{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-xs{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-xs{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-xs{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-xs{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-xs{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-xs{-ms-flex-pack:distribute;justify-content:space-around}.between-xs{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-xs{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-xs{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}@media only screen and (min-width:48em){.container{width:49rem}.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-offset-0,.col-sm-offset-1,.col-sm-offset-10,.col-sm-offset-11,.col-sm-offset-12,.col-sm-offset-2,.col-sm-offset-3,.col-sm-offset-4,.col-sm-offset-5,.col-sm-offset-6,.col-sm-offset-7,.col-sm-offset-8,.col-sm-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-sm{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-sm-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-sm-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-sm-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-sm-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-sm-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-sm-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-sm-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-sm-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-sm-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-sm-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-sm-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-sm-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-sm-offset-0{margin-left:0}.col-sm-offset-1{margin-left:8.33333333%}.col-sm-offset-2{margin-left:16.66666667%}.col-sm-offset-3{margin-left:25%}.col-sm-offset-4{margin-left:33.33333333%}.col-sm-offset-5{margin-left:41.66666667%}.col-sm-offset-6{margin-left:50%}.col-sm-offset-7{margin-left:58.33333333%}.col-sm-offset-8{margin-left:66.66666667%}.col-sm-offset-9{margin-left:75%}.col-sm-offset-10{margin-left:83.33333333%}.col-sm-offset-11{margin-left:91.66666667%}.start-sm{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-sm{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-sm{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-sm{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-sm{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-sm{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-sm{-ms-flex-pack:distribute;justify-content:space-around}.between-sm{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-sm{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-sm{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:64em){.container{width:65rem}.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-offset-0,.col-md-offset-1,.col-md-offset-10,.col-md-offset-11,.col-md-offset-12,.col-md-offset-2,.col-md-offset-3,.col-md-offset-4,.col-md-offset-5,.col-md-offset-6,.col-md-offset-7,.col-md-offset-8,.col-md-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-md{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-md-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-md-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-md-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-md-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-md-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-md-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-md-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-md-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-md-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-md-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-md-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-md-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-md-offset-0{margin-left:0}.col-md-offset-1{margin-left:8.33333333%}.col-md-offset-2{margin-left:16.66666667%}.col-md-offset-3{margin-left:25%}.col-md-offset-4{margin-left:33.33333333%}.col-md-offset-5{margin-left:41.66666667%}.col-md-offset-6{margin-left:50%}.col-md-offset-7{margin-left:58.33333333%}.col-md-offset-8{margin-left:66.66666667%}.col-md-offset-9{margin-left:75%}.col-md-offset-10{margin-left:83.33333333%}.col-md-offset-11{margin-left:91.66666667%}.start-md{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-md{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-md{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-md{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-md{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-md{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-md{-ms-flex-pack:distribute;justify-content:space-around}.between-md{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-md{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-md{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:75em){.container{width:76rem}.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-offset-0,.col-lg-offset-1,.col-lg-offset-10,.col-lg-offset-11,.col-lg-offset-12,.col-lg-offset-2,.col-lg-offset-3,.col-lg-offset-4,.col-lg-offset-5,.col-lg-offset-6,.col-lg-offset-7,.col-lg-offset-8,.col-lg-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-lg{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-lg-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-lg-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-lg-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-lg-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-lg-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-lg-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-lg-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-lg-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-lg-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-lg-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-lg-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-lg-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-lg-offset-0{margin-left:0}.col-lg-offset-1{margin-left:8.33333333%}.col-lg-offset-2{margin-left:16.66666667%}.col-lg-offset-3{margin-left:25%}.col-lg-offset-4{margin-left:33.33333333%}.col-lg-offset-5{margin-left:41.66666667%}.col-lg-offset-6{margin-left:50%}.col-lg-offset-7{margin-left:58.33333333%}.col-lg-offset-8{margin-left:66.66666667%}.col-lg-offset-9{margin-left:75%}.col-lg-offset-10{margin-left:83.33333333%}.col-lg-offset-11{margin-left:91.66666667%}.start-lg{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-lg{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-lg{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-lg{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-lg{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-lg{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-lg{-ms-flex-pack:distribute;justify-content:space-around}.between-lg{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-lg{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-lg{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}</style>
+  
+
+  
+
+  <link href="/index.xml" rel="alternate" type="application/rss+xml"
+    title="nzooherd&#39;s blog">
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Bree+Serif|Bungee+Shade" rel="stylesheet">
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <meta name="referrer" content="no-referrer-when-downgrade"><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="杂谈设计模式"/>
+<meta name="twitter:description" content="最近在读程杰的&laquo;大话设计模式&raquo;，学了十几个设计模式后感觉每个都很相似，下面虽然写了一堆，但是要真正理解还有写代码才可以，实践是检验真理的唯一标准。"/>
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-217390416-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-217390416-1');
+</script>
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="site-header">
+          
+<header>
+  
+  
+  
+  <div class="header-title">
+    <a href="/"
+      >nzooherd 写字的地方</a
+    >
+  </div>
+  <div class="header-subtitle">In real life.</div>
+</header>
+<div class="row end-md center-xs header-items">
+  
+  <div class="header-item">
+    <a href="https://nzooherd.github.io/about" target="_blank">About</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://twitter.com/zmxnv123" target="_blank">Twitter</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="http://nzooherd.github.io/gallery/" target="_blank">Gallery</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://github.com/nzooherd" target="_blank">Github</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://sspai.com/u/vmhwvppx" target="_blank">Sspai</a>
+  </div>
+  
+</div>
+<div class="row end-xs">
+   
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">杂谈设计模式</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2018-02-03 23:16:13 UTC">
+                03 Feb 2018
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+              <div class="post-author">
+                <a target="_blank" href="http://nzooherd.github.io/">@nzooherd</a>
+              </div>
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          
+          <p>最近在读程杰的&laquo;大话设计模式&raquo;，学了十几个设计模式后感觉每个都很相似，下面虽然写了一堆，但是要真正理解还有写代码才可以，实践是检验真理的唯一标准。</p>
+<h2 id="面向对象">面向对象</h2>
+<p>学完了面向对象的Java语言，知道了类，方法，构造，抽象类，接口等概念，然而并不能很优雅的说出面向对象的优点所在，只知道可以增加代码复用。最近在读&laquo;大话设计模式&raquo;，特此记录。
+下面是面向对象设计的三大原则。</p>
+<ul>
+<li>
+<p>封装
+把客观事务封装成类，对不安全的数据进行隐藏，对有需要的数据提供接口。</p>
+</li>
+<li>
+<p>继承
+从一般到特殊，从抽象到细节，从面向细节到面向抽象。</p>
+</li>
+<li>
+<p>多态
+不同对象对同一信息的不同反应。
+$$ \text{三个条件}\left{
+\begin{aligned}
+\text{继承} \
+\text{重写} \
+\text{父类引用指向子类对象}
+\end{aligned}
+\right.
+$$</p>
+</li>
+</ul>
+<h2 id="原则">原则</h2>
+<h3 id="单一职责">单一职责</h3>
+<p><strong>就一个类而言，应该有且仅有一个引起它变化的原因。</strong></p>
+<h3 id="开放封闭">开放封闭</h3>
+<p><strong>软件实体(类，模块，函数)应该可以扩展，但是不可以修改。</strong>
+开放封闭是面向对象设计的核心所在，可维护，可扩展，可复用开发人员应该仅对程序中呈现出频繁变化部分作出抽象。</p>
+<h3 id="依赖倒转">依赖倒转</h3>
+<p><strong>抽象不应该依赖细节，细节应该依赖抽象。</strong>
+读到这里我才明白抽象类和接口的职责所在，以前写代码，抽象类和接口基本没有使用过，原因就在于将一切细节都考虑到了具体类中，导致代码没有丝毫的可扩张性。细节依赖抽象就是要将共有的元素抽象出来成抽象类或接口，然后面向这些抽象类编程。</p>
+<h3 id="里氏代换">里氏代换</h3>
+<p><strong>子类型必须能够替换掉它们的父类型。</strong>
+一个软件实体如果使用的是一个父类的话，那么一定使用于其子类，而且它察觉不出父类和子类对象的区别。</p>
+<h3 id="迪米特法则">迪米特法则</h3>
+<p><strong>如果两个类不必彼此直接通信，那么这两个类就不应当发生直接的相互作用，如果其中一个类需要调用另一个类的某一个方法的话，可以通过第三者转发中这个调用。</strong></p>
+<h2 id="常用设计模式">常用设计模式</h2>
+<h3 id="三个工厂模式">三个工厂模式</h3>
+<h4 id="简单工厂模式">简单工厂模式</h4>
+<blockquote>
+<p>设计一个简单的计算器,可以满足加减乘除等要求。</p>
+</blockquote>
+<p>在面向过程的设计模式中，初学者可能会写出下面的代码。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>import java.util.*;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>public class Calculator{
+</span></span><span style="display:flex;"><span>    public double add(double a, double b){
+</span></span><span style="display:flex;"><span>        return a + b;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    public double sub(double a, double b) {
+</span></span><span style="display:flex;"><span>        return a - b;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    public double mul(double a, double b) {
+</span></span><span style="display:flex;"><span>        return a * b;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    public double div(double a, double b) {
+</span></span><span style="display:flex;"><span>        return a / b;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    public static void main(String[] args) {
+</span></span><span style="display:flex;"><span>        Calculator calculator = new Calculator();
+</span></span><span style="display:flex;"><span>        Scanner scanner = new Scanner(System.in);
+</span></span><span style="display:flex;"><span>        String s = scanner.nextLine();
+</span></span><span style="display:flex;"><span>        if(&#34;+&#34;.equals(s)) {
+</span></span><span style="display:flex;"><span>            ......
+</span></span><span style="display:flex;"><span>        }       
+</span></span><span style="display:flex;"><span>        else if(&#34;-&#34;.equals(s)) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        ......
+</span></span><span style="display:flex;"><span>        else {
+</span></span><span style="display:flex;"><span>            System.out.println(&#34;输入错误&#34;);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>很准确的切合了题目的需求，然而需求这东西往往越契合越不好。如果需要增加乘方运算，就需要增加新的方法和新的判断逻辑，这与面向对象的思维背道而驰。如果用简单工厂的方式，如下。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Operator</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">protacted</span> <span style="color:#000">double</span> <span style="color:#000">numberA</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">protacted</span> <span style="color:#000">double</span> <span style="color:#000">numberB</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">set</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">double</span> <span style="color:#000">A</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">double</span> <span style="color:#000">B</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">numberA</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">A</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">numberB</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">B</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">double</span> <span style="color:#000">getResult</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">AddOpe</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Operator</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">double</span> <span style="color:#000">getResult</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">numberA</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">numberB</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">......</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Factory</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">Operator</span> <span style="color:#000">getOpe</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span> <span style="color:#000">s</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;+&#34;</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">equals</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">s</span><span style="color:#000;font-weight:bold">))</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">new</span> <span style="color:#000">AddOpe</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">else</span> <span style="color:#204a87;font-weight:bold">if</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;-&#34;</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">equals</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">s</span><span style="color:#000;font-weight:bold">))</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">new</span> <span style="color:#000">SubOpe</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ce5c00;font-weight:bold">......</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Main</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#000">void</span> <span style="color:#000">main</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span><span style="color:#000;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">double</span> <span style="color:#000">result</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">Scanner</span> <span style="color:#000">scanner</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">Scanner</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#204a87;font-weight:bold">in</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">Factory</span> <span style="color:#000">facotry</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">Factory</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#c00;font-weight:bold">String</span> <span style="color:#000">op</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Scanner</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">nextLine</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">Operator</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">facotry</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">getOpe</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">op</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">Operator</span> <span style="color:#ce5c00;font-weight:bold">==</span> <span style="color:#000">null</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">else</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ce5c00;font-weight:bold">......</span> 
+</span></span><span style="display:flex;"><span>            <span style="color:#000">result</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Operator</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">getResult</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><p>简单工厂模式中将运算抽象出来，在一个简单的工厂内部判断需要什么运算符，来生产需要的运算符，这样增加新的运算时只需要添加新的运算类，并在工厂内部增加判断逻辑就可以了，然而这样并不是特别符合开放-封闭原则，这就是简单工厂模式。
+下面是简单工厂模式的UML类图。
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<h4 id="工厂方法模式">工厂方法模式</h4>
+<p>如果用工厂方法模式来实现上面的计算器，下面是工厂方法模式的UML类图。
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<p>如果需要增加新的功能，对比就可以发现<em>简单工厂模式中只需增加一个简单的运算类，然后去更改工厂中的case判断，但是工厂方法模式却需要增加一个工厂类和一个运算类，而且需要在客户端判断生成哪个工厂。</em> 从表面上来看，并没有减少什么难度，反而增加了更多的类。</p>
+<p>简单工厂模式的弊端在于违反了开放-封闭原则，当添加新的方法时，需要修改代码内部。工厂方法把简单工厂的内部逻辑判断放在了客户端，如果想增加新的功能，只需要修改客户端代码就可以了。</p>
+<h4 id="抽象工厂模式">抽象工厂模式</h4>
+<blockquote>
+<p>小成有两间塑料加工厂（A厂仅生产容器类产品；B厂仅生产模具类产品）；随着客户需求的变化，A厂所在地的客户需要也模具类产品，B厂所在地的客户也需要容器类产品；</p>
+</blockquote>
+<p>上面是一个典型的使用抽象工厂模式的例子。UML图如下。
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82.png" alt=""></p>
+<ol>
+<li>首先创建抽象工厂。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>abstract class Factory{
+</span></span><span style="display:flex;"><span>    public abstract class createA();
+</span></span><span style="display:flex;"><span>    public abstract class createB();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="2">
+<li>创建抽象产品族类。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>abstract class AbstractProduct{
+</span></span><span style="display:flex;"><span>    public abstarct void show();  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="3">
+<li>创建抽象产品类类。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">AbstractProductA</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">AbstractProduct1</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">void</span> <span style="color:#000">show</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">AbstracctProductB</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">AbstractProduct2</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">void</span> <span style="color:#000">show</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><ol start="4">
+<li>创建具体产品类。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ProductA1</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">AbstractProductA</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">show</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ProductB1</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">AbstractProductB</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">show</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ProductA2</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">AbstractProductA</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">show</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ProductB2</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">AbstracctProductB</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">show</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><ol start="5">
+<li>创建具体工厂。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Factory1</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Facotry</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">createProductA1</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">createProductB1</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Factory2</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Factory</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">createProductA2</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">createProductB2</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><ol start="6">
+<li>客户端运行</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>class Main{
+</span></span><span style="display:flex;"><span>    public static void main(String[] args) {
+</span></span><span style="display:flex;"><span>        Factory1 factory1 = new Factory1();
+</span></span><span style="display:flex;"><span>        Factory2 factory2 = new Factory2();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        factory1.createProductA1();
+</span></span><span style="display:flex;"><span>        factory2.createProductA2();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>对比简单工厂模式和工厂方法模式，可以发现抽象工厂模式对新的产品增加修改需要更改的地方很多，这一方面解隅，另一方面也增加了修改的难度，而且修改的难度对于增加的不同产品也有所不同。</p>
+<p><strong>观察上面的UML图，可以发现如果新增加一个AbstractProductC，每个工厂就都需要修改，这违反了开放-封闭原则，但是如果只是增加一个Product3，只需要增加几个具体的类和一个新的工厂即可，并不违反开放封闭原则，这叫开-闭原则的倾斜性。</strong></p>
+<h3 id="四个器模式">四个*器模式</h3>
+<h4 id="装饰器模式">装饰器模式</h4>
+<blockquote>
+<p>实现一个给人加不同装饰的换装系统。</p>
+</blockquote>
+<p>这是一个典型的装饰器模式，<strong>动态地给一个对象添加一些额外的职责，就增加功能来说，装饰器模式比生成子类更加灵活</strong>。
+下面是装饰器模式的UML图。
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E8%A3%85%E9%A5%B0%E5%99%A8.png" alt="">
+代码实现</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>abstract class Component{
+</span></span><span style="display:flex;"><span>    public abstract void Operation();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>class ConcreteComponent{
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    public void Operation(){
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Decorator</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Component</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">protected</span> <span style="color:#000">Componect</span> <span style="color:#000">component</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">SetComponent</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">Component</span> <span style="color:#000">compontent</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span> <span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#a40000">设置</span><span style="color:#000">Component</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">this</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">componentt</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">component</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Operation</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span> <span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#a40000">具体装饰方法</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">component</span> <span style="color:#ce5c00;font-weight:bold">!=</span> <span style="color:#000">null</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000">component</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Operation</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ConcreteDecoratorA</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Decorator</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">string</span> <span style="color:#000">addedState</span><span style="color:#000;font-weight:bold">;</span>  <span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#a40000">独有的功能</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Operation</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">super</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Operation</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">addedState</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;New State&#34;</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>//客户端
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>public class Main{
+</span></span><span style="display:flex;"><span>    public static void main(String[] args) {
+</span></span><span style="display:flex;"><span>        ConcreteComponent cc = new ConcreteComponent();
+</span></span><span style="display:flex;"><span>        ConcreteDecoratorA d1 = new ConcreteDecoratorA();
+</span></span><span style="display:flex;"><span>        ConcreateDecoratorB d2 = new ConcreteDecoratorB();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        d1.SetComponent(c); //装饰方法
+</span></span><span style="display:flex;"><span>        d2.SetComponent(c1) ;
+</span></span><span style="display:flex;"><span>        d2.Operation();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>装饰器模式利用SetComponent实现自身和装饰对象的分离，每个对象只需关心自己的功能，不需要关心如何被添加到对象链当中。</strong></p>
+<h4 id="适配器模式">适配器模式</h4>
+<p><strong>将一个类的接口转换称客户希望的另外一个接口。Adapter模式使得原本犹豫接口不兼容而不能一起工作的那些类可以一起工作</strong>。说的简单点就是一个翻译。
+下面是适配器模式的UML类图。
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E9%80%82%E9%85%8D%E5%99%A8.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Target</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">void</span> <span style="color:#000">Request</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Adaptee</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">SpecificRequest</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Adapter</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Target</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">Adaptee</span> <span style="color:#000">adaptee</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">Adaptee</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Request</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">adaptee</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">SpecifiRequest</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Main</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#000">void</span> <span style="color:#000">main</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span><span style="color:#000;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">Target</span> <span style="color:#000">target</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">Adapter</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">target</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Request</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><h4 id="解释器模式">解释器模式</h4>
+<p><strong>解释器模式，给定一个语言，定义它的文法的一种表示，并定义一个解释器，这个计时器使用该表示来解释语言中的句子。</strong> //让我想起了python语言解释器。</p>
+<p>下面是解释器模式的UML图。
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<p>看了看书，好像要设计到语法树，学完编译原理再说吧。。。</p>
+<h4 id="迭代器模式">迭代器模式</h4>
+<p><strong>提供一种方法顺序访问一个聚合对象中各个元素，而又不暴露该对象的内部表示。</strong>
+下面是迭代器模式的UML类图。
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Iterator</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">object</span> <span style="color:#000">First</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">object</span> <span style="color:#000">next</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">object</span> <span style="color:#000">IsDone</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">object</span> <span style="color:#000">CurrentItem</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Aggregate</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">Iterator</span> <span style="color:#000">CreateIterator</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ConcreateIterator</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Iterator</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">ConcreateAggregate</span> <span style="color:#000">aggregate</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#c00;font-weight:bold">int</span> <span style="color:#000">current</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">COncreateIterator</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">ConcreteAggregate</span> <span style="color:#000">aggregate</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">this</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">aggregate</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">aggregate</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">publiic</span> <span style="color:#000">object</span> <span style="color:#000">First</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">object</span> <span style="color:#000">Next</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">object</span> <span style="color:#000">ret</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">null</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">current</span><span style="color:#ce5c00;font-weight:bold">++</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">current</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#000">aggregate</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Count</span><span style="color:#ce5c00;font-weight:bold">&gt;</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">ret</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">aggregate</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">currcent</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">retuen</span> <span style="color:#000">ret</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">override</span> <span style="color:#c00;font-weight:bold">bool</span> <span style="color:#000">IsDone</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">current</span> <span style="color:#ce5c00;font-weight:bold">&gt;=</span> <span style="color:#000">aggregate</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Count</span> <span style="color:#a40000">?</span> <span style="color:#3465a4">true</span> <span style="color:#000;font-weight:bold">:</span> <span style="color:#3465a4">false</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">object</span> <span style="color:#000">CurrentItem</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">aggregate</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">current</span><span style="color:#000;font-weight:bold">];</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ConcreteAggregate</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Aggregate</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">IList</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">object</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#000">items</span> <span style="color:#ce5c00;font-weight:bold">=</span>  <span style="color:#000">new</span> <span style="color:#000">List</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">object</span><span style="color:#ce5c00;font-weight:bold">&gt;</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">Iterator</span> <span style="color:#000">CreateIterator</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">new</span> <span style="color:#000">ConcreteIterator</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">this</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#c00;font-weight:bold">int</span> <span style="color:#000">Count</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">items</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">count</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>//客户端
+</span></span><span style="display:flex;"><span>class Main{
+</span></span><span style="display:flex;"><span>    public static void main(String[] args) {
+</span></span><span style="display:flex;"><span>        ConcreteAggregate a = new ConcreteAggreate();
+</span></span><span style="display:flex;"><span>        a[0] = &#34;1&#34;;
+</span></span><span style="display:flex;"><span>        a[1] = &#34;2&#34;;
+</span></span><span style="display:flex;"><span>        a[2] = &#34;3&#34;;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Iterator i = new ConcreteIterator(a);
+</span></span><span style="display:flex;"><span>        Object item = i.First();
+</span></span><span style="display:flex;"><span>        while(!i.IsDone()) {
+</span></span><span style="display:flex;"><span>            i.Next();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>迭代器模式就是对遍历的一个封装。看了这种，终于明白了Java里面迭代器的内幕。</p>
+<h3 id="三个者模式">三个*者模式</h3>
+<h4 id="建造者模式">建造者模式</h4>
+<p><strong>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</strong>
+下面是建造者模式的UML图。<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">Product类</span><span style="color:#a40000">，由多个部件组成。</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Product</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">List</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#c00;font-weight:bold">String</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#000">parts</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">List</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#c00;font-weight:bold">String</span><span style="color:#ce5c00;font-weight:bold">&gt;</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Add</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span> <span style="color:#000">part</span><span style="color:#000;font-weight:bold">){</span>  <span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#a40000">添加产品部件</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">parts</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Add</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">part</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Show</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">foreach</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span> <span style="color:#000">part</span> <span style="color:#000;font-weight:bold">:</span> <span style="color:#000">paths</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">Builder类</span><span style="color:#a40000">，确定产品由两个部件</span><span style="color:#000">PartA和PartB组成</span><span style="color:#a40000">。</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Builder</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">void</span> <span style="color:#000">BuildPartA</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">void</span> <span style="color:#000">BuildPartB</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">Product</span> <span style="color:#000">GetResult</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">ConcreteBuilder1</span> <span style="color:#a40000">类</span><span style="color:#ce5c00;font-weight:bold">--</span><span style="color:#a40000">具体建造者</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ConcreteBuilder1</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Builder</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">Product</span> <span style="color:#000">product</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">Product</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">BuildPartA</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">product</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Add</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;部件A&#34;</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">};</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">BuildPartB</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">product</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Add</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;部件B&#34;</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">};</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">Product</span> <span style="color:#000">GetResult</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">product</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">Director类</span><span style="color:#ce5c00;font-weight:bold">--</span><span style="color:#a40000">指挥者类</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Director</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Construct</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">Builder</span> <span style="color:#000">builder</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">builder</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">BuildPartA</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">builder</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">BuildPartB</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#a40000">客户端代码</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Main</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">Director</span> <span style="color:#000">director</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">Director</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">Builder</span> <span style="color:#000">b1</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">ConcreteBuilder1</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">Builder</span> <span style="color:#000">b2</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">ConcreteBuilder2</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">director</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Construct</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">b1</span><span style="color:#000;font-weight:bold">);</span>  <span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#a40000">指挥者用</span><span style="color:#000">ConcreteBuilder2方法建造产品</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">Product</span> <span style="color:#000">p1</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">b1</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">GetResult</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000">director</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Construct</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">b2</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">Product</span> <span style="color:#000">p2</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">b2</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">GetResult</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><p>*建造者模式中一个很重要的类，Director(指挥者)，用它来封装建造过程，也用来隔离用户与建造过程的关联。*第一次看Director的源码，感觉这里使用的是Java的封装，同时也导致耦合性的提高。</p>
+<p><strong>建造者模式是再创建复杂对象的算法应该独立于该对象的组成部分以及与他们的装配方式适用的模式。</strong></p>
+<h4 id="观察者模式">观察者模式</h4>
+<p><strong>定义了一种一对多的以来关系，让多个观察者对象同时监听某一个主题对象。这个主题对象再状态发生改变时，会通知所有观察者对象，是他们可以自动更新自己。</strong>
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">Subject类</span><span style="color:#a40000">，可翻译成主题或者抽象通知者，一般用一个抽象类或者一个接口实现，把所有观察者对象的引用保存在一个聚集里，每个主题都可以有任何数量的观察者。</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Subject</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">List</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">Observer</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#000">observers</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">List</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">Observer</span><span style="color:#ce5c00;font-weight:bold">&gt;</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">attach</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">Observer</span> <span style="color:#000">observer</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">observers</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Add</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">observer</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">detach</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">Observer</span> <span style="color:#000">observer</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">observers</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Remove</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">observer</span><span style="color:#000;font-weight:bold">);</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">notify</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">foreach</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">Observer</span> <span style="color:#000">o</span> <span style="color:#000;font-weight:bold">:</span> <span style="color:#000">observers</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">o</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">update</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">ConcreteSubject类</span><span style="color:#a40000">，具体主题或具体通知者，将有关状态存入具体观察者对象。</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ConcreteSubject</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Subject</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#c00;font-weight:bold">String</span> <span style="color:#000">subjectState</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">string</span> <span style="color:#000">getSubjectState</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">subjectState</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">setSubjectState</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">value</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">subjectState</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">value</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">Observer类</span><span style="color:#a40000">，抽象观察者，为所有的具体观察者定义一个接口，在得到主题通知时更新自己。</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Observer</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">void</span> <span style="color:#000">update</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">ConcreteObserver类</span><span style="color:#a40000">，具体观察者，实现抽象观察者角色所要求的更新接口。</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ConcreteObserver</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Observer</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">string</span> <span style="color:#000">name</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">string</span> <span style="color:#000">observerState</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">ConcreteSubject</span> <span style="color:#000">subject</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">ConcreteObserver</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">ConcreteSubject</span> <span style="color:#000">subject</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#c00;font-weight:bold">String</span> <span style="color:#000">name</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">this</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">subject</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">subject</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">this</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">name</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">name</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Update</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">ObserverState</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">subject</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">SubjectState</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#a40000">客户端代码</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Main</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#000">void</span> <span style="color:#000">main</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span><span style="color:#000;font-weight:bold">[]</span>  <span style="color:#000">args</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">ConcreteSubject</span> <span style="color:#000">s</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">ConcreteSubject</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">s</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Attach</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">new</span> <span style="color:#000">ConcreteObserver</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">s</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#4e9a06">&#34;X&#34;</span><span style="color:#000;font-weight:bold">));</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">s</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Attach</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">new</span> <span style="color:#000">ConcreteObserver</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">s</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#4e9a06">&#34;Y&#34;</span><span style="color:#000;font-weight:bold">));</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">s</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Attach</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">new</span> <span style="color:#000">ConcreteObserver</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">s</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#4e9a06">&#34;Z&#34;</span><span style="color:#000;font-weight:bold">));</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">s</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">SubjectState</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;ABC&#34;</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">s</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Notify</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><p><strong>当一个对象的改变需要同时改变其它对象的时候，而且它不知道具体有多少对象有待改变时，应该考虑适用观察者模式。</strong></p>
+<p>学到这里，我越来越觉得设计模式的产生是代码耦合性的提高，一个类依赖另一个类本身就是一种耦合，然而从另一方面来说，设计模式又增加了代码的扩展性。</p>
+<h4 id="中介者模式">中介者模式</h4>
+<p><strong>用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显示地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</strong></p>
+<p><img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">Mediator</span> <span style="color:#a40000">抽象中介者类</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Mediator</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">void</span> <span style="color:#000">Send</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span> <span style="color:#000">message</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">Colleague</span> <span style="color:#000">colleague</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">Colleague</span> <span style="color:#a40000">抽象同事类</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> 
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">protected</span> <span style="color:#000">Mediator</span> <span style="color:#000">mediator</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">pubic</span> <span style="color:#000">Colleague</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">Mediator</span> <span style="color:#000">meditaor</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">this</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">mediator</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">mediator</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">ConcreteMediator</span> <span style="color:#a40000">具体中介者类</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ConcreteMediator</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Meidator</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">ConcreteColleague1</span> <span style="color:#000">colleague1</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">ConcreteColleague2</span> <span style="color:#000">colleague2</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">setConcreteColleague1</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">value</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">colleague1</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">value</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">setConcreteColleague2</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">value</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">colleague2</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">value</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Send</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span> <span style="color:#000">message</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">Colleague</span> <span style="color:#000">colleague</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">colleagu</span> <span style="color:#ce5c00;font-weight:bold">==</span> <span style="color:#000">colleague1</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">colleague2</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Notify</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">message</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">else</span> <span style="color:#000">colleague1</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Notify</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">message</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#000">ConcreteColleague1等同事对象</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ConcreteCollegue1</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Colleague</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">ConcreteColleagu1</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">Mediator</span> <span style="color:#000">mediator</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">super</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">mediator</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Send</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span> <span style="color:#000">message</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">mediator</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Send</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">message</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">this</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#a40000">发送给信息通常都是中介者发送出去</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Notify</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span> <span style="color:#000">message</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#a40000">客户端调用</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Main</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#000">void</span> <span style="color:#000">main</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span><span style="color:#000;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">ConcreteMediator</span> <span style="color:#000">m</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">ConcreteMediator</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">ConcreteMediator</span> <span style="color:#000">c1</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">ConcreteColleague1</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">m</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">COncreteMediator</span> <span style="color:#000">c2</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">ConcreteColleague2</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">m</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">m</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Colleague1</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">c1</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">m</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Colleague2</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">c2</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">c1</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Send</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;吃饭了吗?&#34;</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">c2</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Send</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;没有呢，你打算请客?&#34;</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><p><strong>中介者模式很容易在系统中应用，也容易在系统中误用。当系统出现了“多对多”交互复杂的对象时，不要基于适用中介者模式，要先反思系统设计上是否合理。</strong></p>
+<p>由于ConcreteMediator控制了集中化，于是就把交互复杂性变为了中介者的复杂性。中介者的复杂性比任何一个ConcreteColleague都复杂。</p>
+<h3 id="其它几个常用的设计模式">其它几个常用的设计模式</h3>
+<h4 id="单例模式">单例模式</h4>
+<p><strong>保证一个类只有一个实例，并提供一个访问它的全局访问点。</strong> 单例模式是我最早接触的一个设计模式，在Java语言中，我认为的一个类只有一个实例是在一个JVM中。
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F.png" alt="">
+由于单例模式比较简单，下面直接给出代码。</p>
+<ul>
+<li>懒汉式</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>public class Singleton{
+</span></span><span style="display:flex;"><span>    private static final Singleton instance = new Singleton();
+</span></span><span style="display:flex;"><span>    private Singleton(){
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    public static Singleton getInstance(){
+</span></span><span style="display:flex;"><span>        return instance;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>饿汉式</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>public class Singleon{  //非线程安全
+</span></span><span style="display:flex;"><span>    private static Singleton instance;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    private Singleton(){
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    public static Singleton getInstance(){
+</span></span><span style="display:flex;"><span>        if(instance == null) {
+</span></span><span style="display:flex;"><span>            instance = new Singleton();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        return instance;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>双重检验锁</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>public class Singleton{
+</span></span><span style="display:flex;"><span>    private volatie static Singleton instance;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    private Singleton(){
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    public static Singleton getInstance() {
+</span></span><span style="display:flex;"><span>        if(instance == null) {
+</span></span><span style="display:flex;"><span>            synchronized(Singleton.class) {
+</span></span><span style="display:flex;"><span>                if(instance == null) {
+</span></span><span style="display:flex;"><span>                    instance = new Singleton();
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        return instance;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="代理模式">代理模式</h4>
+<p><strong>为其它对象提供一种代理以控制对这个对象的访问。</strong>
+下面是代理模式的UML图。
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E4%BB%A3%E7%90%86%E6%91%A9%E4%B8%9D.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Subject</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">void</span> <span style="color:#000">Request</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">RealSubject</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Subject</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Request</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Proxy</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Subject</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">RealSubject</span> <span style="color:#000">realSubject</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">void</span> <span style="color:#000">Request</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">realSubject</span> <span style="color:#ce5c00;font-weight:bold">==</span> <span style="color:#000">null</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000">realSubject</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">RealSubject</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">realSubject</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Request</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Main</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#000">void</span> <span style="color:#000">main</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span><span style="color:#000;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">Proxy</span> <span style="color:#000">proxy</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">Proxy</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">proxy</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Request</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><p>第一次接触代理模式就是再Java反射那里，然而第一次接触反射加上动态代理，学的很懵比。现在学设计模式，终于把代理模式搞懂了一点。
+<em>代理模式就是在访问对象的时候引入一定程度的间接性，因为这种间接性，可以附加很多用途。</em></p>
+<h4 id="原型模式">原型模式</h4>
+<p><strong>用原型实例制定创建对象的种类，并通过拷贝这些原型创建新的对象。</strong>
+下面是UML图。
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%9E%8B.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#000">abstract</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Prototype</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">private</span> <span style="color:#000">string</span> <span style="color:#000">id</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">Prototype</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">string</span> <span style="color:#000">id</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">this</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">id</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">id</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">string</span> <span style="color:#000">get</span><span style="color:#000;font-weight:bold">(){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">id</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">abstract</span> <span style="color:#000">Protype</span> <span style="color:#000">Clone</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ConcreateProtype</span> <span style="color:#204a87;font-weight:bold">extends</span> <span style="color:#000">Protype</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">ConcreateProtype1</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span> <span style="color:#000">id</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">super</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">id</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">@</span><span style="color:#000">Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#000">Protype</span> <span style="color:#000">Clone</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">this</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">clone</span><span style="color:#000;font-weight:bold">();</span> <span style="color:#ce5c00;font-weight:bold">//</span><span style="color:#a40000">创建当前对象的浅表副本。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Main</span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#000">void</span> <span style="color:#000">main</span><span style="color:#000;font-weight:bold">(</span><span style="color:#c00;font-weight:bold">String</span><span style="color:#000;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">ConcreateProtype1</span> <span style="color:#000">p1</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000">ConcreateProtype1</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;1&#34;</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">ConcreateProtype1</span> <span style="color:#000">q1</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">new</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">ConcreateProtype1</span><span style="color:#000;font-weight:bold">)</span><span style="color:#000">p1</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Clone</span><span style="color:#000;font-weight:bold">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div><p><em>原型模型就是从一个对象再创建另外一个可定制的对象，而且不需要知道任何创建的细节。</em></p>
+<h2 id="备注">备注</h2>
+<h3 id="设计模式的四境界">设计模式的四境界</h3>
+<p>以下来自&laquo;大话设计模式&raquo;。</p>
+<blockquote>
+<ol>
+<li>没学之前想不到设计模式，代码很糟糕。</li>
+<li>学了几个模式后很开心，到处想着用自己学过的设计模式，时常造成误用模式而不自知。</li>
+<li>学完几个设计模式后，感觉设计模式很相似，有困惑，深知误用之害，应用时有所犹豫。</li>
+<li>灵活应用设计模式，甚至不需要应用具体的某种模式也能设计出非常优秀的代码，无剑胜有剑。</li>
+</ol>
+</blockquote>
+<h3 id="关于">关于</h3>
+<ul>
+<li>这篇文章偏重于总结，而不是讲解，不适合新手。</li>
+<li>文章中大部分代码来自&laquo;大话设计模式&raquo;，书中代码为C#，在用Java写的过程中可能有所纰漏。</li>
+</ul>
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-tags">
+              <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+                读书笔记
+              </a>
+            </div>
+            
+          </div>
+        </div>
+        
+          <div class="row">
+            <div class="col-xs-12">
+              
+            </div>
+          </div>
+
+          
+
+<div class="related-content">
+  <h3>Related Posts</h3>
+  <ul>
+    
+    <li><a href="/posts/uml%E7%B1%BB%E5%9B%BE/">UML类图</a></li>
+    
+    <li><a href="/posts/jvm%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0/">JVM中的常用参数</a></li>
+    
+    <li><a href="/posts/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86/">垃圾收集</a></li>
+    
+  </ul>
+</div>
+
+
+
+          
+          
+        
+
+        <div class="site-footer">
+  <div class="busuanzi-footer" hidden>
+    <span id="busuanzi_container_site_pv">
+      本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    <span id="busuanzi_container_site_uv">
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </span>
+    <span id="busuanzi_container_page_pv" >本文阅读量<span id="busuanzi_value_page_pv"></span>次</span>
+  </div>
+  
+</div>
+      </div>
+    </div>
+  </article>
+
+  <script src="https://utteranc.es/client.js"
+        repo="nzooherd/blog-talks"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+  </script>
+  
+
+
+
+  
+
+</body>
+
+</html>

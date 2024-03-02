@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.123.7">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="nzooherd" />
+  <meta property="og:url" content="http://nzooherd.github.io/posts/%E8%B0%88%E8%B0%88rpc/" />
+  <link rel="canonical" href="http://nzooherd.github.io/posts/%E8%B0%88%E8%B0%88rpc/" /><link rel="apple-touch-icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="shortcut" href="/favicon.ico" /><link rel="alternate" type="application/atom+xml" href="http://nzooherd.github.io/index.xml" title="nzooherd&#39;s blog">
+
+  <script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "http:\/\/nzooherd.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "谈谈RPC",
+      "headline" : "谈谈RPC",
+      "description" : "RPC(Remote Procedure Call)字面意思就是远程过程调用，RPC框架的作用就是将远程过程调用封装成本地过程调用。所以Rpc-Framework要封装的就是以下这些东西。 在美团实习用到了Thrift，Thrift作为一个跨语言RPC，美团内部通过jar包将其接入Spring，屏蔽了复杂的Thrift连接操作，而且RPC框架可以很非常方便的将一个单机服务转变为分布式架构的。 不由得让我想起了刚来美团时接手的一个纯C写的分段式语音传输系统，Socket通信加上各种内存复制着实让人恶心。用Java重构后，加上Thrift框架，仅仅两个实习生就多快好省的搞好了这个分布式系统。RPC的强大可见一斑。\n",
+      "inLanguage" : "en-US",
+      "author" : "nzooherd",
+      "creator" : "nzooherd",
+      "publisher": "nzooherd",
+      "accountablePerson" : "nzooherd",
+      "copyrightHolder" : "nzooherd",
+      "copyrightYear" : "2018",
+      "datePublished": "2018-07-10 21:29:54 \u002b0000 UTC",
+      "dateModified" : "2018-07-10 21:29:54 \u002b0000 UTC",
+      "url" : "http:\/\/nzooherd.github.io\/posts\/%E8%B0%88%E8%B0%88rpc\/",
+      "keywords" : [ "Java","读书笔记", ]
+  }
+</script>
+<title>谈谈RPC</title>
+  <meta property="og:title" content="谈谈RPC" />
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="RPC(Remote Procedure Call)字面意思就是远程过程调用，RPC框架的作用就是将远程过程调用封装成本地过程调用。所以Rpc-Framework要封装的就是以下这些东西。 在美团实习用到了Thrift，Thrift作为一个跨语言RPC，美团内部通过jar包将其接入Spring，屏蔽了复杂的Thrift连接操作，而且RPC框架可以很非常方便的将一个单机服务转变为分布式架构的。 不由得让我想起了刚来美团时接手的一个纯C写的分段式语音传输系统，Socket通信加上各种内存复制着实让人恶心。用Java重构后，加上Thrift框架，仅仅两个实习生就多快好省的搞好了这个分布式系统。RPC的强大可见一斑。
+" />
+  <meta name="description" content="RPC(Remote Procedure Call)字面意思就是远程过程调用，RPC框架的作用就是将远程过程调用封装成本地过程调用。所以Rpc-Framework要封装的就是以下这些东西。 在美团实习用到了Thrift，Thrift作为一个跨语言RPC，美团内部通过jar包将其接入Spring，屏蔽了复杂的Thrift连接操作，而且RPC框架可以很非常方便的将一个单机服务转变为分布式架构的。 不由得让我想起了刚来美团时接手的一个纯C写的分段式语音传输系统，Socket通信加上各种内存复制着实让人恶心。用Java重构后，加上Thrift框架，仅仅两个实习生就多快好省的搞好了这个分布式系统。RPC的强大可见一斑。
+" />
+  <meta property="og:locale" content="en-us" />
+
+  
+    <style>body{font-family:bree serif,sans-serif;-webkit-font-smoothing:antialiased;margin:0 20px}article{max-width:800px;margin-left:auto;margin-right:auto}a{color:#000;text-decoration:none}a:hover{font-weight:600;text-decoration:underline}.post-ads{margin:50px 0}.markdown-body{font-size:18px;max-width:100%}.markdown-body a{text-decoration:underline;text-decoration-color:#000}.markdown-body pre{padding:16px;overflow:auto;border-radius:10px}.markdown-body code{padding:.2em .4em;font-size:85%;background-color:#f6f8fa;border-radius:6px}.markdown-body pre>code{padding:0;font-size:100%;background-color:inherit;border:0}.Chinese .markdown-body{line-height:200%}.site-date-catalog{font-size:2rem}.header-title{font-size:2rem;font-weight:700;margin-top:32px;font-family:bungee shade,sans-serif}.header-title a{text-decoration:none}.header-subtitle{color:#666}.header-items{margin:10px 0}.header-item{margin:0 5px}.header-line{width:100%;border-width:2px;border-color:#482936;border-style:solid none none none}.lang-switch{font-weight:600}#posts-list{min-height:600px}.posts-line{font-size:1.2rem;margin:12px 0}.posts-categories{font-size:.8rem;margin:auto;text-align:center}.posts-category{padding:3px 0;border:#000 2px solid;border-radius:5px}.site-footer{}.site-footer-item{margin-right:12px}.post-content img{max-width:100%;display:block;margin-right:auto;margin-top:12px}.post-header{margin-bottom:50px}.post-title{font-size:2rem;font-weight:600}.post-tags{display:inline;font-weight:600;padding:2px 5px;margin-right:6px;border:#000 2px solid;border-radius:5px}.post-date{font-weight:800;font-style:italic}.post-author{float:right;font-weight:600}.page-content{min-height:60%}.post-content{margin-bottom:50px}.post-content p{hyphens:auto;line-height:1.8;text-justify:ideographic;margin-bottom:1em}.related-content{border-width:3px;border-style:solid;border-color:#000;padding:0 10px;margin-bottom:50px;margin-top:100px}.related-content li{margin:5px 0}.taxonomy-term{font-size:3rem}.gallery-img{text-align:center}.gallery-img span{text-align:center}.gallery-img-desc{font-size:.8em;font-weight:800}#disqus_thread{position:relative}#disqus_thread:after{content:"";display:block;height:55px;width:100%;position:absolute;bottom:0;background:#fff}@media screen and (max-width:600px){.header-title,.header-subtitle,.header-items{text-align:center}.posts-line{font-size:16px}.markdown-body{font-size:16px}.post-title{font-size:2rem}.post-content p{letter-spacing:.05em}}@media screen and (max-width:48em){.posts-category{display:none}}table{border-spacing:0;border-collapse:collapse}table th{padding:6px 13px;border:1px solid #dfe2e5;font-size:large}table td{padding:6px 13px;border:1px solid #dfe2e5}</style>
+  
+  
+    <style>.container,.container-fluid{margin-right:auto;margin-left:auto}.container-fluid{padding-right:2rem;padding-left:2rem}.row{box-sizing:border-box;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-flex:0;-ms-flex:0 1 auto;flex:initial;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-.5rem;margin-left:-.5rem}.row.reverse{-webkit-box-orient:horizontal;-webkit-box-direction:reverse;-ms-flex-direction:row-reverse;flex-direction:row-reverse}.col.reverse{-webkit-box-orient:vertical;-webkit-box-direction:reverse;-ms-flex-direction:column-reverse;flex-direction:column-reverse}.col-xs,.col-xs-1,.col-xs-10,.col-xs-11,.col-xs-12,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-offset-0,.col-xs-offset-1,.col-xs-offset-10,.col-xs-offset-11,.col-xs-offset-12,.col-xs-offset-2,.col-xs-offset-3,.col-xs-offset-4,.col-xs-offset-5,.col-xs-offset-6,.col-xs-offset-7,.col-xs-offset-8,.col-xs-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-xs{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-xs-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-xs-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-xs-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-xs-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-xs-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-xs-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-xs-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-xs-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-xs-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-xs-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-xs-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-xs-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-xs-offset-0{margin-left:0}.col-xs-offset-1{margin-left:8.33333333%}.col-xs-offset-2{margin-left:16.66666667%}.col-xs-offset-3{margin-left:25%}.col-xs-offset-4{margin-left:33.33333333%}.col-xs-offset-5{margin-left:41.66666667%}.col-xs-offset-6{margin-left:50%}.col-xs-offset-7{margin-left:58.33333333%}.col-xs-offset-8{margin-left:66.66666667%}.col-xs-offset-9{margin-left:75%}.col-xs-offset-10{margin-left:83.33333333%}.col-xs-offset-11{margin-left:91.66666667%}.start-xs{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-xs{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-xs{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-xs{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-xs{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-xs{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-xs{-ms-flex-pack:distribute;justify-content:space-around}.between-xs{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-xs{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-xs{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}@media only screen and (min-width:48em){.container{width:49rem}.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-offset-0,.col-sm-offset-1,.col-sm-offset-10,.col-sm-offset-11,.col-sm-offset-12,.col-sm-offset-2,.col-sm-offset-3,.col-sm-offset-4,.col-sm-offset-5,.col-sm-offset-6,.col-sm-offset-7,.col-sm-offset-8,.col-sm-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-sm{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-sm-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-sm-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-sm-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-sm-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-sm-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-sm-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-sm-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-sm-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-sm-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-sm-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-sm-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-sm-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-sm-offset-0{margin-left:0}.col-sm-offset-1{margin-left:8.33333333%}.col-sm-offset-2{margin-left:16.66666667%}.col-sm-offset-3{margin-left:25%}.col-sm-offset-4{margin-left:33.33333333%}.col-sm-offset-5{margin-left:41.66666667%}.col-sm-offset-6{margin-left:50%}.col-sm-offset-7{margin-left:58.33333333%}.col-sm-offset-8{margin-left:66.66666667%}.col-sm-offset-9{margin-left:75%}.col-sm-offset-10{margin-left:83.33333333%}.col-sm-offset-11{margin-left:91.66666667%}.start-sm{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-sm{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-sm{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-sm{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-sm{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-sm{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-sm{-ms-flex-pack:distribute;justify-content:space-around}.between-sm{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-sm{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-sm{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:64em){.container{width:65rem}.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-offset-0,.col-md-offset-1,.col-md-offset-10,.col-md-offset-11,.col-md-offset-12,.col-md-offset-2,.col-md-offset-3,.col-md-offset-4,.col-md-offset-5,.col-md-offset-6,.col-md-offset-7,.col-md-offset-8,.col-md-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-md{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-md-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-md-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-md-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-md-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-md-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-md-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-md-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-md-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-md-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-md-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-md-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-md-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-md-offset-0{margin-left:0}.col-md-offset-1{margin-left:8.33333333%}.col-md-offset-2{margin-left:16.66666667%}.col-md-offset-3{margin-left:25%}.col-md-offset-4{margin-left:33.33333333%}.col-md-offset-5{margin-left:41.66666667%}.col-md-offset-6{margin-left:50%}.col-md-offset-7{margin-left:58.33333333%}.col-md-offset-8{margin-left:66.66666667%}.col-md-offset-9{margin-left:75%}.col-md-offset-10{margin-left:83.33333333%}.col-md-offset-11{margin-left:91.66666667%}.start-md{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-md{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-md{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-md{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-md{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-md{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-md{-ms-flex-pack:distribute;justify-content:space-around}.between-md{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-md{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-md{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:75em){.container{width:76rem}.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-offset-0,.col-lg-offset-1,.col-lg-offset-10,.col-lg-offset-11,.col-lg-offset-12,.col-lg-offset-2,.col-lg-offset-3,.col-lg-offset-4,.col-lg-offset-5,.col-lg-offset-6,.col-lg-offset-7,.col-lg-offset-8,.col-lg-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-lg{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-lg-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-lg-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-lg-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-lg-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-lg-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-lg-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-lg-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-lg-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-lg-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-lg-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-lg-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-lg-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-lg-offset-0{margin-left:0}.col-lg-offset-1{margin-left:8.33333333%}.col-lg-offset-2{margin-left:16.66666667%}.col-lg-offset-3{margin-left:25%}.col-lg-offset-4{margin-left:33.33333333%}.col-lg-offset-5{margin-left:41.66666667%}.col-lg-offset-6{margin-left:50%}.col-lg-offset-7{margin-left:58.33333333%}.col-lg-offset-8{margin-left:66.66666667%}.col-lg-offset-9{margin-left:75%}.col-lg-offset-10{margin-left:83.33333333%}.col-lg-offset-11{margin-left:91.66666667%}.start-lg{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-lg{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-lg{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-lg{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-lg{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-lg{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-lg{-ms-flex-pack:distribute;justify-content:space-around}.between-lg{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-lg{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-lg{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}</style>
+  
+
+  
+
+  <link href="/index.xml" rel="alternate" type="application/rss+xml"
+    title="nzooherd&#39;s blog">
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Bree+Serif|Bungee+Shade" rel="stylesheet">
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <meta name="referrer" content="no-referrer-when-downgrade"><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="谈谈RPC"/>
+<meta name="twitter:description" content="RPC(Remote Procedure Call)字面意思就是远程过程调用，RPC框架的作用就是将远程过程调用封装成本地过程调用。所以Rpc-Framework要封装的就是以下这些东西。
+
+在美团实习用到了Thrift，Thrift作为一个跨语言RPC，美团内部通过jar包将其接入Spring，屏蔽了复杂的Thrift连接操作，而且RPC框架可以很非常方便的将一个单机服务转变为分布式架构的。
+不由得让我想起了刚来美团时接手的一个纯C写的分段式语音传输系统，Socket通信加上各种内存复制着实让人恶心。用Java重构后，加上Thrift框架，仅仅两个实习生就多快好省的搞好了这个分布式系统。RPC的强大可见一斑。"/>
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-217390416-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-217390416-1');
+</script>
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="site-header">
+          
+<header>
+  
+  
+  
+  <div class="header-title">
+    <a href="/"
+      >nzooherd 写字的地方</a
+    >
+  </div>
+  <div class="header-subtitle">In real life.</div>
+</header>
+<div class="row end-md center-xs header-items">
+  
+  <div class="header-item">
+    <a href="https://nzooherd.github.io/about" target="_blank">About</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://twitter.com/zmxnv123" target="_blank">Twitter</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="http://nzooherd.github.io/gallery/" target="_blank">Gallery</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://github.com/nzooherd" target="_blank">Github</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://sspai.com/u/vmhwvppx" target="_blank">Sspai</a>
+  </div>
+  
+</div>
+<div class="row end-xs">
+   
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">谈谈RPC</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2018-07-10 21:29:54 UTC">
+                10 Jul 2018
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+              <div class="post-author">
+                <a target="_blank" href="http://nzooherd.github.io/">@nzooherd</a>
+              </div>
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          
+          <p>RPC(Remote Procedure Call)字面意思就是远程过程调用，RPC框架的作用就是将远程过程调用封装成本地过程调用。所以Rpc-Framework要封装的就是以下这些东西。
+<img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20171102105005322.png" alt=""></p>
+<p>在美团实习用到了Thrift，Thrift作为一个跨语言RPC，美团内部通过jar包将其接入Spring，屏蔽了复杂的Thrift连接操作，而且RPC框架可以很非常方便的将一个单机服务转变为分布式架构的。
+不由得让我想起了刚来美团时接手的一个纯C写的分段式语音传输系统，Socket通信加上各种内存复制着实让人恶心。用Java重构后，加上Thrift框架，仅仅两个实习生就多快好省的搞好了这个分布式系统。RPC的强大可见一斑。</p>
+<h2 id="原理">原理</h2>
+<p>实现远程函数调用，无非就是讲函数参数通过Socket传过去，在服务器上执行完之后将结果通过Socket传输到客户端。所以RPC本质就是实现了这么个事情。
+参数传输之后，如何放服务器知道调用哪个类的哪个参数，Java反射特性用来解决这个问题最好不过了。</p>
+<h3 id="code">Code</h3>
+<p>下面贴一段最简单的RPC框架，麻雀虽小，五脏俱全.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>import java.io.IOException;
+</span></span><span style="display:flex;"><span>import java.io.ObjectInputStream;
+</span></span><span style="display:flex;"><span>import java.io.ObjectOutputStream;
+</span></span><span style="display:flex;"><span>import java.lang.reflect.InvocationHandler;
+</span></span><span style="display:flex;"><span>import java.lang.reflect.InvocationTargetException;
+</span></span><span style="display:flex;"><span>import java.lang.reflect.Method;
+</span></span><span style="display:flex;"><span>import java.lang.reflect.Proxy;
+</span></span><span style="display:flex;"><span>import java.net.InetSocketAddress;
+</span></span><span style="display:flex;"><span>import java.net.ServerSocket;
+</span></span><span style="display:flex;"><span>import java.net.Socket;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>public class RpcFramework{
+</span></span><span style="display:flex;"><span>    public static void servicePublish(Object interfaceImplClass, int port) throws IOException, ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+</span></span><span style="display:flex;"><span>        ServerSocket serverSocket = new ServerSocket();
+</span></span><span style="display:flex;"><span>        serverSocket.bind(new InetSocketAddress(port));
+</span></span><span style="display:flex;"><span>        while(true){
+</span></span><span style="display:flex;"><span>            Socket socket = serverSocket.accept();
+</span></span><span style="display:flex;"><span>            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+</span></span><span style="display:flex;"><span>            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            String methodName = inputStream.readUTF();
+</span></span><span style="display:flex;"><span>            Class&lt;?&gt;[] argTypes = (Class&lt;?&gt;[])inputStream.readObject();
+</span></span><span style="display:flex;"><span>            Object[] args = (Object[])inputStream.readObject();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            Method method = interfaceImplClass.getClass().getMethod(methodName, argTypes);
+</span></span><span style="display:flex;"><span>            Object result =  method.invoke(interfaceImplClass, args);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            outputStream.writeObject(result);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            outputStream.close();
+</span></span><span style="display:flex;"><span>            inputStream.close();
+</span></span><span style="display:flex;"><span>            socket.close();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    public static Object clientProxy(Class interfaceClass, String hostname, int port){
+</span></span><span style="display:flex;"><span>        return Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] {interfaceClass},
+</span></span><span style="display:flex;"><span>                new InvocationHandler(){
+</span></span><span style="display:flex;"><span>                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+</span></span><span style="display:flex;"><span>                        Socket socket = new Socket();
+</span></span><span style="display:flex;"><span>                        socket.connect(new InetSocketAddress(hostname, port));
+</span></span><span style="display:flex;"><span>                        ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+</span></span><span style="display:flex;"><span>                        ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+</span></span><span style="display:flex;"><span>                        outputStream.writeUTF(method.getName());
+</span></span><span style="display:flex;"><span>                        outputStream.writeObject(method.getParameterTypes());
+</span></span><span style="display:flex;"><span>                        outputStream.writeObject(args);
+</span></span><span style="display:flex;"><span>                        Object result = inputStream.readObject();
+</span></span><span style="display:flex;"><span>                        outputStream.close();
+</span></span><span style="display:flex;"><span>                        inputStream.close();
+</span></span><span style="display:flex;"><span>                        return result;
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                });
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>客户端和服务端的例子就不放了，看懂代码之后很简单。
+了解动态代理的的人知道，动态代理相比静态代理的区别就是动态生成代理类。[JDK动态代理]http://shiwenhao.gq/2018/05/20/JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/#more</p>
+<h3 id="动态代理">动态代理</h3>
+<p>所以这里当客户端使用代理类执行方法时，内部执行的是如下方法</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>invoke(proxy, method, args)
+</span></span><span style="display:flex;"><span>//proxy是生成的代理类本身， method就是要执行的方法，args则是执行方法的参数
+</span></span></code></pre></div><p>看上面这个小的RPC框架，RPC主要包含如下几个模块，<strong>服务治理，序列化，网络IO</strong>下面来看一下我理解中的如何去扩展这些模块。</p>
+<h2 id="模块">模块</h2>
+<h3 id="序列化">序列化</h3>
+<p>序列化在RPC框架中的作用就是讲RPC request序列化之后从Consumer传输到Provider，同时将RPC response序列化之后从Provider传输到Consumer.
+在如上代码中并没有过多的体现这个过程。</p>
+<p>客户端直接将Rpc Request分成了三部分</p>
+<ol>
+<li>Method 的 name</li>
+<li>Method 的 参数类型</li>
+<li>Object[] arguments  函数参数</li>
+</ol>
+<p>在 ObjectOutputStream.writeUTF()中直接传输了字符串，在ObjectOutputStream.writeObject()中传输了序列化之中的类，所以序列化默认为Java自带的序列化机制，<strong>在如上代码中直接ObjectOutputStream.writeObject(Method)是不可取的，因为Method类没有实现Serizalibe接口</strong>.</p>
+<p>序列化的性能主要从两方面考虑，</p>
+<ol>
+<li>序列化消耗时间</li>
+<li>序列化之后的文件大小</li>
+</ol>
+<p>所以一般情况向二进制的序列化机制可以吊打json或者xml序列化方式，据说在美团内部Thrift甚至被用来传输图片数据。</p>
+<h3 id="网络io">网络IO</h3>
+<p>网络IO谈起来就很多了，从最初的BIO模型，这种 线程数量:连接数量为1:1 的模型实在不适合用于这种负载很大的系统。除了BIO，在Java中还有NIO，在Linux系统中使用了epoll作为其底层实现，然而一直存在一个比较严重的bug，epoll空轮询导致CPU负载100%。在JDK1.7中，引入了AIO，真正的异步IO。然而NIO和AIO的编程过于复杂，像我这种菜鸡也就是照着模板代码跑一跑，出bug的时候怕是只能删库跑路了&hellip;</p>
+<p>所以现在高性能的IO框架一般选择Netty，Netty作为一种事件驱动的异步IO框架，满足我这等屌丝的性能需求是没问题的，否则只能是代码写的烂了。
+建议Netty看看&laquo;Netty权威指南&raquo;和&laquo;Netty实战&raquo;两本书。</p>
+<h3 id="服务治理">服务治理</h3>
+<p>服务治理要分好多方面，包括但不限于 <strong>服务注册，服务发现，服务依赖关系分析，服务分组路由，服务调用链路追踪</strong>等。
+在上面的代码中，基本没有体现服务治理的内容，而是靠函数参数手工传入，这在面向服务化的分布式系统中，无法实现动态添加或者下线机器的功能，现在需要一个服务注册和发现中心。
+这个中心必须是分布式式的，不能在一台机器宕机后整个服务崩掉。在许多RPC框架中一般选择Zookeeper，Zookeeper使用CAB协议保证了一致性，而且命名空间可以很好的满足服务注册发现的要求，唯一缺点的在于Zookeeper使用Java实现，性能有些羸弱。</p>
+<p>在Zookeeper上如何实现服务注册和发现呢，由于Zookeeper有不同的命名空间，所以可以实现下图这样一颗服务树。(Zookeeper在Dubbo中的应用)
+<img src="http://static.zhizuobiao.com/upload/20180329/1522294790550063296.png" alt=""></p>
+<h3 id="spring集成">Spring集成</h3>
+<p>其实Spring集成并不是必须的，但是如果扣字的话，上面的那些模块也不是必须的。集成Spring的目的主要在于如今的Java开发大部分都是基于Spring(Spring Boot)，或者在Spring上进行二次开发。将Rpc框架与Spring无缝集成，可以使开发人员的编程界面保持一致，使用更为方便。</p>
+<p>集成Spring主要就是在Bean的生命周期中，利用一些部分进行扩展，另外一点就是FactoryBean。FactroyBean和BeanFactory的区别一定要清楚，通过FactoryBean可以得到任何想得到的类，而不是FactoryBean本身。</p>
+<h2 id="naive-rpc">Naive Rpc</h2>
+<p>在我第一次接触到Rpc框架的时候，总觉的Rpc是一个非常复杂的东西。经过我的学习发现Rpc确实是一个复杂的系统，有许多可以扩展的地方，还有许多坑点。例如如果保证Rpc Request和Rpc Response一一对应。</p>
+<p>没有手动造过轮子，底层的许多东西可能都不会接触到，不要想当然的认为自己已经懂了。
+一个自己正在写的轮子<a href="https://github.com/zmxnv1/NaiveRpc">NaiveRpc</a>，欢迎交流讨论。</p>
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-tags">
+              <a href="/tags/java/">
+                Java
+              </a>
+            </div>
+            
+            <div class="post-tags">
+              <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+                读书笔记
+              </a>
+            </div>
+            
+          </div>
+        </div>
+        
+          <div class="row">
+            <div class="col-xs-12">
+              
+            </div>
+          </div>
+
+          
+
+<div class="related-content">
+  <h3>Related Posts</h3>
+  <ul>
+    
+    <li><a href="/posts/%E8%AF%A1%E5%BC%82%E7%9A%84integer/">诡异的Integer</a></li>
+    
+    <li><a href="/posts/jdk%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">JDK动态代理</a></li>
+    
+    <li><a href="/posts/zab%E5%8D%8F%E8%AE%AE%E5%92%8Czookeeper%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/">ZAB协议和Zookeeper分布式服务框架</a></li>
+    
+  </ul>
+</div>
+
+
+
+          
+          
+        
+
+        <div class="site-footer">
+  <div class="busuanzi-footer" hidden>
+    <span id="busuanzi_container_site_pv">
+      本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    <span id="busuanzi_container_site_uv">
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </span>
+    <span id="busuanzi_container_page_pv" >本文阅读量<span id="busuanzi_value_page_pv"></span>次</span>
+  </div>
+  
+</div>
+      </div>
+    </div>
+  </article>
+
+  <script src="https://utteranc.es/client.js"
+        repo="nzooherd/blog-talks"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+  </script>
+  
+
+
+
+  
+
+</body>
+
+</html>

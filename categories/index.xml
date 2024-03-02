@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/categories/</link>
+    <description>Recent content in Categories on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 23 Jan 2024 05:35:36 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Review</title>
+      <link>http://nzooherd.github.io/categories/review/</link>
+      <pubDate>Tue, 23 Jan 2024 05:35:36 +0000</pubDate>
+      <guid>http://nzooherd.github.io/categories/review/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tech</title>
+      <link>http://nzooherd.github.io/categories/tech/</link>
+      <pubDate>Sun, 15 Jan 2023 02:34:10 +0000</pubDate>
+      <guid>http://nzooherd.github.io/categories/tech/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Essay</title>
+      <link>http://nzooherd.github.io/categories/essay/</link>
+      <pubDate>Sun, 25 Sep 2022 11:48:52 +0800</pubDate>
+      <guid>http://nzooherd.github.io/categories/essay/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Criticism</title>
+      <link>http://nzooherd.github.io/categories/criticism/</link>
+      <pubDate>Sat, 13 Nov 2021 20:32:43 +0800</pubDate>
+      <guid>http://nzooherd.github.io/categories/criticism/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tool</title>
+      <link>http://nzooherd.github.io/categories/tool/</link>
+      <pubDate>Tue, 07 Sep 2021 21:30:09 +0800</pubDate>
+      <guid>http://nzooherd.github.io/categories/tool/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Thought</title>
+      <link>http://nzooherd.github.io/categories/thought/</link>
+      <pubDate>Sat, 29 May 2021 12:09:39 +0800</pubDate>
+      <guid>http://nzooherd.github.io/categories/thought/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Init</title>
+      <link>http://nzooherd.github.io/categories/init/</link>
+      <pubDate>Sun, 30 Oct 2016 15:14:45 +0000</pubDate>
+      <guid>http://nzooherd.github.io/categories/init/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

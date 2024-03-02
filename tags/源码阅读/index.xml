@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>源码阅读 on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</link>
+    <description>Recent content in 源码阅读 on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 30 Jan 2022 21:58:52 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MinIO(一)纠删码</title>
+      <link>http://nzooherd.github.io/posts/minio%E4%B8%80-%E7%BA%A0%E5%88%A0%E7%A0%81/</link>
+      <pubDate>Sun, 30 Jan 2022 21:58:52 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/minio%E4%B8%80-%E7%BA%A0%E5%88%A0%E7%A0%81/</guid>
+      <description>MinIO 是一个100% 开源的分布式对象存储系统，其主要开发者是 2014 年创建于硅谷的科技公司 MinIO Inc。&#xA;相较于阿里 OSS 底层依赖有巢和盘古，谷歌 GCS 底层依赖 Spanner 和 GFS(Colossus)，MinIO 则是一个完整的对象存储，真正做到了零依赖，单机部署只需要一个二进制可执行文件。从这个意义上看，MinIO 开源的不仅仅是对象系统，更核心的是开源了一个分布式存储系统。&#xA;那么 MinIO 相比业界常见的分布式系统又有哪些优劣，又能否给未来的设计带来一些启发？&#xA;本系列计划详细介绍 MinIO 的系统设计，此文是第一篇 「纠删码」。&#xA;Earsure Code 在存储领域, 最常见的防止数据丢失的方式就是备份。家用 NAS 可能直接上 RAID ，而大数据领域的 HDFS 会默认存双副本。 副本越多提供的数据可靠性也越强，也意味着空间利用率越低，要达到对象存储 11个9 的数据可靠性，通常需要 4 副本，如此计算，真正的利用率只有 25%。&#xA;纠删码则可以在提供和多副本相同的数据可靠性的同时，极大的提高空间利用率。在 03 年的 GFS 初版论文中，Google 就曾设想利用纠删码来存储，然而受限于当时的技术发展无法如愿。十多年过去了，当时遥不可及的技术，如今却频繁的用于某些大中厂自研的系统中，颇有 飞入寻常百姓家 的感触。&#xA;MinIO 使用纠删码 (Erasure Code) 来存储数据，下文简称为 EC。EC 将原始数据均分为 \(N\) 份，然后生成 \(M\) 份相同大小的 校验数据，在这 \((N+M)\) 份数据中任意丢失 \(M\) 份均可生成原始数据。 MinIO 确保这 \((N+M)\) 份数据分散在 \((N+M)\) 个不同的磁盘上，防止磁盘损毁导致数据丢失。常用的 \((N+M) = 8+4\)，提供比 4 副本更强的数据可靠性，同时空间利用率维持在 75%。</description>
+    </item>
+  </channel>
+</rss>

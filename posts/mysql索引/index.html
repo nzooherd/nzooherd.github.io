@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.123.7">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="nzooherd" />
+  <meta property="og:url" content="http://nzooherd.github.io/posts/mysql%E7%B4%A2%E5%BC%95/" />
+  <link rel="canonical" href="http://nzooherd.github.io/posts/mysql%E7%B4%A2%E5%BC%95/" /><link rel="apple-touch-icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="shortcut" href="/favicon.ico" /><link rel="alternate" type="application/atom+xml" href="http://nzooherd.github.io/index.xml" title="nzooherd&#39;s blog">
+
+  <script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "http:\/\/nzooherd.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "MySQL索引",
+      "headline" : "MySQL索引",
+      "description" : "在阅读\u0026laquo;高性能MySQL\u0026raquo;时，开始就被灌输了一个索引很重要的概念。最近在读第五章，\u0026ldquo;创建高性能的索引\u0026rdquo;，用于记录。\n索引基础 理解索引最简单的办法就查字典，小时候查汉语大词典就是最典型的索引思想。通过索引可以将查询的效率提高几个数量级。\n",
+      "inLanguage" : "en-US",
+      "author" : "nzooherd",
+      "creator" : "nzooherd",
+      "publisher": "nzooherd",
+      "accountablePerson" : "nzooherd",
+      "copyrightHolder" : "nzooherd",
+      "copyrightYear" : "2018",
+      "datePublished": "2018-02-25 10:13:53 \u002b0000 UTC",
+      "dateModified" : "2018-02-25 10:13:53 \u002b0000 UTC",
+      "url" : "http:\/\/nzooherd.github.io\/posts\/mysql%E7%B4%A2%E5%BC%95\/",
+      "keywords" : [ "读书笔记", ]
+  }
+</script>
+<title>MySQL索引</title>
+  <meta property="og:title" content="MySQL索引" />
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="在阅读&amp;laquo;高性能MySQL&amp;raquo;时，开始就被灌输了一个索引很重要的概念。最近在读第五章，&amp;ldquo;创建高性能的索引&amp;rdquo;，用于记录。
+索引基础 理解索引最简单的办法就查字典，小时候查汉语大词典就是最典型的索引思想。通过索引可以将查询的效率提高几个数量级。
+" />
+  <meta name="description" content="在阅读&amp;laquo;高性能MySQL&amp;raquo;时，开始就被灌输了一个索引很重要的概念。最近在读第五章，&amp;ldquo;创建高性能的索引&amp;rdquo;，用于记录。
+索引基础 理解索引最简单的办法就查字典，小时候查汉语大词典就是最典型的索引思想。通过索引可以将查询的效率提高几个数量级。
+" />
+  <meta property="og:locale" content="en-us" />
+
+  
+    <style>body{font-family:bree serif,sans-serif;-webkit-font-smoothing:antialiased;margin:0 20px}article{max-width:800px;margin-left:auto;margin-right:auto}a{color:#000;text-decoration:none}a:hover{font-weight:600;text-decoration:underline}.post-ads{margin:50px 0}.markdown-body{font-size:18px;max-width:100%}.markdown-body a{text-decoration:underline;text-decoration-color:#000}.markdown-body pre{padding:16px;overflow:auto;border-radius:10px}.markdown-body code{padding:.2em .4em;font-size:85%;background-color:#f6f8fa;border-radius:6px}.markdown-body pre>code{padding:0;font-size:100%;background-color:inherit;border:0}.Chinese .markdown-body{line-height:200%}.site-date-catalog{font-size:2rem}.header-title{font-size:2rem;font-weight:700;margin-top:32px;font-family:bungee shade,sans-serif}.header-title a{text-decoration:none}.header-subtitle{color:#666}.header-items{margin:10px 0}.header-item{margin:0 5px}.header-line{width:100%;border-width:2px;border-color:#482936;border-style:solid none none none}.lang-switch{font-weight:600}#posts-list{min-height:600px}.posts-line{font-size:1.2rem;margin:12px 0}.posts-categories{font-size:.8rem;margin:auto;text-align:center}.posts-category{padding:3px 0;border:#000 2px solid;border-radius:5px}.site-footer{}.site-footer-item{margin-right:12px}.post-content img{max-width:100%;display:block;margin-right:auto;margin-top:12px}.post-header{margin-bottom:50px}.post-title{font-size:2rem;font-weight:600}.post-tags{display:inline;font-weight:600;padding:2px 5px;margin-right:6px;border:#000 2px solid;border-radius:5px}.post-date{font-weight:800;font-style:italic}.post-author{float:right;font-weight:600}.page-content{min-height:60%}.post-content{margin-bottom:50px}.post-content p{hyphens:auto;line-height:1.8;text-justify:ideographic;margin-bottom:1em}.related-content{border-width:3px;border-style:solid;border-color:#000;padding:0 10px;margin-bottom:50px;margin-top:100px}.related-content li{margin:5px 0}.taxonomy-term{font-size:3rem}.gallery-img{text-align:center}.gallery-img span{text-align:center}.gallery-img-desc{font-size:.8em;font-weight:800}#disqus_thread{position:relative}#disqus_thread:after{content:"";display:block;height:55px;width:100%;position:absolute;bottom:0;background:#fff}@media screen and (max-width:600px){.header-title,.header-subtitle,.header-items{text-align:center}.posts-line{font-size:16px}.markdown-body{font-size:16px}.post-title{font-size:2rem}.post-content p{letter-spacing:.05em}}@media screen and (max-width:48em){.posts-category{display:none}}table{border-spacing:0;border-collapse:collapse}table th{padding:6px 13px;border:1px solid #dfe2e5;font-size:large}table td{padding:6px 13px;border:1px solid #dfe2e5}</style>
+  
+  
+    <style>.container,.container-fluid{margin-right:auto;margin-left:auto}.container-fluid{padding-right:2rem;padding-left:2rem}.row{box-sizing:border-box;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-flex:0;-ms-flex:0 1 auto;flex:initial;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-.5rem;margin-left:-.5rem}.row.reverse{-webkit-box-orient:horizontal;-webkit-box-direction:reverse;-ms-flex-direction:row-reverse;flex-direction:row-reverse}.col.reverse{-webkit-box-orient:vertical;-webkit-box-direction:reverse;-ms-flex-direction:column-reverse;flex-direction:column-reverse}.col-xs,.col-xs-1,.col-xs-10,.col-xs-11,.col-xs-12,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-offset-0,.col-xs-offset-1,.col-xs-offset-10,.col-xs-offset-11,.col-xs-offset-12,.col-xs-offset-2,.col-xs-offset-3,.col-xs-offset-4,.col-xs-offset-5,.col-xs-offset-6,.col-xs-offset-7,.col-xs-offset-8,.col-xs-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-xs{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-xs-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-xs-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-xs-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-xs-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-xs-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-xs-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-xs-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-xs-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-xs-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-xs-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-xs-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-xs-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-xs-offset-0{margin-left:0}.col-xs-offset-1{margin-left:8.33333333%}.col-xs-offset-2{margin-left:16.66666667%}.col-xs-offset-3{margin-left:25%}.col-xs-offset-4{margin-left:33.33333333%}.col-xs-offset-5{margin-left:41.66666667%}.col-xs-offset-6{margin-left:50%}.col-xs-offset-7{margin-left:58.33333333%}.col-xs-offset-8{margin-left:66.66666667%}.col-xs-offset-9{margin-left:75%}.col-xs-offset-10{margin-left:83.33333333%}.col-xs-offset-11{margin-left:91.66666667%}.start-xs{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-xs{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-xs{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-xs{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-xs{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-xs{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-xs{-ms-flex-pack:distribute;justify-content:space-around}.between-xs{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-xs{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-xs{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}@media only screen and (min-width:48em){.container{width:49rem}.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-offset-0,.col-sm-offset-1,.col-sm-offset-10,.col-sm-offset-11,.col-sm-offset-12,.col-sm-offset-2,.col-sm-offset-3,.col-sm-offset-4,.col-sm-offset-5,.col-sm-offset-6,.col-sm-offset-7,.col-sm-offset-8,.col-sm-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-sm{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-sm-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-sm-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-sm-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-sm-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-sm-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-sm-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-sm-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-sm-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-sm-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-sm-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-sm-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-sm-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-sm-offset-0{margin-left:0}.col-sm-offset-1{margin-left:8.33333333%}.col-sm-offset-2{margin-left:16.66666667%}.col-sm-offset-3{margin-left:25%}.col-sm-offset-4{margin-left:33.33333333%}.col-sm-offset-5{margin-left:41.66666667%}.col-sm-offset-6{margin-left:50%}.col-sm-offset-7{margin-left:58.33333333%}.col-sm-offset-8{margin-left:66.66666667%}.col-sm-offset-9{margin-left:75%}.col-sm-offset-10{margin-left:83.33333333%}.col-sm-offset-11{margin-left:91.66666667%}.start-sm{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-sm{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-sm{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-sm{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-sm{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-sm{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-sm{-ms-flex-pack:distribute;justify-content:space-around}.between-sm{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-sm{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-sm{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:64em){.container{width:65rem}.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-offset-0,.col-md-offset-1,.col-md-offset-10,.col-md-offset-11,.col-md-offset-12,.col-md-offset-2,.col-md-offset-3,.col-md-offset-4,.col-md-offset-5,.col-md-offset-6,.col-md-offset-7,.col-md-offset-8,.col-md-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-md{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-md-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-md-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-md-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-md-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-md-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-md-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-md-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-md-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-md-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-md-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-md-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-md-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-md-offset-0{margin-left:0}.col-md-offset-1{margin-left:8.33333333%}.col-md-offset-2{margin-left:16.66666667%}.col-md-offset-3{margin-left:25%}.col-md-offset-4{margin-left:33.33333333%}.col-md-offset-5{margin-left:41.66666667%}.col-md-offset-6{margin-left:50%}.col-md-offset-7{margin-left:58.33333333%}.col-md-offset-8{margin-left:66.66666667%}.col-md-offset-9{margin-left:75%}.col-md-offset-10{margin-left:83.33333333%}.col-md-offset-11{margin-left:91.66666667%}.start-md{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-md{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-md{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-md{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-md{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-md{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-md{-ms-flex-pack:distribute;justify-content:space-around}.between-md{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-md{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-md{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:75em){.container{width:76rem}.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-offset-0,.col-lg-offset-1,.col-lg-offset-10,.col-lg-offset-11,.col-lg-offset-12,.col-lg-offset-2,.col-lg-offset-3,.col-lg-offset-4,.col-lg-offset-5,.col-lg-offset-6,.col-lg-offset-7,.col-lg-offset-8,.col-lg-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-lg{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-lg-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-lg-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-lg-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-lg-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-lg-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-lg-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-lg-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-lg-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-lg-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-lg-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-lg-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-lg-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-lg-offset-0{margin-left:0}.col-lg-offset-1{margin-left:8.33333333%}.col-lg-offset-2{margin-left:16.66666667%}.col-lg-offset-3{margin-left:25%}.col-lg-offset-4{margin-left:33.33333333%}.col-lg-offset-5{margin-left:41.66666667%}.col-lg-offset-6{margin-left:50%}.col-lg-offset-7{margin-left:58.33333333%}.col-lg-offset-8{margin-left:66.66666667%}.col-lg-offset-9{margin-left:75%}.col-lg-offset-10{margin-left:83.33333333%}.col-lg-offset-11{margin-left:91.66666667%}.start-lg{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-lg{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-lg{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-lg{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-lg{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-lg{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-lg{-ms-flex-pack:distribute;justify-content:space-around}.between-lg{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-lg{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-lg{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}</style>
+  
+
+  
+
+  <link href="/index.xml" rel="alternate" type="application/rss+xml"
+    title="nzooherd&#39;s blog">
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Bree+Serif|Bungee+Shade" rel="stylesheet">
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <meta name="referrer" content="no-referrer-when-downgrade"><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="MySQL索引"/>
+<meta name="twitter:description" content="在阅读&laquo;高性能MySQL&raquo;时，开始就被灌输了一个索引很重要的概念。最近在读第五章，&ldquo;创建高性能的索引&rdquo;，用于记录。
+索引基础
+理解索引最简单的办法就查字典，小时候查汉语大词典就是最典型的索引思想。通过索引可以将查询的效率提高几个数量级。"/>
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-217390416-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-217390416-1');
+</script>
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="site-header">
+          
+<header>
+  
+  
+  
+  <div class="header-title">
+    <a href="/"
+      >nzooherd 写字的地方</a
+    >
+  </div>
+  <div class="header-subtitle">In real life.</div>
+</header>
+<div class="row end-md center-xs header-items">
+  
+  <div class="header-item">
+    <a href="https://nzooherd.github.io/about" target="_blank">About</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://twitter.com/zmxnv123" target="_blank">Twitter</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="http://nzooherd.github.io/gallery/" target="_blank">Gallery</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://github.com/nzooherd" target="_blank">Github</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://sspai.com/u/vmhwvppx" target="_blank">Sspai</a>
+  </div>
+  
+</div>
+<div class="row end-xs">
+   
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">MySQL索引</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2018-02-25 10:13:53 UTC">
+                25 Feb 2018
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+              <div class="post-author">
+                <a target="_blank" href="http://nzooherd.github.io/">@nzooherd</a>
+              </div>
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          
+          <p>在阅读&laquo;高性能MySQL&raquo;时，开始就被灌输了一个索引很重要的概念。最近在读第五章，&ldquo;创建高性能的索引&rdquo;，用于记录。</p>
+<h2 id="索引基础">索引基础</h2>
+<p>理解索引最简单的办法就查字典，小时候查汉语大词典就是最典型的索引思想。通过索引可以将查询的效率提高几个数量级。</p>
+<h3 id="类型">类型</h3>
+<h4 id="b-tree索引">B-Tree索引</h4>
+<p>在讨论数据库索引时，如果没有特别指明类型，多半是B-Tree索引，准确来说是B+Tree索引。 (B-Tree树和B+Tree树区别，参考如下 <a href="http://blog.csdn.net/login_sonata/article/details/75268075">b树和b+树区别</a> )</p>
+<p>B-Tree索引通常意味着所有的值都是按顺序存储的，并且每一个叶子页到根的距离相同。B-Tree索引能够加快访问数据的速度，存储引擎不需要进行全盘扫描来获取需要的数据，仅仅从索引的根结点开始进行搜索即可。</p>
+<p>B-Tree对索引列是顺序组织存储的，很适合查找范围数据。例如在一个基于文本域的索引树上，按字母顺序传递连续的值进行查找很方便。</p>
+<p>B-Tree索引适用于<strong>全键值，键值范围或键前缀查找</strong>，其中<strong>键前缀查找只适用于根据最左前缀的查找</strong>。</p>
+<p>考虑如下表</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#000">create</span> <span style="color:#000">table</span> <span style="color:#000">People</span><span style="color:#000;font-weight:bold">(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">last_name</span> <span style="color:#000">varchar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">50</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#204a87;font-weight:bold">not</span> <span style="color:#000">null</span><span style="color:#000;font-weight:bold">,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">first_name</span> <span style="color:#000">varchar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">50</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#204a87;font-weight:bold">not</span> <span style="color:#000">null</span><span style="color:#000;font-weight:bold">,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">dob</span> <span style="color:#000">date</span> <span style="color:#204a87;font-weight:bold">not</span> <span style="color:#000">null</span><span style="color:#000;font-weight:bold">,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">gender</span> <span style="color:#204a87;font-weight:bold">enum</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;m&#39;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;f&#39;</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#204a87;font-weight:bold">not</span> <span style="color:#000">null</span><span style="color:#000;font-weight:bold">,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">key</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">last_name</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">first_name</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">dob</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">)</span>
+</span></span></code></pre></div><p>索引包含了last_name, first_name, dob</p>
+<ul>
+<li>全职匹配
+查找(Cuba Allen, 1960-01-01)的人</li>
+<li>匹配最左前缀
+查找姓为Allen的人</li>
+<li>匹配列前缀
+查找所有以J开头的姓的人</li>
+<li>匹配范围值
+查找姓在Allen和Barrymore之间的人</li>
+<li>精确匹配某列并范围匹配另一列
+查找姓为Allen并且名字是字母K开头的人</li>
+<li>只访问索引的查询</li>
+</ul>
+<p>下面是B-Tree索引的限制。</p>
+<ul>
+<li>不从索引的最左列查找，则无法适用索引。</li>
+<li>不能跳过索引中的列。</li>
+<li>如果查询有某个列的范围查询，则右边所有列无法适用索引优化查询。
+例如 where last_name = &lsquo;Smith&rsquo; AND first_name LIKE &lsquo;%J&rsquo; AND dob = &lsquo;1976-12-23&rsquo;
+查询只能适用索引的前两列。</li>
+</ul>
+<h4 id="哈希索引">哈希索引</h4>
+<p>基于哈希表实现，优点是查找非常快。</p>
+<p>在 MySQL 中只有 Memory 引擎显式支持哈希索引。</p>
+<p>InnoDB 引擎有一个特殊的功能叫“自适应哈希索引”，当某个索引值被使用的非常频繁时，会在 B-Tree 索引之上再创建一个哈希索引，这样就让 B-Tree 索引具有哈希索引的一些优点，比如快速的哈希查找。</p>
+<p>限制：哈希索引只包含哈希值和行指针，而不存储字段值，所以不能使用索引中的值来避免读取行。不过，访问内存中的行的速度很快，所以大部分情况下这一点对性能影响并不明显；无法用于分组与排序；只支持精确查找，无法用于部分查找和范围查找；如果哈希冲突很多，查找速度会变得很慢。</p>
+<h4 id="空间树索引">空间树索引</h4>
+<p>MyISAM表支持空间索引，可以用作地理数据存储，这类索引无须前缀查询。</p>
+<h4 id="全文索引">全文索引</h4>
+<p>一种特殊类型的索引，查找文本中的关键字，而不是直接蹩脚索引中的值。</p>
+<h2 id="索引的优点">索引的优点</h2>
+<ol>
+<li>索引大大减少服务器需要扫描的数据量</li>
+<li>索引可以帮助服务器避免排序和临时表</li>
+<li>索引将随机I/O变为顺序I/O</li>
+</ol>
+<h2 id="高性能的索引">高性能的索引</h2>
+<h3 id="独立的列">独立的列</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>select actor_id from sakila.actor where actor.id + 1 = 5 
+</span></span><span style="display:flex;"><span>//MySQL无法自动解析这个方程式，所以无法使用索引。应该将索引列单独的放在比较符号的一侧
+</span></span></code></pre></div><h3 id="前缀索引和索引选择性">前缀索引和索引选择性</h3>
+<p><em>索引的选择性: 不重复的索引值(基数)和数据表的记录总数(#T)的比值，范围从1/#T 到 1之间，选择性越高则查询效率越高。</em></p>
+<p>选择足够昌的前缀以保证较高的选择性，同时又不能太长，前缀应该足够长，以使得前缀索引的选择性接近于索引整个列。</p>
+<h3 id="多列索引">多列索引</h3>
+<p>一个常见的错误是: <del>为每个列创建独立的索引，或者按照错误顺序创建多列索引。</del></p>
+<p>在多个列上建立独立的单列索引大部分情况下并不能提高MySQL的查询性能。MySQL5.0和更新版本引入了一种叫做&quot;索引合并&quot;的策略，一定程度上可以适用表上的多个单列索引来定位制定的行。</p>
+<h3 id="选择合适的索引列顺序">选择合适的索引列顺序</h3>
+<p>正确的索引列顺序依赖于适用该索引的查询，并且同时需要考虑如何更好的满足排序和分组的需要。</p>
+<p>在一个多列B-Tree索引中，索引列的顺序意味者索引首先按照最左列进行排序。
+让选择性最强的索引列放在前面，例如下面显示的结果中 customer_id 的选择性比 staff_id 更高，因此最好把 customer_id 列放在多列索引的前面。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>SELECT COUNT(DISTINCT staff_id)/COUNT(*) AS staff_id_selectivity,
+</span></span><span style="display:flex;"><span>COUNT(DISTINCT customer_id)/COUNT(*) AS customer_id_selectivity,
+</span></span><span style="display:flex;"><span>COUNT(*)
+</span></span><span style="display:flex;"><span>FROM payment;
+</span></span></code></pre></div><h3 id="聚簇索引">聚簇索引</h3>
+<p>聚簇索引并不是一种单独的索引类型，二十一种数据存储方式。</p>
+<p>当表有聚簇索引时，它的<em>数据行实际上存放在索引的叶子页中</em>，因为无法同时把数据行放在两个不同的地方，所以一个表只能有一个聚簇索引。如下
+<img src="http://owmee6oah.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-09-21%2015.59.21.png" alt=""></p>
+<p>叶子页包含了行的全部数据，但是节点页只包含了索引列，这里索引的是整数值。</p>
+<p>优点:</p>
+<ul>
+<li>把相关数据保存在一起</li>
+<li>数据访问更快</li>
+<li>适用覆盖索引扫描的查询可以直接使用页节点中的主键值</li>
+</ul>
+<p>缺点:</p>
+<ul>
+<li>聚簇数据最大限度提高了I/O密集型应用性能，但如果数据全都放在内存中，访问顺序则不重要，聚簇索引也就失去了优势。</li>
+<li>插入速度严重依赖于插入顺序</li>
+<li>更新聚簇索引列的代价很高</li>
+<li>导致全表扫描变慢</li>
+</ul>
+<h3 id="覆盖索引">覆盖索引</h3>
+<p>如果一个索引包含所有需要查询的字段的值，我们就称之为&quot;覆盖索引&quot;。</p>
+<h3 id="使用索引扫描来排序">使用索引扫描来排序</h3>
+<p>MySQL又两种方式生成有序的结果: 1.通过排序操作 2.按索引顺序扫描。</p>
+<h3 id="压缩索引">压缩索引</h3>
+<p>MyISAM适用前缀索引来减少索引的大小，从而让更多的索引可以放入内存中。默认只压缩字符串，通过参数设置可以对整数做出压缩。</p>
+<h3 id="冗余和重复索引">冗余和重复索引</h3>
+<p>MySQL允许在相同列上创建多个索引，MySQL需要单独维护重复的索引，并且优化器在优化查询的时候也需要逐个的进行考虑，这会影响性能。</p>
+<h3 id="未适用的索引">未适用的索引</h3>
+<p>除了冗余索引和重复索引，可能还会有一些服务器永远不用的索引，这样的索引建议删除。</p>
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-tags">
+              <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+                读书笔记
+              </a>
+            </div>
+            
+          </div>
+        </div>
+        
+          <div class="row">
+            <div class="col-xs-12">
+              
+            </div>
+          </div>
+
+          
+
+<div class="related-content">
+  <h3>Related Posts</h3>
+  <ul>
+    
+    <li><a href="/posts/%E6%9D%82%E8%B0%88%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">杂谈设计模式</a></li>
+    
+    <li><a href="/posts/uml%E7%B1%BB%E5%9B%BE/">UML类图</a></li>
+    
+    <li><a href="/posts/jvm%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0/">JVM中的常用参数</a></li>
+    
+  </ul>
+</div>
+
+
+
+          
+          
+        
+
+        <div class="site-footer">
+  <div class="busuanzi-footer" hidden>
+    <span id="busuanzi_container_site_pv">
+      本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    <span id="busuanzi_container_site_uv">
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </span>
+    <span id="busuanzi_container_page_pv" >本文阅读量<span id="busuanzi_value_page_pv"></span>次</span>
+  </div>
+  
+</div>
+      </div>
+    </div>
+  </article>
+
+  <script src="https://utteranc.es/client.js"
+        repo="nzooherd/blog-talks"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+  </script>
+  
+
+
+
+  
+
+</body>
+
+</html>

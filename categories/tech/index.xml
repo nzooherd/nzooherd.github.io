@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tech on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/categories/tech/</link>
+    <description>Recent content in Tech on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 15 Jan 2023 02:34:10 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/categories/tech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>《深度学习》读书笔记(一)</title>
+      <link>http://nzooherd.github.io/posts/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B8%80/</link>
+      <pubDate>Sun, 15 Jan 2023 02:34:10 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B8%80/</guid>
+      <description>最近在读“花书”《Deep learning》，然而第一部分“应用数学与机器学习基础”就异常吃力。一方面高数等基础我大三开始就不再应用，另一方面这部分写得着实简陋，数学公式的证明充斥着大量的“不难得出，可以看到，因此可证…”。让我一个高考数学 145 的人常常怀疑自己的智商。&#xA;梯度负方向下降最快 每一篇介绍梯度下降的文章，几乎都会告诉你“梯度负方向下降最快”，但却不告诉你为什么。 而当你谷歌时，中文互联网上的资料大都是这两篇文章复制粘贴：&#xA;为什么梯度反方向是函数值局部下降最快的方向？ 为什么梯度的负方向是局部下降最快的方向？ 然而，就在《Deep Learning》这本书的 4.3 章节，用短短 10 行向读者敷衍得证明了下为什么。敷衍到我为了看懂查了一天资料…&#xA;先列一些定义:&#xA;偏导数 \(\frac{\partial}{\partial x_i}f(x)\) 衡量点 \(x\) 处对 \(x_i\) 的变化率。 梯度是相对一个向量求导的导数， \(f\) 的导数是包含所有偏导数的向量，记为 \(\nabla_xf(x)\)。 下降方向中的方向定义为 \(u\) (单位向量)。 \(u\) 方向的下降速度为 \(\frac{\partial}{\partial a}f(x+au)\) 在 a=0 时的值。 下面通过雅可比矩阵链式法则求导(向量求导不能直接应用链式法则): \[\frac{\partial{\boldsymbol{f(x+au)}}}{\partial{a}} = \frac{\partial \boldsymbol{f(x+au)}}{\partial{\boldsymbol{(x+au)}}}\frac{\partial{\boldsymbol{(x+au)}}}{\partial a} \]&#xA;注意这里是 \(\frac{\partial{\boldsymbol{f(x+au)}}}{\partial{a}}\) 而非 \(\frac{\partial{f(x+au)}}{\partial{a}}\)，等号左侧是粗体。&#xA;\(\frac{\partial{\boldsymbol{f}}}{\partial{\boldsymbol{x}}}, \frac{\partial{f}}{\partial{\boldsymbol{x}}}\) 是否相等需要结合分子分母的形态具体分析，以本题为例:&#xA;\(\frac{\partial{\boldsymbol{f(x+au)}}}{\partial{a}}\) 雅可比矩阵结果是 \(1 \times 1\)，而 \(\frac{\partial{f(x+au)}}{\partial{a}}\) 结果同样为 \(1\times 1\)，所以:&#xA;\[\frac{\partial{\boldsymbol{f(x+au)}}}{\partial{a}}=\frac{\partial{f(x+au)}}{\partial{a}}\]&#xA;假设 \(x \in R^n\), \(\frac{\partial \boldsymbol{f(x+au)}}{\partial{\boldsymbol{(x+au)}}}\) 雅可比矩阵结果是 \(1 \times n\)，而 \(\nabla_xf(x)a\) 通常记为 \(n \times 1\)，所以 \[\frac{\partial \boldsymbol{f(x+au)}}{\partial{\boldsymbol{(x+au)}}} ={\frac{\partial f(x+au)}{\partial{\boldsymbol{(x+au)}}}}^\intercal\]</description>
+    </item>
+    <item>
+      <title>树状数组的证明</title>
+      <link>http://nzooherd.github.io/posts/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E8%AF%81%E6%98%8E/</link>
+      <pubDate>Fri, 11 Mar 2022 21:58:52 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E8%AF%81%E6%98%8E/</guid>
+      <description>&lt;!DOCTYPE html&gt; &amp;#x6811;&amp;#x72B6;&amp;#x6570;&amp;#x7EC4;&amp;#x7684;&amp;#x8BC1;&amp;#x660E; 树状数组的证明 树状数组 和 线段树 是解决区间问题常用的两种数据结构。其中线段树理解起来相对简单，而树状数组的代码实现则更简洁。&#xA;参考例题: 区域和检索-数组可修改，就是一个标准的树状数组题。更抽象的应用场景可以理解为:&#xA;假设存在数组 aia_iai​， 存在操作 ⨀(ai,ai+1,ai+2,⋯ ,ai+k)\bigodot(a_i, a_{i+1}, a_{i+2}, \cdots, a_{i+k})⨀(ai​,ai+1​,ai+2​,⋯,ai+k​)，并且 ⨀(ai,ai+1,⋯ ,ai+k)=⨀(⨀(ai,ai+1,⋯ ,ai+j),⨀(ai+j+1,ai+j+2,⋯ ,ai+k))(1)\bigodot(a_i, a_{i+1}, \cdots, a_{i+k}) =\bigodot( \bigodot(a_i, a_{i+1}, \cdots, a_{i+j}), \bigodot(a_{i+j+1}, a_{i+j+2}, \cdots, a_{i+k}) )\tag{1} ⨀(ai​,ai+1​,⋯,ai+k​)=⨀(⨀(ai​,ai+1​,⋯,ai+j​),⨀(ai+j+1​,ai+j+2​,⋯,ai+k​))(1)&#xA;⨀(aj,⨀(ak))=⨀(aj,aK)(2)\bigodot(a_j, \bigodot(a_k)) = \bigodot(a_j, a_K) \tag{2} ⨀(aj​,⨀(ak​))=⨀(aj​,aK​)(2)&#xA;树状数组可以 O(log⁡n)O(\log{}n)O(logn) 的时间复杂度求出 ⨀(a1,a2,a3,⋯ ,ai)\bigodot(a_1, a_{2}, a_{3}, \cdots, a_{i})⨀(a1​,a2​,a3​,⋯,ai​)的值。 这里的 ⨀\bigodot⨀ 可以是 ∑\sum∑, 也可以是 ∏\prod∏，或者是任意其他满足上述等式的操作。 楼主从大一就已学习树状数组，但一直断断续续的用，断断续续的忘，每次使用时都要翻出模板代码来。&#xA;最近尝试手推了一下树状数组，记录于下。&#xA;假设原数组是 aia_iai​，树状数组利用 aia_iai​ 构建了新数组 bib_ibi​。&#xA;bi=⨀i−2k+1iaib_i = \bigodot_{i-2^k+1}^{i}a_i bi​=i−2k+1⨀i​ai​</description>
+    </item>
+    <item>
+      <title>MinIO(一)纠删码</title>
+      <link>http://nzooherd.github.io/posts/minio%E4%B8%80-%E7%BA%A0%E5%88%A0%E7%A0%81/</link>
+      <pubDate>Sun, 30 Jan 2022 21:58:52 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/minio%E4%B8%80-%E7%BA%A0%E5%88%A0%E7%A0%81/</guid>
+      <description>MinIO 是一个100% 开源的分布式对象存储系统，其主要开发者是 2014 年创建于硅谷的科技公司 MinIO Inc。&#xA;相较于阿里 OSS 底层依赖有巢和盘古，谷歌 GCS 底层依赖 Spanner 和 GFS(Colossus)，MinIO 则是一个完整的对象存储，真正做到了零依赖，单机部署只需要一个二进制可执行文件。从这个意义上看，MinIO 开源的不仅仅是对象系统，更核心的是开源了一个分布式存储系统。&#xA;那么 MinIO 相比业界常见的分布式系统又有哪些优劣，又能否给未来的设计带来一些启发？&#xA;本系列计划详细介绍 MinIO 的系统设计，此文是第一篇 「纠删码」。&#xA;Earsure Code 在存储领域, 最常见的防止数据丢失的方式就是备份。家用 NAS 可能直接上 RAID ，而大数据领域的 HDFS 会默认存双副本。 副本越多提供的数据可靠性也越强，也意味着空间利用率越低，要达到对象存储 11个9 的数据可靠性，通常需要 4 副本，如此计算，真正的利用率只有 25%。&#xA;纠删码则可以在提供和多副本相同的数据可靠性的同时，极大的提高空间利用率。在 03 年的 GFS 初版论文中，Google 就曾设想利用纠删码来存储，然而受限于当时的技术发展无法如愿。十多年过去了，当时遥不可及的技术，如今却频繁的用于某些大中厂自研的系统中，颇有 飞入寻常百姓家 的感触。&#xA;MinIO 使用纠删码 (Erasure Code) 来存储数据，下文简称为 EC。EC 将原始数据均分为 \(N\) 份，然后生成 \(M\) 份相同大小的 校验数据，在这 \((N+M)\) 份数据中任意丢失 \(M\) 份均可生成原始数据。 MinIO 确保这 \((N+M)\) 份数据分散在 \((N+M)\) 个不同的磁盘上，防止磁盘损毁导致数据丢失。常用的 \((N+M) = 8+4\)，提供比 4 副本更强的数据可靠性，同时空间利用率维持在 75%。</description>
+    </item>
+    <item>
+      <title>论装饰器的四种写法</title>
+      <link>http://nzooherd.github.io/posts/%E8%AE%BA%E8%A3%85%E9%A5%B0%E5%99%A8%E7%9A%84%E5%9B%9B%E7%A7%8D%E5%86%99%E6%B3%95/</link>
+      <pubDate>Sat, 25 Dec 2021 12:34:52 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E8%AE%BA%E8%A3%85%E9%A5%B0%E5%99%A8%E7%9A%84%E5%9B%9B%E7%A7%8D%E5%86%99%E6%B3%95/</guid>
+      <description>面向切面编程在 Python 中一部分体现为装饰器。&#xA;由于 Python 中一切皆对象，装饰器的使用方法也因此多种多样，下文介绍装饰器的四种写法。&#xA;用函数装饰函数 def retry(func: Optional[Callable] = None, duration: timedelta = timedelta(seconds=2), limit: int = 10) -&amp;gt; Callable: if not func: return functools.partial(retry, duration=duration, limit=limit) @functools.wraps(func) def _func(*args, **kwargs): duration_seconds = duration.total_seconds() count = 1 while count &amp;lt;= limit: try: result = func(*args, **kwargs) return result except: count += 1 time.sleep(duration_seconds) continue return _func class TestRetry(unittest.TestCase): @staticmethod def generate_test_function(limit, retry_decorator): retry_count = [0] @retry_decorator(limit=5, duration=timedelta(seconds=0)) def my_test(): retry_count[0] += 1 if retry_count[0] &amp;lt; limit: raise Exception(&amp;#34;Test failed&amp;#34;) else: return retry_count return my_test def test_function_decoration(self): for i in range(100): exception_count = random.</description>
+    </item>
+    <item>
+      <title>深入Http Read Timeout</title>
+      <link>http://nzooherd.github.io/posts/%E6%B7%B1%E5%85%A5http-read-timeout/</link>
+      <pubDate>Sat, 11 Dec 2021 13:43:08 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E6%B7%B1%E5%85%A5http-read-timeout/</guid>
+      <description>海外的对象存储底层直接使用公有云，由于某些莫名其妙的原因，客户端不定期出现大量的 Read timed out 异常，部分异常栈如下。在和公有云的技术支持人员沟通过程中，我发现双方都不能很明确的指出到底是哪个环节超时了。&#xA;java.net.SocketTimeoutException: Read timed out at java.base/java.net.SocketInputStream.socketRead0(Native Method) ~[na:na] at java.base/java.net.SocketInputStream.socketRead(SocketInputStream.java:115) ~[na:na] at java.base/java.net.SocketInputStream.read(SocketInputStream.java:168) ~[na:na] at java.base/java.net.SocketInputStream.read(SocketInputStream.java:140) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:478) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.readHeader(SSLSocketInputRecord.java:472) ~[na:na] at java.base/sun.security.ssl.SSLSocketInputRecord.bytesInCompletePacket(SSLSocketInputRecord.java:70) ~[na:na] at java.base/sun.security.ssl.SSLSocketImpl.readApplicationRecord(SSLSocketImpl.java:1374) ~[na:na] at java.base/sun.security.ssl.SSLSocketImpl$AppInputStream.read(SSLSocketImpl.java:986) ~[na:na] at org.apache.http.impl.io.SessionInputBufferImpl.streamRead(SessionInputBufferImpl.java:137) ~[httpcore-4.4.13.jar!/:4.4.13] 众所周知，Http1.1 协议可以分成两个过程&#xA;客户端向服务端发送数据 客户端从服务端读取数据 所以 Http Read Timeout 的具体范围可能是指&#xA;上图 2-3 的时间 ? 上图 2-4 的时间 ? 上图 3-4 的时间 ? Tcp 层任意两个 Segment 的间隔时间 ? Tcp 层任意两个 Receive Segment 的间隔时间 ?</description>
+    </item>
+    <item>
+      <title>熔断限流与隔板</title>
+      <link>http://nzooherd.github.io/posts/%E7%86%94%E6%96%AD%E9%99%90%E6%B5%81%E4%B8%8E%E9%9A%94%E6%9D%BF/</link>
+      <pubDate>Sat, 18 Sep 2021 12:57:11 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E7%86%94%E6%96%AD%E9%99%90%E6%B5%81%E4%B8%8E%E9%9A%94%E6%9D%BF/</guid>
+      <description>熔断，限流与隔板 公司的对象存储服务上线至今仍没有限流模块。&#xA;8月份一次 CDN 事故中所有流量直接打到源站，导致 CPU 和内存使用率突增。 为防止服务雪崩， 紧急申请了一批资源才避免引发更大的事故。&#xA;于是9月份我就有了这个限流组件的 OKR。&#xA;动手之前，发现对微服务中的 熔断, 限流, 隔板 三者的理解有一定的误区，搜索一些资料记录于此。&#xA;熔断 - Circuite Breaker 问题背景&#xA;如果被调方由于某些问题挂掉，但是并没有从服务发现节点摘除。&#xA;主调方仍然会发起请求，虽然被调方已经无法提供服务，但由于超时时间的配置，主调不会立即失败。&#xA;如果在流量非常大的情况下，主调方会由于请求hang住占用大量资源，进而导致主调方挂掉。&#xA;解决方案&#xA;主调挂掉的原因是等待响应的请求占用了大量的资源。而熔断器的原理就是在发生此类情况时对于调用立即返回失败。&#xA;熔断器的一种实现方式是利用状态机，通过滑动窗口计算每个周期的状态，如下图。&#xA;适用场景&#xA;避免因为被调服务挂掉引起自身挂掉 限流 - Throttling 问题背景&#xA;客户端请求可能由于某些问题突发爆炸性增长，服务端压力陡增。&#xA;此时如果流量继续增长，很有可能导致服务挂掉，例如因为内存占用过大被操作系统kill等。&#xA;为避免发生此类场景，就需要对请求限流。&#xA;解决方案&#xA;限流的常用方式如下:&#xA;拒绝服务。对于某些请求直接返回失败 服务降级。停止提供低优先级功能，降低资源占用 使用负载均衡组件平滑请求量，例如消息队列等，常见于异步请求。 适用场景&#xA;保护自己避免因为流量突增雪崩 防止单一租户占用大量资源 隔板 - Bulkhead 问题背景&#xA;场景1: 主调方为了完成一个响应可能需要对多个背调方发起请求，假如一个被调方响应缓慢，请求堆积导致耗尽线程池，会引起大规模请求失败。&#xA;场景2: 被调方由于某个主调出现大量请求占用大量资源，导致无法对其他主调提供服务。&#xA;写到这里会发现，场景1和熔断的场景类似，而场景2就是限流的场景&amp;hellip;&#xA;基于此，隔板和熔断，限流并不是对立，而是对同一问题的不同考虑角度。&#xA;解决方案&#xA;在服务层面通常使用 隔离部署 的方式实现。&#xA;在单个进程内部，大多使用场景是池化隔离，如下图:&#xA;适用场景&#xA;隔离不同功能的资源消耗&#xA;客户优先级隔离&#xA;保护自己免于雪崩&#xA;参考链接 [1] Throttling pattern&#xA;[2] Bulkhead pattern</description>
+    </item>
+    <item>
+      <title>Artificially create connection timemout</title>
+      <link>http://nzooherd.github.io/posts/artifically-create-a-connection-timemout/</link>
+      <pubDate>Sat, 19 Jun 2021 12:06:55 +0800</pubDate>
+      <guid>http://nzooherd.github.io/posts/artifically-create-a-connection-timemout/</guid>
+      <description>从三年前第一次接触TCP backlog开始，TCP建连时到底时两个队列还是一个队列就一直作为一个问题存在脑子了，没想到三年过去了才终于搞明白。&#xA;上图摘自&amp;laquo;TCP/IP详解卷1&amp;raquo;关于backlog的描写，我到现在也没有明白这段话想精确表达的含义。&#xA;无论如何，希望大家尽量去读英文书，搜英文资料，避免吃屎。&#xA;原理 首先看一下经典老图， 第一个问题到底是一个队列还是两个队列&#xA;一个队列: 此场景下要将处于SYNC_RECV和ESTABLISHED的状态全部放入其中&#xA;两个队列: SYNC_RECV一个队列，ESTABLISHED一个队列&#xA;准确来说两种实现都是正确的，因为这不属于TCP协议的范畴。&#xA;BSD选择了第一种，当队列满时，仅仅是丢弃收到的SYN，让客户端重试。&#xA;Linux2.2之后选择了第二种，存在两个队列。因此对于绝大多数程序员来说，记住下图就可以应用100%的场景了。&#xA;When SYN Queue is Full&#xA;if net.ipv4.tcp_syncookies=0, 丢弃SYN if net.ipv4.tcp_syncookies=1, if ACP Queue is Full and req_young_len &amp;gt; 1，丢弃SYN。req_young_len是指SYN队列中没有被重传的SYN/ACK pakcet的数量 否则对这个SYNC packet生成syncookies。 When Accept Queue is Full&#xA;if tcp_abort_on_overflow=1, 返回 RST packet，并且从SYN Queue中移除。 if tcp_abort_on_overflow=0, 仅仅标记此连接为acked，并不从SYN Queue中移除。一段时间后，服务端会因为[假装]没有收到ACK而重发SYN+ACK packet. 重现 了解上述原理后，我们只需要将SYN Queue和ACK Queue设置的尽量小，就可以重现Connection Timeout，甚至重现Server discard syn的场景，本文会重现Server discard syn，这也是Connection Timeout的一种。&#xA;设置SYN Queue大小为1 关闭syncookies 设置系统级backlog最大值 打开/etc/sysctl.conf文件，加入以下内容&#xA;net.ipv4.tcp_max_syn_backlog = 1 net.</description>
+    </item>
+    <item>
+      <title>谈谈RPC</title>
+      <link>http://nzooherd.github.io/posts/%E8%B0%88%E8%B0%88rpc/</link>
+      <pubDate>Tue, 10 Jul 2018 21:29:54 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E8%B0%88%E8%B0%88rpc/</guid>
+      <description>&lt;p&gt;RPC(Remote Procedure Call)字面意思就是远程过程调用，RPC框架的作用就是将远程过程调用封装成本地过程调用。所以Rpc-Framework要封装的就是以下这些东西。&#xA;&lt;img src=&#34;http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20171102105005322.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;在美团实习用到了Thrift，Thrift作为一个跨语言RPC，美团内部通过jar包将其接入Spring，屏蔽了复杂的Thrift连接操作，而且RPC框架可以很非常方便的将一个单机服务转变为分布式架构的。&#xA;不由得让我想起了刚来美团时接手的一个纯C写的分段式语音传输系统，Socket通信加上各种内存复制着实让人恶心。用Java重构后，加上Thrift框架，仅仅两个实习生就多快好省的搞好了这个分布式系统。RPC的强大可见一斑。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>诡异的Integer</title>
+      <link>http://nzooherd.github.io/posts/%E8%AF%A1%E5%BC%82%E7%9A%84integer/</link>
+      <pubDate>Sun, 01 Jul 2018 22:39:03 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E8%AF%A1%E5%BC%82%E7%9A%84integer/</guid>
+      <description>&lt;h2 id=&#34;一个常见的面试题&#34;&gt;一个常见的面试题&lt;/h2&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Java语言实现两个线程交替输出1,2。&#xA;看到这个题就想起了生产者-消费者，进而想到了Synchorinzed, wait, notify。下面是我要写的代码&lt;/p&gt;&#xA;&lt;/blockquote&gt;</description>
+    </item>
+    <item>
+      <title>JDK动态代理</title>
+      <link>http://nzooherd.github.io/posts/jdk%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</link>
+      <pubDate>Sun, 20 May 2018 10:07:45 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/jdk%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</guid>
+      <description>&lt;p&gt;最近复习了一下JDK自带的动态代理，在Java技术中，和动态代理连接最紧密的就是Spring中的AOP，所谓的面向切面技术。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>ZAB协议和Zookeeper分布式服务框架</title>
+      <link>http://nzooherd.github.io/posts/zab%E5%8D%8F%E8%AE%AE%E5%92%8Czookeeper%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/</link>
+      <pubDate>Sun, 13 May 2018 21:20:52 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/zab%E5%8D%8F%E8%AE%AE%E5%92%8Czookeeper%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/</guid>
+      <description>&lt;p&gt;What is ZooKeeper?&#xA;ZooKeeper是一个开放源代码的分布式协调服务,出自&amp;laquo;分布式一致性原理与实践&amp;raquo;。对于像我这样的新手来说，这句话就是在扯淡。&#xA;还记得当初刚学Spring，网上各种都在说的Spring的IOC,AOP的优越，但是讲半天也没有说明Spring到底是做什么的。在&amp;laquo;Spring实战&amp;raquo;中，开门见山的讲明了Spring就是用来解隅的。带着这个目的去学习Spring，就有了方向，你就会逐渐明白Spring如何解隅，IOC和AOP。这就是好书给人的感觉。本文适合菜鸟，高手止步。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>分布式基础</title>
+      <link>http://nzooherd.github.io/posts/%E5%88%86%E5%B8%83%E5%BC%8F%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Wed, 09 May 2018 23:31:48 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E5%88%86%E5%B8%83%E5%BC%8F%E5%9F%BA%E7%A1%80/</guid>
+      <description>&lt;h2 id=&#34;cap&#34;&gt;CAP&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Consistency&#xA;当一个系统在数据一致的状态下执行更新操作后，应该保证系统的数据处于一致的状态。&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Availability&#xA;提供的服务必须处于可用状态。两个维度，有限时间内和返回结果&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Partition tolerance&#xA;分布式系统在遇到任何网络分区故障的时候，仍然需要能够保证对外提供满足一致性和可用性的服务。&#xA;网络分区是指在分布式系统个中，不同的节点分布在不同的子网络，一些特殊原因导致子网络之间网络不联通，各个系统的网络环境被切分成了若干个孤立区域。&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>统计学习方法(1)-感知机</title>
+      <link>http://nzooherd.github.io/posts/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A01-%E6%84%9F%E7%9F%A5%E6%9C%BA/</link>
+      <pubDate>Wed, 04 Apr 2018 22:02:05 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A01-%E6%84%9F%E7%9F%A5%E6%9C%BA/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/1009183469.jpg&#34; alt=&#34;&#34;&gt;&#xA;初雪 2018-4-4 晚&lt;/p&gt;&#xA;&lt;p&gt;&lt;em&gt;找了近一个月的时间都没有找到一款合适的笔记，最终我选择了Visual Code + Vim + Markdown + Mega。笔记内容链接在个人描述页面&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;忽然想学一波大数据方面的东西，但是我不想搞人工智能，例如NLU, CV等，这些对于人来说很简单的事。关于人工智能，我仍然坚持当前基于统计的方法无法实现真正的人工智能，不如花时间来玩一玩大数据的东西。以下内容参考李航的&amp;laquo;统计学习方法&amp;raquo;，重在理解。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>MySQL索引</title>
+      <link>http://nzooherd.github.io/posts/mysql%E7%B4%A2%E5%BC%95/</link>
+      <pubDate>Sun, 25 Feb 2018 10:13:53 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/mysql%E7%B4%A2%E5%BC%95/</guid>
+      <description>&lt;p&gt;在阅读&amp;laquo;高性能MySQL&amp;raquo;时，开始就被灌输了一个索引很重要的概念。最近在读第五章，&amp;ldquo;创建高性能的索引&amp;rdquo;，用于记录。&lt;/p&gt;&#xA;&lt;h2 id=&#34;索引基础&#34;&gt;索引基础&lt;/h2&gt;&#xA;&lt;p&gt;理解索引最简单的办法就查字典，小时候查汉语大词典就是最典型的索引思想。通过索引可以将查询的效率提高几个数量级。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>杂谈设计模式</title>
+      <link>http://nzooherd.github.io/posts/%E6%9D%82%E8%B0%88%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Sat, 03 Feb 2018 23:16:13 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E6%9D%82%E8%B0%88%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
+      <description>&lt;p&gt;最近在读程杰的&amp;laquo;大话设计模式&amp;raquo;，学了十几个设计模式后感觉每个都很相似，下面虽然写了一堆，但是要真正理解还有写代码才可以，实践是检验真理的唯一标准。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>UML类图</title>
+      <link>http://nzooherd.github.io/posts/uml%E7%B1%BB%E5%9B%BE/</link>
+      <pubDate>Wed, 31 Jan 2018 22:29:29 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/uml%E7%B1%BB%E5%9B%BE/</guid>
+      <description>&lt;p&gt;最近在读大话设计模式，其中的UML类图尚不熟悉，特此记录。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>JAVA泛型</title>
+      <link>http://nzooherd.github.io/posts/java%E6%B3%9B%E5%9E%8B/</link>
+      <pubDate>Sat, 23 Dec 2017 12:26:09 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/java%E6%B3%9B%E5%9E%8B/</guid>
+      <description>&lt;p&gt;最近在看Java源码，在Java容器类中所有容器都用到了泛型，然而Java中的泛型实际上是一种伪泛型。记录一下Java中泛型的实现。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Java NIO易错点</title>
+      <link>http://nzooherd.github.io/posts/java-nio%E6%98%93%E9%94%99%E7%82%B9/</link>
+      <pubDate>Wed, 29 Nov 2017 19:22:03 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/java-nio%E6%98%93%E9%94%99%E7%82%B9/</guid>
+      <description>&lt;p&gt;最近在和同学写一个Android端的类微信项目，不过非常简单，只有添加好友，设置备注，通话等功能。我主要负责服务器端的开发，在开发过程中，使用了Spring框架和Java NIO。有些东西，确实不写代码根本就学不会，在学习过程中，发现Java NIO中的一些易错点，特此记录，以备查询。(可能会不定时更新)&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>记一次诡异的Bug</title>
+      <link>http://nzooherd.github.io/posts/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%AF%A1%E5%BC%82%E7%9A%84bug/</link>
+      <pubDate>Tue, 14 Nov 2017 09:07:38 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%AF%A1%E5%BC%82%E7%9A%84bug/</guid>
+      <description>&lt;p&gt;故事是这样的，前几天固态硬盘到了之后决定重装系统，电脑换上固态后装好Linux后，直接将原来机械硬盘中的JDK, Tomcat, Intellij IDEA拷贝过来，简单的配置了一下环境变量，java -version没有任何问题，于是就开始修改之前的LetChat源文件。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>JVM中的常用参数</title>
+      <link>http://nzooherd.github.io/posts/jvm%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0/</link>
+      <pubDate>Mon, 30 Oct 2017 21:58:52 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/jvm%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0/</guid>
+      <description>&lt;p&gt;不得不说&amp;laquo;深入理解Java虚拟机&amp;raquo;真的是一本很神奇的书籍，每次读都有一种醍醐灌顶的效果，像这种书不是读一遍放下就可以了，而是要放在手边，随时查阅，直到真正的融会贯通，达到人书合一的效果。&#xA;这是一篇记录JVM中常用参数的帖子，可能会不定时更新。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>JavaWeb和SSM</title>
+      <link>http://nzooherd.github.io/posts/javaweb%E5%92%8Cssm/</link>
+      <pubDate>Sat, 28 Oct 2017 12:21:40 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/javaweb%E5%92%8Cssm/</guid>
+      <description>&lt;p&gt;近一个月的时间都在做一个B/S架构的在线聊天工具，从最初的的命令行再到Jsp最后用SSM框架重构，到目前就先告一段落吧，记录一下学习过程中的感想，以便查阅。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>通过ngrok实现内网穿透</title>
+      <link>http://nzooherd.github.io/posts/%E9%80%9A%E8%BF%87ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</link>
+      <pubDate>Fri, 20 Oct 2017 22:41:44 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E9%80%9A%E8%BF%87ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</guid>
+      <description>&lt;h3 id=&#34;通过ngrok实现ssh连接本机电脑&#34;&gt;通过ngrok实现ssh连接本机电脑&lt;/h3&gt;&#xA;&lt;p&gt;从树莓派开始就一直想着有没有一种方法可以通过外网ssh连接内网中的树莓派，之前知道一个大概的思路，就是通过花生壳的类似内网穿透的服务。然而好几次尝试都失败了，最后直接知乎，搜到了ngrok这个神器，一次搞定。不得不感叹一下国外的开源环境确实比国内好很多，一些用中文怎么搜索都找不到答案的问题，换成英文搜索就会发现，老外早就给你写好解决办法了，就看你会不会用Google了。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>关于c/s和b/s架构</title>
+      <link>http://nzooherd.github.io/posts/%E5%85%B3%E4%BA%8Ec-s%E5%92%8Cb-s%E6%9E%B6%E6%9E%84/</link>
+      <pubDate>Mon, 18 Sep 2017 19:25:55 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E5%85%B3%E4%BA%8Ec-s%E5%92%8Cb-s%E6%9E%B6%E6%9E%84/</guid>
+      <description>&lt;p&gt;从上学期期末开始就尝试写一个聊天工具，从最开始的Java IO，由于Java代码是运行在JVM上的，一方面即时是一个简单的客户端程序，同样会占用不少的内存，另一方面Java本身就不适合写客户端程序，让用户装JVM这件事本事就很扯淡。为了解决内存占用问题，这学期开始将服务器端的代码改为了Java NIO，通过NIO中的selector(轮询)来减少服务器端CPU和内存占用，在完成一个最初的model后，就开始尝试将其改为B/S架构的，随即发现不少问题。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>粗谈Tcp/Ip协议</title>
+      <link>http://nzooherd.github.io/posts/%E7%B2%97%E8%B0%88tcp-ip%E5%8D%8F%E8%AE%AE/</link>
+      <pubDate>Thu, 06 Jul 2017 10:37:18 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E7%B2%97%E8%B0%88tcp-ip%E5%8D%8F%E8%AE%AE/</guid>
+      <description>最近在学习Tcp-Ip协议，这种东西怎么说，不知道学哪，不知道学完有什么用，不知道哪些是重点，而且对于各个协议的细节，根本记不住。缕一下，方便以后学习。 首先通常所说的Tcp-ip协议是一个协议簇，不仅有Tcp-Ip协议。从计算机网络中的五个分层来说，Tcp-Ip协议簇在各个层次都有不同的协议，应用层的http,ftp等，传输层的tcp,udp,网络层的ip，链路层的apr协议，还有物理层的协议等。计算机网络作为一个系统，不仅要有硬件，还要有软件。就比如一条高速公路，公路，服务区，收费站等就是硬件，汽车需要遵守的交通规则就是软件，即我们所说的Tcp-Ip协议，两者缺一不可。</description>
+    </item>
+    <item>
+      <title>IO多路复用</title>
+      <link>http://nzooherd.github.io/posts/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/</link>
+      <pubDate>Thu, 06 Jul 2017 10:36:54 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/</guid>
+      <description>&lt;h3 id=&#34;阻塞同步非阻塞异步&#34;&gt;阻塞，同步，非阻塞，异步&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;同步和异步&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;同步和异步关注点是&lt;em&gt;消息通信机制&lt;/em&gt;，同步模型下消息的处理者主动去等待消息的提供者，异步模型下由消息提供者来通知消息处理者。&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;阻塞和非阻塞&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;阻塞和非阻塞关注的是&lt;em&gt;消息处理者在等待调用结果消息结果时的状态&lt;/em&gt;。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>垃圾收集</title>
+      <link>http://nzooherd.github.io/posts/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86/</link>
+      <pubDate>Mon, 12 Jun 2017 17:38:12 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86/</guid>
+      <description>&lt;h3 id=&#34;垃圾收集&#34;&gt;垃圾收集&lt;/h3&gt;&#xA;&lt;p&gt;未能释放已分配的块是一种&lt;strong&gt;编程错误&lt;/strong&gt;。如下代码&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;void garbage()&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;int *p = (int *)malloc(15213);&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    return ;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;程序员忘记释放p，导致p占用本来可以满足后面分配请求的堆空间。&#xA;&lt;em&gt;垃圾收集器&lt;/em&gt;(garbage collector)是一种动态存储分配器，自动释放不再需要的称为&lt;em&gt;垃圾&lt;/em&gt;的块，自动回收堆存储过程叫做&lt;em&gt;垃圾收集&lt;/em&gt;，垃圾收集器定期识别垃圾块，并相应的调动free，将这些块放回到空闲链表中。&#xA;我们主要讨论标记清除法&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>git命令总结</title>
+      <link>http://nzooherd.github.io/posts/git%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Sun, 02 Apr 2017 16:36:01 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/git%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid>
+      <description>&lt;p&gt;Java选修课上，老师建议采用git来管理自己的代码．其实很久以前就了解到这个linus大神编写的版本控制工具,也看过一些它的命令，现在抽个时间整理（抄袭）一下，大部分来自阮一峰大大．&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>xx-net网络分享</title>
+      <link>http://nzooherd.github.io/posts/xx-net%E7%BD%91%E7%BB%9C%E5%88%86%E4%BA%AB/</link>
+      <pubDate>Mon, 06 Mar 2017 20:53:53 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/xx-net%E7%BD%91%E7%BB%9C%E5%88%86%E4%BA%AB/</guid>
+      <description>&lt;p&gt;趁着新学期开学的这段时间，抽时间搞了搞寒假遗留的东西。&lt;/p&gt;&#xA;&lt;h3 id=&#34;first&#34;&gt;First&lt;/h3&gt;&#xA;&lt;p&gt;第一件事就是树莓派，一直想着将树莓派刷成openwrt固件，最终在我的无限努力下，我完成了目标，尴尬的却发现根本不会使用，wan口和lan口完全混杂，最后只能放弃将树莓派当路由器的想法。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>ipv6网络下观看清华iptv</title>
+      <link>http://nzooherd.github.io/posts/ipv6%E7%BD%91%E7%BB%9C%E4%B8%8B%E8%A7%82%E7%9C%8B%E6%B8%85%E5%8D%8Eiptv/</link>
+      <pubDate>Mon, 26 Dec 2016 11:01:34 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/ipv6%E7%BD%91%E7%BB%9C%E4%B8%8B%E8%A7%82%E7%9C%8B%E6%B8%85%E5%8D%8Eiptv/</guid>
+      <description>&lt;h3 id=&#34;深夜看球&#34;&gt;深夜看球&lt;/h3&gt;&#xA;&lt;p&gt;在校园网环境下，ipv6不仅不限制流量，晚间还不断网，简直就是为晚间看球赛而生的。于是想到了我理的iptv。我理的iptv应该是走的ipv6通道，但是夜晚却不能使用。后来就在ipv6资源中看到了北邮iptv和清华iptv。最终当然是选择清华iptv了，五道口财大气粗，基本上各卫视都有高清，这带宽不用就是浪费。&lt;br&gt;&#xA;1 首先就是确定自己有ipv6地址咯，Linux和Mac 终端里面&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ping6 2001:4860:4860::8888&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;windows 将ping6 改为 ping -6 收到回复就说明可以了。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>acm有感</title>
+      <link>http://nzooherd.github.io/posts/acm%E6%9C%89%E6%84%9F/</link>
+      <pubDate>Fri, 16 Dec 2016 15:44:23 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/acm%E6%9C%89%E6%84%9F/</guid>
+      <description>一个月的暑假集训就这样结束了。&#xA;遗憾是有的，不过不是那些没A的题，而是自己先前未曾意识到ACM的精髓。也许时间证明了我不是ACM之人，我想说，ACM之中有太多的巧合和不确定，想比而言，我更想静静的思考一种算法，而不是为了一些格式，精度等等白白的浪费时间，也许是不屑于吧，又或许这种说法只是为了满足一下虚荣。&#xA;另一方面，关于刷题 ，难道我们做这些题就是为了要AC吗，大可以思考两三分钟直接去网上找题解，问同学，甚至照着代码来一遍，然而呢，记住了这个题，其他的题呢，记住了这个技巧，其他的技巧呢，A了这么多题，遇到没见过的，不是仍然不会。一个人一生创造一种算法就足以被后人记住，但是我们做的仅仅是模仿了前人的成果，甚至模仿都算不上，只是套用，仅此而已。做题不在于你A了多少道题，需要的仅仅只是你的思考，不管道路的错误还是正确，这些都会在未来的某天报答给你。学习没有错，然而对于一个在未来要做到整个世界都未曾达到的境界的人，一味的学习并没有太大的用，在将来，不会有人给你指导，因为你是探索者。有些路，注定要自己走，有些事，注定要亲自去做。&#xA;不要随便接受他人的想法，就这样。</description>
+    </item>
+  </channel>
+</rss>

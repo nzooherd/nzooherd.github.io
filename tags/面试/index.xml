@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>面试 on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/tags/%E9%9D%A2%E8%AF%95/</link>
+    <description>Recent content in 面试 on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 06 Mar 2018 20:44:44 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/tags/%E9%9D%A2%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>美团面试小记</title>
+      <link>http://nzooherd.github.io/posts/%E7%BE%8E%E5%9B%A2%E9%9D%A2%E8%AF%95/</link>
+      <pubDate>Tue, 06 Mar 2018 20:44:44 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E7%BE%8E%E5%9B%A2%E9%9D%A2%E8%AF%95/</guid>
+      <description>&lt;p&gt;最近同学帮我内推了美团，本来想投的是Java后台研发，阴差阳错之间帮我推到了一个AI语言部门，昨天面试了一下，问的比较浅，但是还是有许多问题回答的不好，简单记录了一下。现在还不知道结果，&lt;del&gt;最蛋疼的是同学无意间帮你问了一下结果，面试官说还行，结果最后被据了。&lt;/del&gt;&#xA;&lt;img src=&#34;http://img.youbiaoqing.com/u/ed7b0b1e2446cf109526928a2ac11ad7.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

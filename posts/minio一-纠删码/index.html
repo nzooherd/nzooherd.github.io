@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.123.7">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="nzooherd" />
+  <meta property="og:url" content="http://nzooherd.github.io/posts/minio%E4%B8%80-%E7%BA%A0%E5%88%A0%E7%A0%81/" />
+  <link rel="canonical" href="http://nzooherd.github.io/posts/minio%E4%B8%80-%E7%BA%A0%E5%88%A0%E7%A0%81/" /><link rel="apple-touch-icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="shortcut" href="/favicon.ico" /><link rel="alternate" type="application/atom+xml" href="http://nzooherd.github.io/index.xml" title="nzooherd&#39;s blog">
+
+  <script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "http:\/\/nzooherd.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "MinIO(一)纠删码",
+      "headline" : "MinIO(一)纠删码",
+      "description" : "MinIO 是一个100% 开源的分布式对象存储系统，其主要开发者是 2014 年创建于硅谷的科技公司 MinIO Inc。\n相较于阿里 OSS 底层依赖有巢和盘古，谷歌 GCS 底层依赖 Spanner 和 GFS(Colossus)，MinIO 则是一个完整的对象存储，真正做到了零依赖，单机部署只需要一个二进制可执行文件。从这个意义上看，MinIO 开源的不仅仅是对象系统，更核心的是开源了一个分布式存储系统。\n那么 MinIO 相比业界常见的分布式系统又有哪些优劣，又能否给未来的设计带来一些启发？\n本系列计划详细介绍 MinIO 的系统设计，此文是第一篇 「纠删码」。\nEarsure Code 在存储领域, 最常见的防止数据丢失的方式就是备份。家用 NAS 可能直接上 RAID ，而大数据领域的 HDFS 会默认存双副本。 副本越多提供的数据可靠性也越强，也意味着空间利用率越低，要达到对象存储 11个9 的数据可靠性，通常需要 4 副本，如此计算，真正的利用率只有 25%。\n纠删码则可以在提供和多副本相同的数据可靠性的同时，极大的提高空间利用率。在 03 年的 GFS 初版论文中，Google 就曾设想利用纠删码来存储，然而受限于当时的技术发展无法如愿。十多年过去了，当时遥不可及的技术，如今却频繁的用于某些大中厂自研的系统中，颇有 飞入寻常百姓家 的感触。\nMinIO 使用纠删码 (Erasure Code) 来存储数据，下文简称为 EC。EC 将原始数据均分为 \\(N\\) 份，然后生成 \\(M\\) 份相同大小的 校验数据，在这 \\((N\u002bM)\\) 份数据中任意丢失 \\(M\\) 份均可生成原始数据。 MinIO 确保这 \\((N\u002bM)\\) 份数据分散在 \\((N\u002bM)\\) 个不同的磁盘上，防止磁盘损毁导致数据丢失。常用的 \\((N\u002bM) = 8\u002b4\\)，提供比 4 副本更强的数据可靠性，同时空间利用率维持在 75%。",
+      "inLanguage" : "en-US",
+      "author" : "nzooherd",
+      "creator" : "nzooherd",
+      "publisher": "nzooherd",
+      "accountablePerson" : "nzooherd",
+      "copyrightHolder" : "nzooherd",
+      "copyrightYear" : "2022",
+      "datePublished": "2022-01-30 21:58:52 \u002b0000 UTC",
+      "dateModified" : "2022-01-30 21:58:52 \u002b0000 UTC",
+      "url" : "http:\/\/nzooherd.github.io\/posts\/minio%E4%B8%80-%E7%BA%A0%E5%88%A0%E7%A0%81\/",
+      "keywords" : [ "源码阅读", ]
+  }
+</script>
+<title>MinIO(一)纠删码</title>
+  <meta property="og:title" content="MinIO(一)纠删码" />
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="MinIO 是一个100% 开源的分布式对象存储系统，其主要开发者是 2014 年创建于硅谷的科技公司 MinIO Inc。
+相较于阿里 OSS 底层依赖有巢和盘古，谷歌 GCS 底层依赖 Spanner 和 GFS(Colossus)，MinIO 则是一个完整的对象存储，真正做到了零依赖，单机部署只需要一个二进制可执行文件。从这个意义上看，MinIO 开源的不仅仅是对象系统，更核心的是开源了一个分布式存储系统。
+那么 MinIO 相比业界常见的分布式系统又有哪些优劣，又能否给未来的设计带来一些启发？
+本系列计划详细介绍 MinIO 的系统设计，此文是第一篇 「纠删码」。
+Earsure Code 在存储领域, 最常见的防止数据丢失的方式就是备份。家用 NAS 可能直接上 RAID ，而大数据领域的 HDFS 会默认存双副本。 副本越多提供的数据可靠性也越强，也意味着空间利用率越低，要达到对象存储 11个9 的数据可靠性，通常需要 4 副本，如此计算，真正的利用率只有 25%。
+纠删码则可以在提供和多副本相同的数据可靠性的同时，极大的提高空间利用率。在 03 年的 GFS 初版论文中，Google 就曾设想利用纠删码来存储，然而受限于当时的技术发展无法如愿。十多年过去了，当时遥不可及的技术，如今却频繁的用于某些大中厂自研的系统中，颇有 飞入寻常百姓家 的感触。
+MinIO 使用纠删码 (Erasure Code) 来存储数据，下文简称为 EC。EC 将原始数据均分为 \(N\) 份，然后生成 \(M\) 份相同大小的 校验数据，在这 \((N&#43;M)\) 份数据中任意丢失 \(M\) 份均可生成原始数据。 MinIO 确保这 \((N&#43;M)\) 份数据分散在 \((N&#43;M)\) 个不同的磁盘上，防止磁盘损毁导致数据丢失。常用的 \((N&#43;M) = 8&#43;4\)，提供比 4 副本更强的数据可靠性，同时空间利用率维持在 75%。" />
+  <meta name="description" content="MinIO 是一个100% 开源的分布式对象存储系统，其主要开发者是 2014 年创建于硅谷的科技公司 MinIO Inc。
+相较于阿里 OSS 底层依赖有巢和盘古，谷歌 GCS 底层依赖 Spanner 和 GFS(Colossus)，MinIO 则是一个完整的对象存储，真正做到了零依赖，单机部署只需要一个二进制可执行文件。从这个意义上看，MinIO 开源的不仅仅是对象系统，更核心的是开源了一个分布式存储系统。
+那么 MinIO 相比业界常见的分布式系统又有哪些优劣，又能否给未来的设计带来一些启发？
+本系列计划详细介绍 MinIO 的系统设计，此文是第一篇 「纠删码」。
+Earsure Code 在存储领域, 最常见的防止数据丢失的方式就是备份。家用 NAS 可能直接上 RAID ，而大数据领域的 HDFS 会默认存双副本。 副本越多提供的数据可靠性也越强，也意味着空间利用率越低，要达到对象存储 11个9 的数据可靠性，通常需要 4 副本，如此计算，真正的利用率只有 25%。
+纠删码则可以在提供和多副本相同的数据可靠性的同时，极大的提高空间利用率。在 03 年的 GFS 初版论文中，Google 就曾设想利用纠删码来存储，然而受限于当时的技术发展无法如愿。十多年过去了，当时遥不可及的技术，如今却频繁的用于某些大中厂自研的系统中，颇有 飞入寻常百姓家 的感触。
+MinIO 使用纠删码 (Erasure Code) 来存储数据，下文简称为 EC。EC 将原始数据均分为 \(N\) 份，然后生成 \(M\) 份相同大小的 校验数据，在这 \((N&#43;M)\) 份数据中任意丢失 \(M\) 份均可生成原始数据。 MinIO 确保这 \((N&#43;M)\) 份数据分散在 \((N&#43;M)\) 个不同的磁盘上，防止磁盘损毁导致数据丢失。常用的 \((N&#43;M) = 8&#43;4\)，提供比 4 副本更强的数据可靠性，同时空间利用率维持在 75%。" />
+  <meta property="og:locale" content="en-us" />
+
+  
+    <style>body{font-family:bree serif,sans-serif;-webkit-font-smoothing:antialiased;margin:0 20px}article{max-width:800px;margin-left:auto;margin-right:auto}a{color:#000;text-decoration:none}a:hover{font-weight:600;text-decoration:underline}.post-ads{margin:50px 0}.markdown-body{font-size:18px;max-width:100%}.markdown-body a{text-decoration:underline;text-decoration-color:#000}.markdown-body pre{padding:16px;overflow:auto;border-radius:10px}.markdown-body code{padding:.2em .4em;font-size:85%;background-color:#f6f8fa;border-radius:6px}.markdown-body pre>code{padding:0;font-size:100%;background-color:inherit;border:0}.Chinese .markdown-body{line-height:200%}.site-date-catalog{font-size:2rem}.header-title{font-size:2rem;font-weight:700;margin-top:32px;font-family:bungee shade,sans-serif}.header-title a{text-decoration:none}.header-subtitle{color:#666}.header-items{margin:10px 0}.header-item{margin:0 5px}.header-line{width:100%;border-width:2px;border-color:#482936;border-style:solid none none none}.lang-switch{font-weight:600}#posts-list{min-height:600px}.posts-line{font-size:1.2rem;margin:12px 0}.posts-categories{font-size:.8rem;margin:auto;text-align:center}.posts-category{padding:3px 0;border:#000 2px solid;border-radius:5px}.site-footer{}.site-footer-item{margin-right:12px}.post-content img{max-width:100%;display:block;margin-right:auto;margin-top:12px}.post-header{margin-bottom:50px}.post-title{font-size:2rem;font-weight:600}.post-tags{display:inline;font-weight:600;padding:2px 5px;margin-right:6px;border:#000 2px solid;border-radius:5px}.post-date{font-weight:800;font-style:italic}.post-author{float:right;font-weight:600}.page-content{min-height:60%}.post-content{margin-bottom:50px}.post-content p{hyphens:auto;line-height:1.8;text-justify:ideographic;margin-bottom:1em}.related-content{border-width:3px;border-style:solid;border-color:#000;padding:0 10px;margin-bottom:50px;margin-top:100px}.related-content li{margin:5px 0}.taxonomy-term{font-size:3rem}.gallery-img{text-align:center}.gallery-img span{text-align:center}.gallery-img-desc{font-size:.8em;font-weight:800}#disqus_thread{position:relative}#disqus_thread:after{content:"";display:block;height:55px;width:100%;position:absolute;bottom:0;background:#fff}@media screen and (max-width:600px){.header-title,.header-subtitle,.header-items{text-align:center}.posts-line{font-size:16px}.markdown-body{font-size:16px}.post-title{font-size:2rem}.post-content p{letter-spacing:.05em}}@media screen and (max-width:48em){.posts-category{display:none}}table{border-spacing:0;border-collapse:collapse}table th{padding:6px 13px;border:1px solid #dfe2e5;font-size:large}table td{padding:6px 13px;border:1px solid #dfe2e5}</style>
+  
+  
+    <style>.container,.container-fluid{margin-right:auto;margin-left:auto}.container-fluid{padding-right:2rem;padding-left:2rem}.row{box-sizing:border-box;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-flex:0;-ms-flex:0 1 auto;flex:initial;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-.5rem;margin-left:-.5rem}.row.reverse{-webkit-box-orient:horizontal;-webkit-box-direction:reverse;-ms-flex-direction:row-reverse;flex-direction:row-reverse}.col.reverse{-webkit-box-orient:vertical;-webkit-box-direction:reverse;-ms-flex-direction:column-reverse;flex-direction:column-reverse}.col-xs,.col-xs-1,.col-xs-10,.col-xs-11,.col-xs-12,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-offset-0,.col-xs-offset-1,.col-xs-offset-10,.col-xs-offset-11,.col-xs-offset-12,.col-xs-offset-2,.col-xs-offset-3,.col-xs-offset-4,.col-xs-offset-5,.col-xs-offset-6,.col-xs-offset-7,.col-xs-offset-8,.col-xs-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-xs{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-xs-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-xs-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-xs-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-xs-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-xs-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-xs-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-xs-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-xs-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-xs-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-xs-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-xs-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-xs-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-xs-offset-0{margin-left:0}.col-xs-offset-1{margin-left:8.33333333%}.col-xs-offset-2{margin-left:16.66666667%}.col-xs-offset-3{margin-left:25%}.col-xs-offset-4{margin-left:33.33333333%}.col-xs-offset-5{margin-left:41.66666667%}.col-xs-offset-6{margin-left:50%}.col-xs-offset-7{margin-left:58.33333333%}.col-xs-offset-8{margin-left:66.66666667%}.col-xs-offset-9{margin-left:75%}.col-xs-offset-10{margin-left:83.33333333%}.col-xs-offset-11{margin-left:91.66666667%}.start-xs{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-xs{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-xs{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-xs{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-xs{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-xs{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-xs{-ms-flex-pack:distribute;justify-content:space-around}.between-xs{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-xs{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-xs{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}@media only screen and (min-width:48em){.container{width:49rem}.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-offset-0,.col-sm-offset-1,.col-sm-offset-10,.col-sm-offset-11,.col-sm-offset-12,.col-sm-offset-2,.col-sm-offset-3,.col-sm-offset-4,.col-sm-offset-5,.col-sm-offset-6,.col-sm-offset-7,.col-sm-offset-8,.col-sm-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-sm{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-sm-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-sm-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-sm-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-sm-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-sm-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-sm-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-sm-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-sm-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-sm-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-sm-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-sm-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-sm-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-sm-offset-0{margin-left:0}.col-sm-offset-1{margin-left:8.33333333%}.col-sm-offset-2{margin-left:16.66666667%}.col-sm-offset-3{margin-left:25%}.col-sm-offset-4{margin-left:33.33333333%}.col-sm-offset-5{margin-left:41.66666667%}.col-sm-offset-6{margin-left:50%}.col-sm-offset-7{margin-left:58.33333333%}.col-sm-offset-8{margin-left:66.66666667%}.col-sm-offset-9{margin-left:75%}.col-sm-offset-10{margin-left:83.33333333%}.col-sm-offset-11{margin-left:91.66666667%}.start-sm{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-sm{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-sm{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-sm{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-sm{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-sm{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-sm{-ms-flex-pack:distribute;justify-content:space-around}.between-sm{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-sm{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-sm{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:64em){.container{width:65rem}.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-offset-0,.col-md-offset-1,.col-md-offset-10,.col-md-offset-11,.col-md-offset-12,.col-md-offset-2,.col-md-offset-3,.col-md-offset-4,.col-md-offset-5,.col-md-offset-6,.col-md-offset-7,.col-md-offset-8,.col-md-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-md{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-md-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-md-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-md-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-md-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-md-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-md-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-md-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-md-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-md-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-md-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-md-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-md-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-md-offset-0{margin-left:0}.col-md-offset-1{margin-left:8.33333333%}.col-md-offset-2{margin-left:16.66666667%}.col-md-offset-3{margin-left:25%}.col-md-offset-4{margin-left:33.33333333%}.col-md-offset-5{margin-left:41.66666667%}.col-md-offset-6{margin-left:50%}.col-md-offset-7{margin-left:58.33333333%}.col-md-offset-8{margin-left:66.66666667%}.col-md-offset-9{margin-left:75%}.col-md-offset-10{margin-left:83.33333333%}.col-md-offset-11{margin-left:91.66666667%}.start-md{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-md{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-md{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-md{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-md{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-md{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-md{-ms-flex-pack:distribute;justify-content:space-around}.between-md{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-md{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-md{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:75em){.container{width:76rem}.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-offset-0,.col-lg-offset-1,.col-lg-offset-10,.col-lg-offset-11,.col-lg-offset-12,.col-lg-offset-2,.col-lg-offset-3,.col-lg-offset-4,.col-lg-offset-5,.col-lg-offset-6,.col-lg-offset-7,.col-lg-offset-8,.col-lg-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-lg{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-lg-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-lg-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-lg-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-lg-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-lg-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-lg-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-lg-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-lg-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-lg-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-lg-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-lg-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-lg-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-lg-offset-0{margin-left:0}.col-lg-offset-1{margin-left:8.33333333%}.col-lg-offset-2{margin-left:16.66666667%}.col-lg-offset-3{margin-left:25%}.col-lg-offset-4{margin-left:33.33333333%}.col-lg-offset-5{margin-left:41.66666667%}.col-lg-offset-6{margin-left:50%}.col-lg-offset-7{margin-left:58.33333333%}.col-lg-offset-8{margin-left:66.66666667%}.col-lg-offset-9{margin-left:75%}.col-lg-offset-10{margin-left:83.33333333%}.col-lg-offset-11{margin-left:91.66666667%}.start-lg{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-lg{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-lg{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-lg{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-lg{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-lg{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-lg{-ms-flex-pack:distribute;justify-content:space-around}.between-lg{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-lg{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-lg{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}</style>
+  
+
+  
+
+  <link href="/index.xml" rel="alternate" type="application/rss+xml"
+    title="nzooherd&#39;s blog">
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Bree+Serif|Bungee+Shade" rel="stylesheet">
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <meta name="referrer" content="no-referrer-when-downgrade"><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="MinIO(一)纠删码"/>
+<meta name="twitter:description" content="MinIO 是一个100% 开源的分布式对象存储系统，其主要开发者是 2014 年创建于硅谷的科技公司 MinIO Inc。
+相较于阿里 OSS 底层依赖有巢和盘古，谷歌 GCS 底层依赖 Spanner 和 GFS(Colossus)，MinIO 则是一个完整的对象存储，真正做到了零依赖，单机部署只需要一个二进制可执行文件。从这个意义上看，MinIO 开源的不仅仅是对象系统，更核心的是开源了一个分布式存储系统。
+那么 MinIO 相比业界常见的分布式系统又有哪些优劣，又能否给未来的设计带来一些启发？
+本系列计划详细介绍 MinIO 的系统设计，此文是第一篇 「纠删码」。
+Earsure Code 在存储领域, 最常见的防止数据丢失的方式就是备份。家用 NAS 可能直接上 RAID ，而大数据领域的 HDFS 会默认存双副本。 副本越多提供的数据可靠性也越强，也意味着空间利用率越低，要达到对象存储 11个9 的数据可靠性，通常需要 4 副本，如此计算，真正的利用率只有 25%。
+纠删码则可以在提供和多副本相同的数据可靠性的同时，极大的提高空间利用率。在 03 年的 GFS 初版论文中，Google 就曾设想利用纠删码来存储，然而受限于当时的技术发展无法如愿。十多年过去了，当时遥不可及的技术，如今却频繁的用于某些大中厂自研的系统中，颇有 飞入寻常百姓家 的感触。
+MinIO 使用纠删码 (Erasure Code) 来存储数据，下文简称为 EC。EC 将原始数据均分为 \(N\) 份，然后生成 \(M\) 份相同大小的 校验数据，在这 \((N&#43;M)\) 份数据中任意丢失 \(M\) 份均可生成原始数据。 MinIO 确保这 \((N&#43;M)\) 份数据分散在 \((N&#43;M)\) 个不同的磁盘上，防止磁盘损毁导致数据丢失。常用的 \((N&#43;M) = 8&#43;4\)，提供比 4 副本更强的数据可靠性，同时空间利用率维持在 75%。"/>
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-217390416-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-217390416-1');
+</script>
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="site-header">
+          
+<header>
+  
+  
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$','$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      processEnvironments: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+  };
+
+  window.addEventListener('load', (event) => {
+      document.querySelectorAll("mjx-container").forEach(function(x){
+        x.parentElement.classList += 'has-jax'})
+    });
+
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  
+  <div class="header-title">
+    <a href="/"
+      >nzooherd 写字的地方</a
+    >
+  </div>
+  <div class="header-subtitle">In real life.</div>
+</header>
+<div class="row end-md center-xs header-items">
+  
+  <div class="header-item">
+    <a href="https://nzooherd.github.io/about" target="_blank">About</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://twitter.com/zmxnv123" target="_blank">Twitter</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="http://nzooherd.github.io/gallery/" target="_blank">Gallery</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://github.com/nzooherd" target="_blank">Github</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://sspai.com/u/vmhwvppx" target="_blank">Sspai</a>
+  </div>
+  
+</div>
+<div class="row end-xs">
+   
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">MinIO(一)纠删码</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2022-01-30 21:58:52 UTC">
+                30 Jan 2022
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+              <div class="post-author">
+                <a target="_blank" href="http://nzooherd.github.io/">@nzooherd</a>
+              </div>
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          
+          <p><img
+src="https://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/%E5%8D%83%E5%AF%BB.png" /></p>
+<p><a href="https://min.io/">MinIO</a> 是一个100%
+开源的分布式对象存储系统，其主要开发者是 2014 年创建于硅谷的科技公司
+MinIO Inc。</p>
+<p>相较于阿里 OSS 底层依赖有巢和盘古，谷歌 GCS 底层依赖 Spanner 和
+GFS(Colossus)，MinIO
+则是一个完整的对象存储，真正做到了<strong>零依赖</strong>，单机部署只需要一个二进制可执行文件。从这个意义上看，MinIO
+开源的不仅仅是对象系统，更核心的是开源了一个分布式存储系统。</p>
+<p>那么 MinIO
+相比业界常见的分布式系统又有哪些优劣，又能否给未来的设计带来一些启发？</p>
+<p>本系列计划详细介绍 MinIO 的系统设计，此文是第一篇 「纠删码」。</p>
+<h2 id="earsure-code">Earsure Code</h2>
+<p>在存储领域, 最常见的防止数据丢失的方式就是备份。家用 NAS 可能直接上
+RAID ，而大数据领域的 HDFS 会默认存双副本。
+副本越多提供的数据可靠性也越强，也意味着空间利用率越低，要达到对象存储
+11个9 的数据可靠性，通常需要 4 副本，如此计算，真正的利用率只有
+25%。</p>
+<p><strong>纠删码则可以在提供和多副本相同的数据可靠性的同时，极大的提高空间利用率</strong>。在
+03 年的 GFS 初版论文中，Google
+就曾设想利用纠删码来存储，然而受限于当时的技术发展无法如愿。十多年过去了，当时遥不可及的技术，如今却频繁的用于某些大中厂自研的系统中，颇有
+<em>飞入寻常百姓家</em> 的感触。</p>
+<p>MinIO 使用纠删码 (Erasure Code) 来存储数据，下文简称为 EC。EC
+将<strong>原始数据</strong>均分为 <span class="math inline">\(N\)</span>
+份，然后生成 <span class="math inline">\(M\)</span> 份相同大小的
+<strong>校验数据</strong>，在这 <span
+class="math inline">\((N+M)\)</span> 份数据中任意丢失 <span
+class="math inline">\(M\)</span> 份均可生成原始数据。 MinIO 确保这 <span
+class="math inline">\((N+M)\)</span> 份数据分散在 <span
+class="math inline">\((N+M)\)</span>
+个不同的磁盘上，防止磁盘损毁导致数据丢失。常用的 <span
+class="math inline">\((N+M) = 8+4\)</span>，提供比 4
+副本更强的数据可靠性，同时空间利用率维持在 75%。</p>
+<p>EC 的原理是数学中的矩阵运算，设想存在一份原数据:
+<em>“abcdefghijklmnop”</em>，共 16Byte.</p>
+<p>假设 <span class="math inline">\((N+M) = 4 +
+2\)</span>，我们要将原数据切分为 4
+份，用矩阵表示如下，每行代表一份数据</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+   a &amp; b &amp; c &amp; d \\
+   e &amp; f &amp; g &amp; h \\
+   i &amp; j &amp; k &amp; l \\
+   m &amp; n &amp; o &amp; p
+\end{bmatrix}
+\]</span></p>
+<p>如果我们用另一个 <span class="math inline">\(6 \times 4\)</span>
+矩阵和原始数据相乘:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+   01 &amp; 00 &amp; 00 &amp; 00 \\
+   00 &amp; 01 &amp; 00 &amp; 00 \\
+   00 &amp; 00 &amp; 01 &amp; 00 \\
+   00 &amp; 00 &amp; 00 &amp; 01 \\
+   1b &amp; 1c &amp; 12 &amp; 14 \\
+   1c &amp; 1b &amp; 14 &amp; 12
+\end{bmatrix}
+\times
+\begin{bmatrix}
+   a &amp; b &amp; c &amp; d \\
+   e &amp; f &amp; g &amp; h \\
+   i &amp; j &amp; k &amp; l \\
+   m &amp; n &amp; o &amp; p \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+   a &amp; b &amp; c &amp; d \\
+   e &amp; f &amp; g &amp; h \\
+   i &amp; j &amp; k &amp; l \\
+   m &amp; n &amp; o &amp; p \\
+   51 &amp; 52 &amp; 53 &amp; 49 \\
+   55 &amp; 56 &amp; 57 &amp; 25 \\
+\end{bmatrix}
+\]</span></p>
+<p>这样就生成了两份新数据，假设我们丢失了两份数据 <del><em>i j k
+l</em></del> 和 <del><em>m n o p</em></del>，现有数据变为 <span
+class="math display">\[
+\begin{bmatrix}
+   a &amp; b &amp; c &amp; d \\
+   e &amp; f &amp; g &amp; h \\
+   51 &amp; 52 &amp; 53 &amp; 49 \\
+   55 &amp; 56 &amp; 57 &amp; 25 \\
+\end{bmatrix}
+\]</span></p>
+<p>因为 <span class="math display">\[
+\begin{bmatrix}
+   01 &amp; 00 &amp; 00 &amp; 00 \\
+   00 &amp; 01 &amp; 00 &amp; 00 \\
+   1b &amp; 1c &amp; 12 &amp; 14 \\
+   1c &amp; 1b &amp; 14 &amp; 12
+\end{bmatrix}
+\times
+\begin{bmatrix}
+   a &amp; b &amp; c &amp; d \\
+   e &amp; f &amp; g &amp; h \\
+   i &amp; j &amp; k &amp; l \\
+   m &amp; n &amp; o &amp; p \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+   a &amp; b &amp; c &amp; d \\
+   e &amp; f &amp; g &amp; h \\
+   51 &amp; 52 &amp; 53 &amp; 49 \\
+   55 &amp; 56 &amp; 57 &amp; 25 \\
+\end{bmatrix}
+\]</span></p>
+<p>如果我们同时乘一个逆矩阵 <span class="math display">\[
+\begin{bmatrix}
+   01 &amp; 00 &amp; 00 &amp; 00 \\
+   00 &amp; 01 &amp; 00 &amp; 00 \\
+   1b &amp; 1c &amp; 12 &amp; 14 \\
+   1c &amp; 1b &amp; 14 &amp; 12
+\end{bmatrix}^{-1}
+\times
+\begin{bmatrix}
+   01 &amp; 00 &amp; 00 &amp; 00 \\
+   00 &amp; 01 &amp; 00 &amp; 00 \\
+   1b &amp; 1c &amp; 12 &amp; 14 \\
+   1c &amp; 1b &amp; 14 &amp; 12
+\end{bmatrix}
+\times
+\begin{bmatrix}
+   a &amp; b &amp; c &amp; d \\
+   e &amp; f &amp; g &amp; h \\
+   i &amp; j &amp; k &amp; l \\
+   m &amp; n &amp; o &amp; p \\
+\end{bmatrix}
+\\ =
+\begin{bmatrix}
+   01 &amp; 00 &amp; 00 &amp; 00 \\
+   00 &amp; 01 &amp; 00 &amp; 00 \\
+   1b &amp; 1c &amp; 12 &amp; 14 \\
+   1c &amp; 1b &amp; 14 &amp; 12
+\end{bmatrix}^{-1}
+\times
+\begin{bmatrix}
+   a &amp; b &amp; c &amp; d \\
+   e &amp; f &amp; g &amp; h \\
+   51 &amp; 52 &amp; 53 &amp; 49 \\
+   55 &amp; 56 &amp; 57 &amp; 25 \\
+\end{bmatrix}
+\]</span></p>
+<p>消去单元矩阵有 <span class="math display">\[
+\begin{bmatrix}
+   a &amp; b &amp; c &amp; d \\
+   e &amp; f &amp; g &amp; h \\
+   i &amp; j &amp; k &amp; l \\
+   m &amp; n &amp; o &amp; p \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+   01 &amp; 00 &amp; 00 &amp; 00 \\
+   00 &amp; 01 &amp; 00 &amp; 00 \\
+   1b &amp; 1c &amp; 12 &amp; 14 \\
+   1c &amp; 1b &amp; 14 &amp; 12
+\end{bmatrix}^{-1}
+\times
+\begin{bmatrix}
+   a &amp; b &amp; c &amp; d \\
+   e &amp; f &amp; g &amp; h \\
+   51 &amp; 52 &amp; 53 &amp; 49 \\
+   55 &amp; 56 &amp; 57 &amp; 25 \\
+\end{bmatrix}
+\]</span></p>
+<p>如此，我们便可用丢失后的数据还原原有的数据。</p>
+<p>可是这里仍然存在两个问题: 1.
+如何知道对应数据的逆矩阵并且确保其存在性? 2.
+如何保证矩阵相乘后每个单元的数据仍然只需要一字节存储?</p>
+<h2 id="vandermonde-matrix">Vandermonde Matrix</h2>
+<p>假设 EC 采用 <span class="math inline">\(N + M\)</span>，其中 <span
+class="math inline">\(N\)</span> 是原始数据， <span
+class="math inline">\(M\)</span> 是纠删数据，可以知道生成矩阵是 <span
+class="math inline">\((K+M) \times K\)</span> 维的。</p>
+<p>对于矩阵前 <span class="math inline">\(K\)</span>
+行是单位矩阵，而矩阵的后 <span class="math inline">\(M\)</span>
+行则需要保证矩阵的任意 <span class="math inline">\(k\)</span>
+行祖成的方阵都是可逆的。</p>
+<p>工程化中利用了 Vandermonde Matrix，满足下面要求的则是一个 Vandermonde
+Matrix</p>
+<p><span class="math display">\[
+V =
+\begin{vmatrix}
+1 &amp; x_{0} &amp; x_{0}^{2} &amp; \dots &amp; x_{0}^{n} \\
+1 &amp; x_{1} &amp; x_{1}^{2} &amp; \dots &amp; x_{1}^{n} \\
+1 &amp; x_{2} &amp; x_{2}^{2} &amp; \dots &amp; x_{2}^{n} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp;\vdots \\
+1 &amp; x_{n} &amp; x_{n}^{2} &amp; \dots &amp; x_{n}^{n}
+\end{vmatrix}
+\]</span></p>
+<p><strong>Vandermonde Matrix 大概率是可逆的!!</strong></p>
+<p>而要求生成矩阵 <span class="math display">\[
+V =
+\begin{vmatrix}
+01 &amp; 00 &amp; 00 &amp; \dots &amp; 00 \\
+00 &amp; 01 &amp; 00 &amp; \dots &amp; 00 \\
+00 &amp; 00 &amp; 01 &amp; \dots &amp; 00 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp;\vdots \\
+k_0 &amp; k_1 &amp; k_2 &amp; \dots &amp; k_{k-1} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp;\vdots \\
+\{k+m-1\}_0 &amp; \{k+m-1\}_1 &amp; \{k+m-1\}_ 2&amp; \dots &amp;
+\{k+m-1\}_{k-1}
+\end{vmatrix}
+\]</span></p>
+<p>可以根据 Vandermonde Matrix 得出 <span class="math display">\[
+V =
+\begin{vmatrix}
+1 &amp; x_{0} &amp; x_{0}^{2} &amp; \dots &amp; x_{0}^{k-1} \\
+1 &amp; x_{1} &amp; x_{1}^{2} &amp; \dots &amp; x_{1}^{k-1} \\
+1 &amp; x_{2} &amp; x_{2}^{2} &amp; \dots &amp; x_{2}^{k-1} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp;\vdots \\
+1 &amp; x_{k+m-1} &amp; x_{k+m-1}^{2} &amp; \dots &amp; x_{k+m-1}^{k-1}
+\end{vmatrix}
+\times
+\begin{vmatrix}
+1 &amp; x_{0} &amp; x_{0}^{2} &amp; \dots &amp; x_{0}^{k-1} \\
+1 &amp; x_{1} &amp; x_{1}^{2} &amp; \dots &amp; x_{1}^{k-1} \\
+1 &amp; x_{2} &amp; x_{2}^{2} &amp; \dots &amp; x_{2}^{k-1} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp;\vdots \\
+1 &amp; x_{k-1} &amp; x_{k-1}^{2} &amp; \dots &amp; x_{k-1}^{k-1}
+\end{vmatrix}^{-1}
+\]</span></p>
+<p><strong>此矩阵大概率是可逆的，不过好在 <span class="math display">\[K
++ M\]</span>
+在生产环境中往往是固定的几个可选值，可以提前确定生成矩阵。</strong></p>
+<h2 id="galois-field">Galois Field</h2>
+<p>先了解什么是 <em>Field(域)</em>。</p>
+<p>通常来说， Field
+是一个<strong>元素集合</strong>，对于其中的<strong>任意两个元素</strong>都支持
+<span class="math inline">\(\oplus\)</span> 和 <span
+class="math inline">\(\otimes\)</span>
+两种操作，并且需要满足以下性质:</p>
+<ul>
+<li>结合律: <span class="math inline">\(a \oplus (b \oplus c) = (a
+\oplus b) \oplus c\)</span>; <span class="math inline">\(a \otimes (b
+\otimes c ) = (a \otimes b) \otimes c\)</span></li>
+<li>交换律: <span class="math inline">\(a \oplus b = b \oplus
+a\)</span>; <span class="math inline">\(a \otimes b = b \otimes
+a\)</span></li>
+<li>分配律: <span class="math inline">\(a \otimes (b \oplus c) = (a
+\otimes b) + (a \otimes c)\)</span></li>
+<li>存在 <span class="math inline">\(\oplus\)</span> 和 <span
+class="math inline">\(\otimes\)</span> 单元: 对于一个 Field <em>F</em>
+<ul>
+<li><span class="math inline">\(\exists~a \in F, \forall~b \in F,  a
+\oplus b = b\)</span></li>
+<li><span class="math inline">\(\exists~x \in F, \forall~y \in F,  x
+\otimes y = y\)</span></li>
+</ul></li>
+<li>存在 <span class="math inline">\(\oplus\)</span> 和 <span
+class="math inline">\(\otimes\)</span> 逆元: 假设 <em>a</em> 和
+<em>x</em> 分别是 <span class="math inline">\(\oplus\)</span> 和 <span
+class="math inline">\(\otimes\)</span> 单元，对于 Field <em>F</em>
+<ul>
+<li><span class="math inline">\(\forall~b \in F, \exists~c \in F，b
+\oplus c = a\)</span></li>
+<li><span class="math inline">\(\forall~y \in F \land y \neq a,
+\exists~z \in F，y \otimes z = x\)</span></li>
+</ul></li>
+</ul>
+<p>常见的 Field 如 <em>有理数域</em>,
+<em>实数域</em>，<em>复数域</em>，<span
+class="math inline">\(\oplus\)</span> 和 <span
+class="math inline">\(\otimes\)</span> 分别对应 <span
+class="math inline">\(+\)</span> 和 <span
+class="math inline">\(\times\)</span>，
+这些域内元素个数都是无限的。而<strong>具有有限个元素</strong>的域就是<em>有限域</em>，又被称为<em>Galois
+Field</em>(纪念埃瓦里斯特·伽罗瓦)。</p>
+<p>一个简单的有限域是 <span class="math inline">\((0, 1,
+2)\)</span>，定义 <span class="math inline">\(\oplus\)</span> 和 <span
+class="math inline">\(\otimes\)</span> 如下:
+结合上文中对域的定义，可以知道 <span
+class="math inline">\(\oplus\)</span> 和 <span
+class="math inline">\(\otimes\)</span> 是符合域的所有性质的。</p>
+<table>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(\oplus\)</span></th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>──</th>
+<th><span class="math inline">\(\otimes\)</span></th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>──</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+<td>──</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>──</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>有限域的符号表示为 <span class="math inline">\(GF(q)\)</span>，其中
+<span class="math inline">\(q\)</span>
+代表有限域的元素个数，又称为<em>阶</em>，上文的有限域就是 <span
+class="math inline">\(GF(3)\)</span>。<strong>在 Erasure Code
+中就需要使用 <span class="math inline">\(GF(256)\)</span>
+的有限域</strong>，因为需要将数限定在一个字节可表示的范围内。根据域的定义很难通过直觉直接构建出一个有限域，好在数学家们发明了一种可实践的有限域生成方法。</p>
+<p>构建 <span class="math inline">\(GF(256)\)</span>
+其实只需要填充下表，使 <span class="math inline">\(\oplus\)</span> 和
+<span class="math inline">\(\otimes\)</span> 满足域的性质就可。</p>
+<table>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(\oplus\)</span></th>
+<th>0</th>
+<th>1</th>
+<th>…</th>
+<th>255</th>
+<th>──</th>
+<th><span class="math inline">\(\otimes\)</span></th>
+<th>0</th>
+<th>1</th>
+<th>…</th>
+<th>255</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>──</td>
+<td></td>
+<td></td>
+<td></td>
+<td>…</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>──</td>
+<td></td>
+<td></td>
+<td></td>
+<td>…</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>──</td>
+<td></td>
+<td></td>
+<td></td>
+<td>…</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>──</td>
+<td></td>
+<td></td>
+<td></td>
+<td>…</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>容易想到，对于 <span class="math inline">\(\oplus\)</span>
+只需做 <em>异或运算</em>，0 为 <span
+class="math inline">\(\oplus\)</span>
+单元，并且容易证明满足交换律等各种性质。</strong></p>
+<p>对于 <span class="math inline">\(\otimes\)</span>
+运算，需要借助多项式乘法： 1. 首先将元素映射为一个多项式。假设要计算
+<span class="math inline">\(23 \otimes 45\)</span>， 23
+写成二进制的格式为 <span
+class="math inline">\(0b10111\)</span>，转化为多项式就是 <span
+class="math inline">\(x^4+x^2+x^1+x^0\)</span>，45 二进制格式为 <span
+class="math inline">\(x^5+x^3+x^2+x^0\)</span></p>
+<ol start="2" type="1">
+<li><p>执行多项式相乘 <span class="math display">\[23 \otimes 45 \\=
+(x^4+x^2+x^1+x^0) \times (x^5+x^3+x^2+x^0) \\= x^9 + 2x^7 + x^6 + 2x^5 +
+2x^4 + x^3 + 2x^2 + 1\]</span></p></li>
+<li><p>将相乘结果对 <span
+class="math inline">\(x^8+x^4+x^3+x^2+1\)</span> 做 <em>特殊的取模</em>
+运算。多项式取模采用 <em>长除法</em>，长除法后的模为 <span
+class="math inline">\(2x^7+2x^6+x^5+2x^4+x^3+2x^2+1\)</span>。但是要对结果做进一步变换:</p>
+<ul>
+<li>将系数为负数的项式直接对系数取反。(这个例子中没负数，就不举例了)</li>
+<li>将系数为偶数的项式直接略去。</li>
+<li>将系数为奇数的项式系数变为1。处理后结果变为 <span
+class="math inline">\(x^5+x^3+x^0\)</span></li>
+</ul></li>
+<li><p>将结果转换为二进制 <span
+class="math inline">\(0b101001\)</span>，值为 <em>41</em>，因此 <span
+class="math inline">\(23 \otimes 45 = 41\)</span></p></li>
+</ol>
+<p>这种 <span class="math inline">\(\otimes\)</span>
+很容证明符合交换律，分配律和结合律, 而 <em>1</em> 就是乘法单元。
+但是如何证明除 <em>0</em> 之外每个元素都有乘法逆元？</p>
+<p>根据上图的 <span class="math inline">\(mod\)</span> 定义， <span
+class="math display">\[x^{113} \mod (x^8+x^4+x^3+x^2+1) \\=
+(x^4+x^2+x^1+x^0) \mod (x^8+x^4+x^3+x^2+1)\]</span> 因此认为在 <span
+class="math inline">\(\otimes\)</span> 的语义下， <span
+class="math inline">\(x^{113} = (x^4+x^2+x^1+x^0) = 23\)</span>。</p>
+<p>对于集合<span class="math inline">\(GF(256)\)</span> <span
+class="math inline">\(F\)</span>, 存在推论: 1. <span
+class="math display">\[\forall~a \in F \land a \neq 0, \exists ~k \in F
+, x^k = a\]</span> 2. <span class="math display">\[x^{255} = x^0 =
+1\]</span></p>
+<p>因此元素 a 的乘法逆元就是 <span class="math inline">\(x^{255 -
+log_{x}^{a}}\)</span>，存在且唯一。至于为什么有这两个推论…(证不出来睡大觉!)</p>
+<p>并不是对于任何 <span class="math inline">\(q\)</span>，都存在 <span
+class="math inline">\(GF(q)\)</span>. 数学家已经证明只有当 <span
+class="math inline">\(q = p^k \land p \in Prime \land k \in
+Positive\)</span> 时存在。而 <span
+class="math inline">\(x^8+x^4+x^3+x^2+1\)</span> 又被称为
+<em>本原多项式</em>，当 <span class="math inline">\(q\)</span>
+满足上述条件时存在且不唯一，对于 <span
+class="math inline">\(GF(256)\)</span> 常用的就是这个多项式。</p>
+<p>如果用代码按上述流程实现 <span
+class="math inline">\(\otimes\)</span>，复杂度是很高的，首先是多项式相乘，然后取模。真正实践过程中，往往采用查表的方式。我们已经知道
+<span class="math display">\[\forall~a \in F \land a \neq 0, \exists ~k
+\in F , x^k = a\]</span> 所以 <span class="math display">\[a \otimes b
+\\= x^{log_x^a} \times x^{log_x^b} \\= x^{log_x^a+log_x^b}\]</span></p>
+<p>因此我们只需知道 <span class="math inline">\(\forall~k \in
+F\)</span>, <span class="math inline">\(log_x^k\)</span> 和 <span
+class="math inline">\(x^k\)</span> 的结果就可以很简单的计算 <span
+class="math inline">\(\otimes\)</span>。 由于 <span
+class="math inline">\(GF(256)\)</span> 元素只有 256
+个，完全可以通过打表的方式一一列出。</p>
+<p>生产实践中往往有两张表， <span class="math inline">\(exp\)</span> 和
+<span class="math inline">\(log\)</span> 分别表示取幂和取对数。这里由于
+<span class="math inline">\(GF(2^8)\)</span> 元素太多，下面列出 <span
+class="math inline">\(GF(2^4)\)</span> 的表:</p>
+<table>
+<thead>
+<tr class="header">
+<th>k</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>exp</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td>3</td>
+<td>6</td>
+<td>12</td>
+<td>11</td>
+<td>5</td>
+<td>10</td>
+<td>7</td>
+<td>14</td>
+<td>15</td>
+<td>13</td>
+<td>9</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>log</td>
+<td>-</td>
+<td>0</td>
+<td>1</td>
+<td>4</td>
+<td>2</td>
+<td>8</td>
+<td>5</td>
+<td>10</td>
+<td>3</td>
+<td>15</td>
+<td>9</td>
+<td>6</td>
+<td>6</td>
+<td>13</td>
+<td>11</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>构造出 <span class="math inline">\(GF(256)\)</span>
+后将前文的矩阵乘法在此域内做计算，就可以保证任何结果运算皆用 1
+字节存储。</p>
+<h3 id="一个-rust-实现"><a
+href="https://github.com/nzooherd/reed-solomon">一个 Rust 实现</a></h3>
+<h3 id="参考链接">参考链接</h3>
+<p><a id="1">[1]</a><a
+href="https://en.wikipedia.org/wiki/Field_(mathematics)">Field</a></p>
+<p><a id="2">[2]</a><a
+href="https://en.wikipedia.org/wiki/Finite_field">Finite Field</a></p>
+<p><a id="3">[3]</a><a
+href="https://www.backblaze.com/blog/reed-solomon/">Reed-Solomon</a></p>
+<p><a id="4">[4]</a><a
+href="https://en.wikipedia.org/wiki/Vandermonde_matrix#Resulting_properties">Vanderonmade
+Matrix</a></p>
+
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-tags">
+              <a href="/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">
+                源码阅读
+              </a>
+            </div>
+            
+          </div>
+        </div>
+        
+          <div class="row">
+            <div class="col-xs-12">
+              
+            </div>
+          </div>
+
+          
+
+
+
+          
+          
+        
+
+        <div class="site-footer">
+  <div class="busuanzi-footer" hidden>
+    <span id="busuanzi_container_site_pv">
+      本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    <span id="busuanzi_container_site_uv">
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </span>
+    <span id="busuanzi_container_page_pv" >本文阅读量<span id="busuanzi_value_page_pv"></span>次</span>
+  </div>
+  
+</div>
+      </div>
+    </div>
+  </article>
+
+  <script src="https://utteranc.es/client.js"
+        repo="nzooherd/blog-talks"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+  </script>
+  
+
+
+
+  
+
+</body>
+
+</html>

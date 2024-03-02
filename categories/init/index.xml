@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Init on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/categories/init/</link>
+    <description>Recent content in Init on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 30 Oct 2016 15:14:45 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/categories/init/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hello World</title>
+      <link>http://nzooherd.github.io/posts/hello-world/</link>
+      <pubDate>Sun, 30 Oct 2016 15:14:45 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/hello-world/</guid>
+      <description>前前后后折腾了两天，总算将这个博客弄了个大概。有些人就是喜欢折腾，发现自己就是这种人。从来没写过博客，然而在那次误入学长的博客后却深深的陷入其中。为什么你要写博客，这是之后看到的一篇写到心里的文章，博客时代远远离去，既然生不逢时，那就逆流而上。不知道为什么，就是感觉想写点东西了，不为证明什么。认识自己。既然选择了开始，就要一路走下去。&#xA;markdown大概看了一点，用最经典的&amp;quot;Hello world&amp;quot;向程序员致敬。&#xA;#include &amp;lt;stdio.h&amp;gt; int main() { printf(&amp;#34;Hello world!\n&amp;#34;); return 0; } </description>
+    </item>
+  </channel>
+</rss>

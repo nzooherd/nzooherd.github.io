@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.123.7">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="nzooherd" />
+  <meta property="og:url" content="http://nzooherd.github.io/posts/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A01-%E6%84%9F%E7%9F%A5%E6%9C%BA/" />
+  <link rel="canonical" href="http://nzooherd.github.io/posts/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A01-%E6%84%9F%E7%9F%A5%E6%9C%BA/" /><link rel="apple-touch-icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="shortcut" href="/favicon.ico" /><link rel="alternate" type="application/atom+xml" href="http://nzooherd.github.io/index.xml" title="nzooherd&#39;s blog">
+
+  <script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "http:\/\/nzooherd.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "统计学习方法(1)-感知机",
+      "headline" : "统计学习方法(1)-感知机",
+      "description" : " 初雪 2018-4-4 晚\n找了近一个月的时间都没有找到一款合适的笔记，最终我选择了Visual Code \u002b Vim \u002b Markdown \u002b Mega。笔记内容链接在个人描述页面\n忽然想学一波大数据方面的东西，但是我不想搞人工智能，例如NLU, CV等，这些对于人来说很简单的事。关于人工智能，我仍然坚持当前基于统计的方法无法实现真正的人工智能，不如花时间来玩一玩大数据的东西。以下内容参考李航的\u0026laquo;统计学习方法\u0026raquo;，重在理解。\n",
+      "inLanguage" : "en-US",
+      "author" : "nzooherd",
+      "creator" : "nzooherd",
+      "publisher": "nzooherd",
+      "accountablePerson" : "nzooherd",
+      "copyrightHolder" : "nzooherd",
+      "copyrightYear" : "2018",
+      "datePublished": "2018-04-04 22:02:05 \u002b0000 UTC",
+      "dateModified" : "2018-04-04 22:02:05 \u002b0000 UTC",
+      "url" : "http:\/\/nzooherd.github.io\/posts\/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A01-%E6%84%9F%E7%9F%A5%E6%9C%BA\/",
+      "keywords" : [ "读书笔记","机器学习", ]
+  }
+</script>
+<title>统计学习方法(1)-感知机</title>
+  <meta property="og:title" content="统计学习方法(1)-感知机" />
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content=" 初雪 2018-4-4 晚
+找了近一个月的时间都没有找到一款合适的笔记，最终我选择了Visual Code &#43; Vim &#43; Markdown &#43; Mega。笔记内容链接在个人描述页面
+忽然想学一波大数据方面的东西，但是我不想搞人工智能，例如NLU, CV等，这些对于人来说很简单的事。关于人工智能，我仍然坚持当前基于统计的方法无法实现真正的人工智能，不如花时间来玩一玩大数据的东西。以下内容参考李航的&amp;laquo;统计学习方法&amp;raquo;，重在理解。
+" />
+  <meta name="description" content=" 初雪 2018-4-4 晚
+找了近一个月的时间都没有找到一款合适的笔记，最终我选择了Visual Code &#43; Vim &#43; Markdown &#43; Mega。笔记内容链接在个人描述页面
+忽然想学一波大数据方面的东西，但是我不想搞人工智能，例如NLU, CV等，这些对于人来说很简单的事。关于人工智能，我仍然坚持当前基于统计的方法无法实现真正的人工智能，不如花时间来玩一玩大数据的东西。以下内容参考李航的&amp;laquo;统计学习方法&amp;raquo;，重在理解。
+" />
+  <meta property="og:locale" content="en-us" />
+
+  
+    <style>body{font-family:bree serif,sans-serif;-webkit-font-smoothing:antialiased;margin:0 20px}article{max-width:800px;margin-left:auto;margin-right:auto}a{color:#000;text-decoration:none}a:hover{font-weight:600;text-decoration:underline}.post-ads{margin:50px 0}.markdown-body{font-size:18px;max-width:100%}.markdown-body a{text-decoration:underline;text-decoration-color:#000}.markdown-body pre{padding:16px;overflow:auto;border-radius:10px}.markdown-body code{padding:.2em .4em;font-size:85%;background-color:#f6f8fa;border-radius:6px}.markdown-body pre>code{padding:0;font-size:100%;background-color:inherit;border:0}.Chinese .markdown-body{line-height:200%}.site-date-catalog{font-size:2rem}.header-title{font-size:2rem;font-weight:700;margin-top:32px;font-family:bungee shade,sans-serif}.header-title a{text-decoration:none}.header-subtitle{color:#666}.header-items{margin:10px 0}.header-item{margin:0 5px}.header-line{width:100%;border-width:2px;border-color:#482936;border-style:solid none none none}.lang-switch{font-weight:600}#posts-list{min-height:600px}.posts-line{font-size:1.2rem;margin:12px 0}.posts-categories{font-size:.8rem;margin:auto;text-align:center}.posts-category{padding:3px 0;border:#000 2px solid;border-radius:5px}.site-footer{}.site-footer-item{margin-right:12px}.post-content img{max-width:100%;display:block;margin-right:auto;margin-top:12px}.post-header{margin-bottom:50px}.post-title{font-size:2rem;font-weight:600}.post-tags{display:inline;font-weight:600;padding:2px 5px;margin-right:6px;border:#000 2px solid;border-radius:5px}.post-date{font-weight:800;font-style:italic}.post-author{float:right;font-weight:600}.page-content{min-height:60%}.post-content{margin-bottom:50px}.post-content p{hyphens:auto;line-height:1.8;text-justify:ideographic;margin-bottom:1em}.related-content{border-width:3px;border-style:solid;border-color:#000;padding:0 10px;margin-bottom:50px;margin-top:100px}.related-content li{margin:5px 0}.taxonomy-term{font-size:3rem}.gallery-img{text-align:center}.gallery-img span{text-align:center}.gallery-img-desc{font-size:.8em;font-weight:800}#disqus_thread{position:relative}#disqus_thread:after{content:"";display:block;height:55px;width:100%;position:absolute;bottom:0;background:#fff}@media screen and (max-width:600px){.header-title,.header-subtitle,.header-items{text-align:center}.posts-line{font-size:16px}.markdown-body{font-size:16px}.post-title{font-size:2rem}.post-content p{letter-spacing:.05em}}@media screen and (max-width:48em){.posts-category{display:none}}table{border-spacing:0;border-collapse:collapse}table th{padding:6px 13px;border:1px solid #dfe2e5;font-size:large}table td{padding:6px 13px;border:1px solid #dfe2e5}</style>
+  
+  
+    <style>.container,.container-fluid{margin-right:auto;margin-left:auto}.container-fluid{padding-right:2rem;padding-left:2rem}.row{box-sizing:border-box;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-flex:0;-ms-flex:0 1 auto;flex:initial;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-.5rem;margin-left:-.5rem}.row.reverse{-webkit-box-orient:horizontal;-webkit-box-direction:reverse;-ms-flex-direction:row-reverse;flex-direction:row-reverse}.col.reverse{-webkit-box-orient:vertical;-webkit-box-direction:reverse;-ms-flex-direction:column-reverse;flex-direction:column-reverse}.col-xs,.col-xs-1,.col-xs-10,.col-xs-11,.col-xs-12,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-offset-0,.col-xs-offset-1,.col-xs-offset-10,.col-xs-offset-11,.col-xs-offset-12,.col-xs-offset-2,.col-xs-offset-3,.col-xs-offset-4,.col-xs-offset-5,.col-xs-offset-6,.col-xs-offset-7,.col-xs-offset-8,.col-xs-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-xs{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-xs-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-xs-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-xs-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-xs-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-xs-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-xs-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-xs-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-xs-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-xs-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-xs-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-xs-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-xs-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-xs-offset-0{margin-left:0}.col-xs-offset-1{margin-left:8.33333333%}.col-xs-offset-2{margin-left:16.66666667%}.col-xs-offset-3{margin-left:25%}.col-xs-offset-4{margin-left:33.33333333%}.col-xs-offset-5{margin-left:41.66666667%}.col-xs-offset-6{margin-left:50%}.col-xs-offset-7{margin-left:58.33333333%}.col-xs-offset-8{margin-left:66.66666667%}.col-xs-offset-9{margin-left:75%}.col-xs-offset-10{margin-left:83.33333333%}.col-xs-offset-11{margin-left:91.66666667%}.start-xs{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-xs{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-xs{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-xs{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-xs{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-xs{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-xs{-ms-flex-pack:distribute;justify-content:space-around}.between-xs{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-xs{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-xs{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}@media only screen and (min-width:48em){.container{width:49rem}.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-offset-0,.col-sm-offset-1,.col-sm-offset-10,.col-sm-offset-11,.col-sm-offset-12,.col-sm-offset-2,.col-sm-offset-3,.col-sm-offset-4,.col-sm-offset-5,.col-sm-offset-6,.col-sm-offset-7,.col-sm-offset-8,.col-sm-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-sm{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-sm-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-sm-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-sm-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-sm-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-sm-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-sm-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-sm-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-sm-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-sm-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-sm-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-sm-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-sm-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-sm-offset-0{margin-left:0}.col-sm-offset-1{margin-left:8.33333333%}.col-sm-offset-2{margin-left:16.66666667%}.col-sm-offset-3{margin-left:25%}.col-sm-offset-4{margin-left:33.33333333%}.col-sm-offset-5{margin-left:41.66666667%}.col-sm-offset-6{margin-left:50%}.col-sm-offset-7{margin-left:58.33333333%}.col-sm-offset-8{margin-left:66.66666667%}.col-sm-offset-9{margin-left:75%}.col-sm-offset-10{margin-left:83.33333333%}.col-sm-offset-11{margin-left:91.66666667%}.start-sm{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-sm{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-sm{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-sm{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-sm{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-sm{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-sm{-ms-flex-pack:distribute;justify-content:space-around}.between-sm{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-sm{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-sm{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:64em){.container{width:65rem}.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-offset-0,.col-md-offset-1,.col-md-offset-10,.col-md-offset-11,.col-md-offset-12,.col-md-offset-2,.col-md-offset-3,.col-md-offset-4,.col-md-offset-5,.col-md-offset-6,.col-md-offset-7,.col-md-offset-8,.col-md-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-md{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-md-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-md-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-md-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-md-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-md-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-md-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-md-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-md-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-md-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-md-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-md-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-md-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-md-offset-0{margin-left:0}.col-md-offset-1{margin-left:8.33333333%}.col-md-offset-2{margin-left:16.66666667%}.col-md-offset-3{margin-left:25%}.col-md-offset-4{margin-left:33.33333333%}.col-md-offset-5{margin-left:41.66666667%}.col-md-offset-6{margin-left:50%}.col-md-offset-7{margin-left:58.33333333%}.col-md-offset-8{margin-left:66.66666667%}.col-md-offset-9{margin-left:75%}.col-md-offset-10{margin-left:83.33333333%}.col-md-offset-11{margin-left:91.66666667%}.start-md{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-md{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-md{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-md{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-md{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-md{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-md{-ms-flex-pack:distribute;justify-content:space-around}.between-md{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-md{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-md{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:75em){.container{width:76rem}.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-offset-0,.col-lg-offset-1,.col-lg-offset-10,.col-lg-offset-11,.col-lg-offset-12,.col-lg-offset-2,.col-lg-offset-3,.col-lg-offset-4,.col-lg-offset-5,.col-lg-offset-6,.col-lg-offset-7,.col-lg-offset-8,.col-lg-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-lg{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-lg-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-lg-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-lg-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-lg-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-lg-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-lg-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-lg-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-lg-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-lg-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-lg-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-lg-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-lg-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-lg-offset-0{margin-left:0}.col-lg-offset-1{margin-left:8.33333333%}.col-lg-offset-2{margin-left:16.66666667%}.col-lg-offset-3{margin-left:25%}.col-lg-offset-4{margin-left:33.33333333%}.col-lg-offset-5{margin-left:41.66666667%}.col-lg-offset-6{margin-left:50%}.col-lg-offset-7{margin-left:58.33333333%}.col-lg-offset-8{margin-left:66.66666667%}.col-lg-offset-9{margin-left:75%}.col-lg-offset-10{margin-left:83.33333333%}.col-lg-offset-11{margin-left:91.66666667%}.start-lg{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-lg{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-lg{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-lg{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-lg{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-lg{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-lg{-ms-flex-pack:distribute;justify-content:space-around}.between-lg{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-lg{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-lg{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}</style>
+  
+
+  
+
+  <link href="/index.xml" rel="alternate" type="application/rss+xml"
+    title="nzooherd&#39;s blog">
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Bree+Serif|Bungee+Shade" rel="stylesheet">
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <meta name="referrer" content="no-referrer-when-downgrade"><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="统计学习方法(1)-感知机"/>
+<meta name="twitter:description" content="
+初雪 2018-4-4 晚
+找了近一个月的时间都没有找到一款合适的笔记，最终我选择了Visual Code &#43; Vim &#43; Markdown &#43; Mega。笔记内容链接在个人描述页面
+忽然想学一波大数据方面的东西，但是我不想搞人工智能，例如NLU, CV等，这些对于人来说很简单的事。关于人工智能，我仍然坚持当前基于统计的方法无法实现真正的人工智能，不如花时间来玩一玩大数据的东西。以下内容参考李航的&laquo;统计学习方法&raquo;，重在理解。"/>
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-217390416-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-217390416-1');
+</script>
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="site-header">
+          
+<header>
+  
+  
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$','$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      processEnvironments: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+  };
+
+  window.addEventListener('load', (event) => {
+      document.querySelectorAll("mjx-container").forEach(function(x){
+        x.parentElement.classList += 'has-jax'})
+    });
+
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  
+  <div class="header-title">
+    <a href="/"
+      >nzooherd 写字的地方</a
+    >
+  </div>
+  <div class="header-subtitle">In real life.</div>
+</header>
+<div class="row end-md center-xs header-items">
+  
+  <div class="header-item">
+    <a href="https://nzooherd.github.io/about" target="_blank">About</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://twitter.com/zmxnv123" target="_blank">Twitter</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="http://nzooherd.github.io/gallery/" target="_blank">Gallery</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://github.com/nzooherd" target="_blank">Github</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://sspai.com/u/vmhwvppx" target="_blank">Sspai</a>
+  </div>
+  
+</div>
+<div class="row end-xs">
+   
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">统计学习方法(1)-感知机</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2018-04-04 22:02:05 UTC">
+                04 Apr 2018
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+              <div class="post-author">
+                <a target="_blank" href="http://nzooherd.github.io/">@nzooherd</a>
+              </div>
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          
+          <p><img src="http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/1009183469.jpg" alt="">
+初雪 2018-4-4 晚</p>
+<p><em>找了近一个月的时间都没有找到一款合适的笔记，最终我选择了Visual Code + Vim + Markdown + Mega。笔记内容链接在个人描述页面</em></p>
+<p>忽然想学一波大数据方面的东西，但是我不想搞人工智能，例如NLU, CV等，这些对于人来说很简单的事。关于人工智能，我仍然坚持当前基于统计的方法无法实现真正的人工智能，不如花时间来玩一玩大数据的东西。以下内容参考李航的&laquo;统计学习方法&raquo;，重在理解。</p>
+<h2 id="基础">基础</h2>
+<h3 id="我眼中的统计学习">我眼中的统计学习</h3>
+<p>三要素(模型，策略，方法)就不说了，死扣定义没什么意思，提一下我理解的统计学习。由于放弃了许多数学上标准的定义，所以在描述上会存在偏差。</p>
+<ul>
+<li>
+<p>目标
+预测，从一堆数据中预测出某些具有价值的东西。</p>
+</li>
+<li>
+<p>本质
+设想一个座标系中，给定一系列点$ (x, y) $，寻找一个函数$ f(x) $ 使  $ y = f(x) $，不仅对于已给出的点满足，对于尚未给出的点同样满足。
+高中人教版数学中提到的<em>最小二乘法</em>即时最简单的统计学习，这个方法中，我们知道$ y = kx + b $，在真正的统计学习方法中，我们是不知道这些内容的，只有一系列点$ (x, y) $，而且座标系不一定是平面直角座标系，即 $$ x = \left[\begin{matrix}x_1 &amp; x_2 &amp; x_3 \cdot \cdot \cdot x_n\end{matrix} \right] $$，同时f(x)不再是标准的函数，由于x的输入或者测量误差，可能对于某些x并不满足f(x)。</p>
+</li>
+</ul>
+<h3 id="概念">概念</h3>
+<p>虽然概念重在理解，但是将一个概念用清除的数学公式表示出来还是有必要的。许多科学家厉害就厉害在将人们脑海中某些定性的概念定量的表示出来。记不住这些公式，看书都很困难。</p>
+<ol>
+<li>指示函数
+$$ f(x) = \begin{cases} 1 &amp; \text{x = y}  \ 0 &amp; x \neq y \end{cases}$$</li>
+<li>符号函数
+$$ f(x) = sign(x) = \begin{cases} 1 &amp; \text{x &gt; 0}  \ 0 &amp; x = 0 \ -1 &amp; x &lt; 0 \end{cases}$$</li>
+<li>风险函数
+寻找f(x)，由于f(x)可能不唯一，所以我们要找出最好的f(x)来，什么是最好呢，这里用一个定量值来表示。
+$$ \mathop{\min}\limits_{f \in F}\frac{1}{N} \sum_{i=1}^NL(y_i, f(x_i))$$
+其中L为损失函数，常用的有如下几个</li>
+</ol>
+<ul>
+<li>0-1损失函数
+即指示函数</li>
+<li>平方损失函数
+$$ L(Y, f(X)) = (Y - f(X))^2 $$</li>
+<li>绝对损失函数
+$$ L(Y, f(X)) = |Y - f(X)|$$</li>
+<li>对数损失函数
+$$ L(Y, f(X)) = -logP(Y|X) $$</li>
+</ul>
+<ol start="4">
+<li>过拟合
+当样本容量很小的时候，容易产生<strong>过拟合</strong>现象。
+假设二维直角座标系中，对于给定的n个点$(x, y)$，可以唯一确定一个n-1阶的方程$ f(x) = kx^{n-1} + &hellip;$，使所有给定的点都在此曲线上。这就会产生过拟合现象。
+过拟合本质是将给出的点中的一些共有却不必要的特征当作某个共性，例如给出了5个白人，计算机寻找用于判断是否为<em>人</em>的f(x)的时候，<strong>错将肤色白</strong>当成人的一个共性。
+所以，在过拟合的基础上，将<strong>风险函数</strong>升级成如下方程。
+$$ Rsrm(f) = \frac{1}{N}\sum_{i=1}^NL(y_i, f(x_i)) + \lambda J(f)$$
+J(f)为模型的复杂度，模型越复杂，复杂度越高。<del>复杂度可以简单的认为x的阶数</del>。</li>
+</ol>
+<h2 id="感知机">感知机</h2>
+<p>设想在一维的座标轴中有两堆点，可以用一个点将这两堆点分开，求满足此要求的点。将一维的座标轴推广到n维，就是感知机问题。本质是一个分类问题，对于不同的x，y的值只有两个1或者-1。即 $ y = sign(f(x)) $，现在求f(x)。</p>
+<p><strong>假设x是二维的, $ x = (x^{(1)}, x^{(2)}) $</strong>，有如下图</p>
+<p><strong>此图不同与二维直角座标系，二维直角座标系中x是一维的，现在x是二维的，所以y的值并没有在座标中体现，仅仅用不同的点表示。</strong> 我们的目标是求一条直线，将点分开。看图即可知道直线并不是唯一的。
+对于此座标系中的任一条直线，有$$ w \cdot x + b = 0  $$，对于二维的向量来说$$ w \cdot x = w^{(1)} * x^{(1)} + w^{(2)} * x^{(2)} $$ 所以我们的目标即求$ w $ 和 $ b $。</p>
+<p>现在定义<strong>损失函数</strong>，损失函数的选择是误分类点到此直线的距离。在此座标系中，x到此直线的距离为
+$$  \frac {1}{\left|W\right|} |w \cdot x_0 + b| $$ $||W||$是$w$的$L_2$范数。</p>
+<p>对于误分类的点 $-y_i(w \cdot x_i + b) &gt; 0$
+所有误分类点到超平面即f(x)距离之和为$$ -\frac{1}{\left|w\right|}\sum_{x_i \in {M}} y_i (w \cdot x_i + b)$$
+不考虑$\frac{1}{\left|w\right|}$，得到损失函数
+$$ L(w, b) = -\sum_{x_i \in {M}}y_i (w \cdot x_i + b)$$</p>
+<p>损失函数是非负的，如果没有误分类点，损失函数值为0，即最小值为0。</p>
+<h3 id="算法">算法</h3>
+<p>输入: $ T = {(x_1, y_1), (x_2, y_2), \cdot \cdot \cdot, (x_N, y_N)}$
+输出: $ w, b$
+目的: $$ minL(w, b) = min-\sum_{x_i \in {M}} y_i (w \cdot x_i + b)$$</p>
+<p>由于$ minL(w, b) = 0 $，所以本质即找到一个超平面将所有点正确分类。现在<strong>假设</strong>这群点是可分的，所以一定存在这个超平面。<strong>正实例点集构成的凸壳和负实例点集构成的凸壳不相交是线性可分的充分必要条件。</strong></p>
+<p>为求$w,b$，给出一种迭代方法。
+任选$w_0, b_0$，得到超平面，$w_0 \cdot x + b = 0$
+从给定的点集合中，选出一个误分类的点 $(x, y)$
+令$$ w \gets w + \eta y_ix_i $$ $$ b \gets b + \eta y_i $$
+其中 $ \eta $为步长，又称为学习率。</p>
+<p>现在证明此种方法可以得到需要的$w, b$。以下为独立思考所得，未经验证。</p>
+<p>(1) 证明: 对于误分类点$(x_1, y_1)$，设原$(w ,b)$为$(w_0, b0)$经过有限次迭代后，可以将误分类点正确分类。</p>
+<p>$$ a_0 = y_1(w_0 \cdot x_1 + b) &lt;  0 $$ $$w_1 \gets w_0 + \eta y_1x_1 $$ $$ b_1 \gets b_0 + \eta y_1 $$
+所以 $$ a_1 = y_1(w_1 \cdot x_1 + b) = a_0 + \eta y_1^2{(x_1^2 + 1)}$$
+如果 $$ a_1 &gt; 0 $$得解，否则对于$a_k$得解。</p>
+<p>(2) 证明: 如果对于某个误分类点可以通过次方法将其正确分类，则对于所有误分类点运用此方法，可以得到正确的$(w,b)$。
+此迭代法的本质是将$w$更改，$w$即为此超平面的法向量，对于所有误分类的点，$w$更改的方向是一致的，因为不可能对于同一堆点，在此超平面两侧都有误分类的点。同理，对于不同堆的点，即$y_i &gt; 0$中误分类的点和$y_i &lt; 0$误分类的点应该在分布在此直线的两侧。</p>
+<h3 id="对偶形式">对偶形式</h3>
+<p>对偶形式: 将 (w) 和$b$表示为$(x_i, y_i)$的线性组合，即\w = f(x, y), b = f(x, y)
+假设$w, b$初始值均为0，根据上面的迭代算法，假设对于误分类点$(x_i, y_i)$经过了$n$次迭代，共有N个误分类点则最终(\varphi = \dfrac{1+\sqrt5}{2}= 1.6180339887…)
+$$ w = \sum_{i=1}^{N}a_iy_ix_i$$
+$$ b = \sum_{i=1}^Na_iy_i $$
+这里 $ a_i = n_i \eta $</p>
+<p>所以 对偶形式的算法如下。
+输入: $ T = {(x_1, y_1), (x_2, y_2), \cdot \cdot \cdot, (x_N, y_N)}$
+输出: $a, b$ 其中 $a = (a_1, a_2, \cdot \cdot \cdot, a_N)^T $
+目的: $f(x) = sign( \sum_{j=1}^Na_jy_jx_j \cdot x+b)$
+(1) $a \gets 0$, $b \gets 0$
+(2) 选取数据$(x_i, y_i)$
+(3) 如果$y_i(\sum_{j=1}^{N}a_jy_jx_j \cdot x_i + b) \le 0 $
+$$ a_i \gets a_i +n $$ $$ b \gets b + \eta y_i $$
+(4) 转至(2)直到无误分类数据。</p>
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-tags">
+              <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+                读书笔记
+              </a>
+            </div>
+            
+            <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
+                机器学习
+              </a>
+            </div>
+            
+          </div>
+        </div>
+        
+          <div class="row">
+            <div class="col-xs-12">
+              
+            </div>
+          </div>
+
+          
+
+<div class="related-content">
+  <h3>Related Posts</h3>
+  <ul>
+    
+    <li><a href="/posts/mysql%E7%B4%A2%E5%BC%95/">MySQL索引</a></li>
+    
+    <li><a href="/posts/%E6%9D%82%E8%B0%88%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">杂谈设计模式</a></li>
+    
+    <li><a href="/posts/uml%E7%B1%BB%E5%9B%BE/">UML类图</a></li>
+    
+  </ul>
+</div>
+
+
+
+          
+          
+        
+
+        <div class="site-footer">
+  <div class="busuanzi-footer" hidden>
+    <span id="busuanzi_container_site_pv">
+      本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    <span id="busuanzi_container_site_uv">
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </span>
+    <span id="busuanzi_container_page_pv" >本文阅读量<span id="busuanzi_value_page_pv"></span>次</span>
+  </div>
+  
+</div>
+      </div>
+    </div>
+  </article>
+
+  <script src="https://utteranc.es/client.js"
+        repo="nzooherd/blog-talks"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+  </script>
+  
+
+
+
+  
+
+</body>
+
+</html>

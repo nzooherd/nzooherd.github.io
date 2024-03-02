@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>分布式 on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</link>
+    <description>Recent content in 分布式 on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 13 May 2018 21:20:52 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ZAB协议和Zookeeper分布式服务框架</title>
+      <link>http://nzooherd.github.io/posts/zab%E5%8D%8F%E8%AE%AE%E5%92%8Czookeeper%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/</link>
+      <pubDate>Sun, 13 May 2018 21:20:52 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/zab%E5%8D%8F%E8%AE%AE%E5%92%8Czookeeper%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/</guid>
+      <description>&lt;p&gt;What is ZooKeeper?&#xA;ZooKeeper是一个开放源代码的分布式协调服务,出自&amp;laquo;分布式一致性原理与实践&amp;raquo;。对于像我这样的新手来说，这句话就是在扯淡。&#xA;还记得当初刚学Spring，网上各种都在说的Spring的IOC,AOP的优越，但是讲半天也没有说明Spring到底是做什么的。在&amp;laquo;Spring实战&amp;raquo;中，开门见山的讲明了Spring就是用来解隅的。带着这个目的去学习Spring，就有了方向，你就会逐渐明白Spring如何解隅，IOC和AOP。这就是好书给人的感觉。本文适合菜鸟，高手止步。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>分布式基础</title>
+      <link>http://nzooherd.github.io/posts/%E5%88%86%E5%B8%83%E5%BC%8F%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Wed, 09 May 2018 23:31:48 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E5%88%86%E5%B8%83%E5%BC%8F%E5%9F%BA%E7%A1%80/</guid>
+      <description>&lt;h2 id=&#34;cap&#34;&gt;CAP&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Consistency&#xA;当一个系统在数据一致的状态下执行更新操作后，应该保证系统的数据处于一致的状态。&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Availability&#xA;提供的服务必须处于可用状态。两个维度，有限时间内和返回结果&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Partition tolerance&#xA;分布式系统在遇到任何网络分区故障的时候，仍然需要能够保证对外提供满足一致性和可用性的服务。&#xA;网络分区是指在分布式系统个中，不同的节点分布在不同的子网络，一些特殊原因导致子网络之间网络不联通，各个系统的网络环境被切分成了若干个孤立区域。&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+  </channel>
+</rss>

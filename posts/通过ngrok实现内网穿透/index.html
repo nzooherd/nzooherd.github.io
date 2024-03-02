@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.123.7">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="nzooherd" />
+  <meta property="og:url" content="http://nzooherd.github.io/posts/%E9%80%9A%E8%BF%87ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" />
+  <link rel="canonical" href="http://nzooherd.github.io/posts/%E9%80%9A%E8%BF%87ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" /><link rel="apple-touch-icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="shortcut" href="/favicon.ico" /><link rel="alternate" type="application/atom+xml" href="http://nzooherd.github.io/index.xml" title="nzooherd&#39;s blog">
+
+  <script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "http:\/\/nzooherd.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "通过ngrok实现内网穿透",
+      "headline" : "通过ngrok实现内网穿透",
+      "description" : "通过ngrok实现ssh连接本机电脑 从树莓派开始就一直想着有没有一种方法可以通过外网ssh连接内网中的树莓派，之前知道一个大概的思路，就是通过花生壳的类似内网穿透的服务。然而好几次尝试都失败了，最后直接知乎，搜到了ngrok这个神器，一次搞定。不得不感叹一下国外的开源环境确实比国内好很多，一些用中文怎么搜索都找不到答案的问题，换成英文搜索就会发现，老外早就给你写好解决办法了，就看你会不会用Google了。\n",
+      "inLanguage" : "en-US",
+      "author" : "nzooherd",
+      "creator" : "nzooherd",
+      "publisher": "nzooherd",
+      "accountablePerson" : "nzooherd",
+      "copyrightHolder" : "nzooherd",
+      "copyrightYear" : "2017",
+      "datePublished": "2017-10-20 22:41:44 \u002b0000 UTC",
+      "dateModified" : "2017-10-20 22:41:44 \u002b0000 UTC",
+      "url" : "http:\/\/nzooherd.github.io\/posts\/%E9%80%9A%E8%BF%87ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F\/",
+      "keywords" : [ "network", ]
+  }
+</script>
+<title>通过ngrok实现内网穿透</title>
+  <meta property="og:title" content="通过ngrok实现内网穿透" />
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="通过ngrok实现ssh连接本机电脑 从树莓派开始就一直想着有没有一种方法可以通过外网ssh连接内网中的树莓派，之前知道一个大概的思路，就是通过花生壳的类似内网穿透的服务。然而好几次尝试都失败了，最后直接知乎，搜到了ngrok这个神器，一次搞定。不得不感叹一下国外的开源环境确实比国内好很多，一些用中文怎么搜索都找不到答案的问题，换成英文搜索就会发现，老外早就给你写好解决办法了，就看你会不会用Google了。
+" />
+  <meta name="description" content="通过ngrok实现ssh连接本机电脑 从树莓派开始就一直想着有没有一种方法可以通过外网ssh连接内网中的树莓派，之前知道一个大概的思路，就是通过花生壳的类似内网穿透的服务。然而好几次尝试都失败了，最后直接知乎，搜到了ngrok这个神器，一次搞定。不得不感叹一下国外的开源环境确实比国内好很多，一些用中文怎么搜索都找不到答案的问题，换成英文搜索就会发现，老外早就给你写好解决办法了，就看你会不会用Google了。
+" />
+  <meta property="og:locale" content="en-us" />
+
+  
+    <style>body{font-family:bree serif,sans-serif;-webkit-font-smoothing:antialiased;margin:0 20px}article{max-width:800px;margin-left:auto;margin-right:auto}a{color:#000;text-decoration:none}a:hover{font-weight:600;text-decoration:underline}.post-ads{margin:50px 0}.markdown-body{font-size:18px;max-width:100%}.markdown-body a{text-decoration:underline;text-decoration-color:#000}.markdown-body pre{padding:16px;overflow:auto;border-radius:10px}.markdown-body code{padding:.2em .4em;font-size:85%;background-color:#f6f8fa;border-radius:6px}.markdown-body pre>code{padding:0;font-size:100%;background-color:inherit;border:0}.Chinese .markdown-body{line-height:200%}.site-date-catalog{font-size:2rem}.header-title{font-size:2rem;font-weight:700;margin-top:32px;font-family:bungee shade,sans-serif}.header-title a{text-decoration:none}.header-subtitle{color:#666}.header-items{margin:10px 0}.header-item{margin:0 5px}.header-line{width:100%;border-width:2px;border-color:#482936;border-style:solid none none none}.lang-switch{font-weight:600}#posts-list{min-height:600px}.posts-line{font-size:1.2rem;margin:12px 0}.posts-categories{font-size:.8rem;margin:auto;text-align:center}.posts-category{padding:3px 0;border:#000 2px solid;border-radius:5px}.site-footer{}.site-footer-item{margin-right:12px}.post-content img{max-width:100%;display:block;margin-right:auto;margin-top:12px}.post-header{margin-bottom:50px}.post-title{font-size:2rem;font-weight:600}.post-tags{display:inline;font-weight:600;padding:2px 5px;margin-right:6px;border:#000 2px solid;border-radius:5px}.post-date{font-weight:800;font-style:italic}.post-author{float:right;font-weight:600}.page-content{min-height:60%}.post-content{margin-bottom:50px}.post-content p{hyphens:auto;line-height:1.8;text-justify:ideographic;margin-bottom:1em}.related-content{border-width:3px;border-style:solid;border-color:#000;padding:0 10px;margin-bottom:50px;margin-top:100px}.related-content li{margin:5px 0}.taxonomy-term{font-size:3rem}.gallery-img{text-align:center}.gallery-img span{text-align:center}.gallery-img-desc{font-size:.8em;font-weight:800}#disqus_thread{position:relative}#disqus_thread:after{content:"";display:block;height:55px;width:100%;position:absolute;bottom:0;background:#fff}@media screen and (max-width:600px){.header-title,.header-subtitle,.header-items{text-align:center}.posts-line{font-size:16px}.markdown-body{font-size:16px}.post-title{font-size:2rem}.post-content p{letter-spacing:.05em}}@media screen and (max-width:48em){.posts-category{display:none}}table{border-spacing:0;border-collapse:collapse}table th{padding:6px 13px;border:1px solid #dfe2e5;font-size:large}table td{padding:6px 13px;border:1px solid #dfe2e5}</style>
+  
+  
+    <style>.container,.container-fluid{margin-right:auto;margin-left:auto}.container-fluid{padding-right:2rem;padding-left:2rem}.row{box-sizing:border-box;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-flex:0;-ms-flex:0 1 auto;flex:initial;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-.5rem;margin-left:-.5rem}.row.reverse{-webkit-box-orient:horizontal;-webkit-box-direction:reverse;-ms-flex-direction:row-reverse;flex-direction:row-reverse}.col.reverse{-webkit-box-orient:vertical;-webkit-box-direction:reverse;-ms-flex-direction:column-reverse;flex-direction:column-reverse}.col-xs,.col-xs-1,.col-xs-10,.col-xs-11,.col-xs-12,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-offset-0,.col-xs-offset-1,.col-xs-offset-10,.col-xs-offset-11,.col-xs-offset-12,.col-xs-offset-2,.col-xs-offset-3,.col-xs-offset-4,.col-xs-offset-5,.col-xs-offset-6,.col-xs-offset-7,.col-xs-offset-8,.col-xs-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-xs{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-xs-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-xs-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-xs-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-xs-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-xs-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-xs-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-xs-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-xs-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-xs-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-xs-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-xs-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-xs-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-xs-offset-0{margin-left:0}.col-xs-offset-1{margin-left:8.33333333%}.col-xs-offset-2{margin-left:16.66666667%}.col-xs-offset-3{margin-left:25%}.col-xs-offset-4{margin-left:33.33333333%}.col-xs-offset-5{margin-left:41.66666667%}.col-xs-offset-6{margin-left:50%}.col-xs-offset-7{margin-left:58.33333333%}.col-xs-offset-8{margin-left:66.66666667%}.col-xs-offset-9{margin-left:75%}.col-xs-offset-10{margin-left:83.33333333%}.col-xs-offset-11{margin-left:91.66666667%}.start-xs{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-xs{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-xs{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-xs{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-xs{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-xs{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-xs{-ms-flex-pack:distribute;justify-content:space-around}.between-xs{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-xs{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-xs{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}@media only screen and (min-width:48em){.container{width:49rem}.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-offset-0,.col-sm-offset-1,.col-sm-offset-10,.col-sm-offset-11,.col-sm-offset-12,.col-sm-offset-2,.col-sm-offset-3,.col-sm-offset-4,.col-sm-offset-5,.col-sm-offset-6,.col-sm-offset-7,.col-sm-offset-8,.col-sm-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-sm{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-sm-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-sm-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-sm-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-sm-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-sm-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-sm-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-sm-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-sm-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-sm-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-sm-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-sm-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-sm-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-sm-offset-0{margin-left:0}.col-sm-offset-1{margin-left:8.33333333%}.col-sm-offset-2{margin-left:16.66666667%}.col-sm-offset-3{margin-left:25%}.col-sm-offset-4{margin-left:33.33333333%}.col-sm-offset-5{margin-left:41.66666667%}.col-sm-offset-6{margin-left:50%}.col-sm-offset-7{margin-left:58.33333333%}.col-sm-offset-8{margin-left:66.66666667%}.col-sm-offset-9{margin-left:75%}.col-sm-offset-10{margin-left:83.33333333%}.col-sm-offset-11{margin-left:91.66666667%}.start-sm{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-sm{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-sm{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-sm{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-sm{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-sm{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-sm{-ms-flex-pack:distribute;justify-content:space-around}.between-sm{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-sm{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-sm{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:64em){.container{width:65rem}.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-offset-0,.col-md-offset-1,.col-md-offset-10,.col-md-offset-11,.col-md-offset-12,.col-md-offset-2,.col-md-offset-3,.col-md-offset-4,.col-md-offset-5,.col-md-offset-6,.col-md-offset-7,.col-md-offset-8,.col-md-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-md{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-md-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-md-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-md-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-md-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-md-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-md-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-md-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-md-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-md-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-md-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-md-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-md-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-md-offset-0{margin-left:0}.col-md-offset-1{margin-left:8.33333333%}.col-md-offset-2{margin-left:16.66666667%}.col-md-offset-3{margin-left:25%}.col-md-offset-4{margin-left:33.33333333%}.col-md-offset-5{margin-left:41.66666667%}.col-md-offset-6{margin-left:50%}.col-md-offset-7{margin-left:58.33333333%}.col-md-offset-8{margin-left:66.66666667%}.col-md-offset-9{margin-left:75%}.col-md-offset-10{margin-left:83.33333333%}.col-md-offset-11{margin-left:91.66666667%}.start-md{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-md{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-md{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-md{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-md{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-md{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-md{-ms-flex-pack:distribute;justify-content:space-around}.between-md{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-md{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-md{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:75em){.container{width:76rem}.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-offset-0,.col-lg-offset-1,.col-lg-offset-10,.col-lg-offset-11,.col-lg-offset-12,.col-lg-offset-2,.col-lg-offset-3,.col-lg-offset-4,.col-lg-offset-5,.col-lg-offset-6,.col-lg-offset-7,.col-lg-offset-8,.col-lg-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-lg{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-lg-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-lg-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-lg-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-lg-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-lg-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-lg-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-lg-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-lg-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-lg-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-lg-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-lg-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-lg-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-lg-offset-0{margin-left:0}.col-lg-offset-1{margin-left:8.33333333%}.col-lg-offset-2{margin-left:16.66666667%}.col-lg-offset-3{margin-left:25%}.col-lg-offset-4{margin-left:33.33333333%}.col-lg-offset-5{margin-left:41.66666667%}.col-lg-offset-6{margin-left:50%}.col-lg-offset-7{margin-left:58.33333333%}.col-lg-offset-8{margin-left:66.66666667%}.col-lg-offset-9{margin-left:75%}.col-lg-offset-10{margin-left:83.33333333%}.col-lg-offset-11{margin-left:91.66666667%}.start-lg{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-lg{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-lg{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-lg{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-lg{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-lg{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-lg{-ms-flex-pack:distribute;justify-content:space-around}.between-lg{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-lg{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-lg{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}</style>
+  
+
+  
+
+  <link href="/index.xml" rel="alternate" type="application/rss+xml"
+    title="nzooherd&#39;s blog">
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Bree+Serif|Bungee+Shade" rel="stylesheet">
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <meta name="referrer" content="no-referrer-when-downgrade"><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="通过ngrok实现内网穿透"/>
+<meta name="twitter:description" content="通过ngrok实现ssh连接本机电脑
+从树莓派开始就一直想着有没有一种方法可以通过外网ssh连接内网中的树莓派，之前知道一个大概的思路，就是通过花生壳的类似内网穿透的服务。然而好几次尝试都失败了，最后直接知乎，搜到了ngrok这个神器，一次搞定。不得不感叹一下国外的开源环境确实比国内好很多，一些用中文怎么搜索都找不到答案的问题，换成英文搜索就会发现，老外早就给你写好解决办法了，就看你会不会用Google了。"/>
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-217390416-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-217390416-1');
+</script>
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="site-header">
+          
+<header>
+  
+  
+  
+  <div class="header-title">
+    <a href="/"
+      >nzooherd 写字的地方</a
+    >
+  </div>
+  <div class="header-subtitle">In real life.</div>
+</header>
+<div class="row end-md center-xs header-items">
+  
+  <div class="header-item">
+    <a href="https://nzooherd.github.io/about" target="_blank">About</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://twitter.com/zmxnv123" target="_blank">Twitter</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="http://nzooherd.github.io/gallery/" target="_blank">Gallery</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://github.com/nzooherd" target="_blank">Github</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://sspai.com/u/vmhwvppx" target="_blank">Sspai</a>
+  </div>
+  
+</div>
+<div class="row end-xs">
+   
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">通过ngrok实现内网穿透</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2017-10-20 22:41:44 UTC">
+                20 Oct 2017
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+              <div class="post-author">
+                <a target="_blank" href="http://nzooherd.github.io/">@nzooherd</a>
+              </div>
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          
+          <h3 id="通过ngrok实现ssh连接本机电脑">通过ngrok实现ssh连接本机电脑</h3>
+<p>从树莓派开始就一直想着有没有一种方法可以通过外网ssh连接内网中的树莓派，之前知道一个大概的思路，就是通过花生壳的类似内网穿透的服务。然而好几次尝试都失败了，最后直接知乎，搜到了ngrok这个神器，一次搞定。不得不感叹一下国外的开源环境确实比国内好很多，一些用中文怎么搜索都找不到答案的问题，换成英文搜索就会发现，老外早就给你写好解决办法了，就看你会不会用Google了。</p>
+<h4 id="关于ngrok">关于ngrok</h4>
+<p>ngrok是国外的一个开源项目，可以把内网主机暴露在公网中，可以直接下载ngrok客户端版本，不过这样反向代理服务器在国外，所以ssh会比较慢。由于开源的原因，如果我们有一个公网的服务器，可以自己编译源码，将服务器部署到公网上，经过自己测试，延迟和普通的ssh基本一致。</p>
+<h4 id="解析域名">解析域名</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>ngrok.shiwenhao.gq   -----&gt; A记录到你的公网服务器
+</span></span><span style="display:flex;"><span>*.ngrok.shiwenhao.gq -----&gt; CNAME记录到ngrok.shiwenhao.gq 
+</span></span></code></pre></div><p>这里需要提一下，*.ngrok.shiwenhao.gq是三级泛域名，一般的域名的解析商的免费服务可能不支持三级泛域名解析，LZ使用的是腾讯的云解析服务，后果就是腾讯云封了我未备案的网站。</p>
+<h4 id="下载源码">下载源码</h4>
+<p><strong>ngrok分为服务端和客户端,请将源码下载在服务器上</strong>
+github上下载源码，不说了。</p>
+<h4 id="生成证书">生成证书</h4>
+<p>这部分不懂，借鉴别人的blog。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>openssl genrsa -out rootCA.key 2048
+</span></span><span style="display:flex;"><span>openssl req -x509 -new -nodes -key rootCA.key -subj &#34;/CN=$NGROK_DOMAIN&#34; -days 36500 -out rootCA.pem
+</span></span><span style="display:flex;"><span>openssl genrsa -out device.key 2048
+</span></span><span style="display:flex;"><span>openssl req -new -key device.key -subj &#34;/CN=$NGROK_DOMAIN&#34; -out device.csr
+</span></span><span style="display:flex;"><span>openssl x509 -req -in device.csr -days 36500 -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out device.crt 
+</span></span><span style="display:flex;"><span>cp rootCA.pem assets/client/tls/ngrokroot.crt
+</span></span><span style="display:flex;"><span>cp device.crt assets/server/tls/snakeoil.crt 
+</span></span><span style="display:flex;"><span>cp device.key assets/server/tls/snakeoil.key
+</span></span></code></pre></div><h4 id="编译">编译</h4>
+<p>由于ngrok是用go语言编写的，所以需要安装GO语言，ubuntu安装如下,安装完查看版本。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sudo apt-get install golang
+</span></span><span style="display:flex;"><span>go version
+</span></span></code></pre></div><p>开始编译，<strong>服务器端一定是Linux版的，所以如果是在服务器上编译源码的话，如下</strong></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>make release-server
+</span></span></code></pre></div><p>客户端请选择对应的对应的客户端，如下</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ GOOS=linux GOARCH=amd64 make release-client
+</span></span><span style="display:flex;"><span>$ GOOS=windows GOARCH=amd64 make release-client
+</span></span><span style="display:flex;"><span>$ GOOS=linux GOARCH=arm make release-client
+</span></span></code></pre></div><p>编译需要一段时间，来杯cafe吧。</p>
+<h4 id="部署">部署</h4>
+<p>编译完成后，会生成ngrok和ngrokd执行文件，ngrokd对应服务器端，ngrok对应客户端。ngrokd在bin目录下，ngrok在不知道在bin的哪个子目录下，自己找吧。
+<em>通过rcp命令之类的东西将ngrok拉到客户端上</em></p>
+<ul>
+<li>服务器，可以通过nohup命令设置ngrok，避免退出终端后结束，具体请搜索nohup</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>./ngrokd -h
+</span></span><span style="display:flex;"><span>Usage of ./ngrokd:
+</span></span><span style="display:flex;"><span>  -domain string
+</span></span><span style="display:flex;"><span>        Domain where the tunnels are hosted (default &#34;ngrok.com&#34;)
+</span></span><span style="display:flex;"><span>  -httpAddr string
+</span></span><span style="display:flex;"><span>        Public address for HTTP connections, empty string to disable (default &#34;:80&#34;)
+</span></span><span style="display:flex;"><span>  -httpsAddr string
+</span></span><span style="display:flex;"><span>        Public address listening for HTTPS connections, emptry string to disable (default &#34;:443&#34;)
+</span></span><span style="display:flex;"><span>  -log string
+</span></span><span style="display:flex;"><span>        Write log messages to this file. &#39;stdout&#39; and &#39;none&#39; have special meanings (default &#34;stdout&#34;)
+</span></span><span style="display:flex;"><span>  -log-level string
+</span></span><span style="display:flex;"><span>        The level of messages to log. One of: DEBUG, INFO, WARNING, ERROR (default &#34;DEBUG&#34;)
+</span></span><span style="display:flex;"><span>  -tlsCrt string
+</span></span><span style="display:flex;"><span>        Path to a TLS certificate file
+</span></span><span style="display:flex;"><span>  -tlsKey string
+</span></span><span style="display:flex;"><span>        Path to a TLS key file
+</span></span><span style="display:flex;"><span>  -tunnelAddr string
+</span></span><span style="display:flex;"><span>        Public address listening for ngrok client (default &#34;:4443&#34;)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>./ngrokd -domain=$NGROK_DOMAIN 
+</span></span><span style="display:flex;"><span>./ngrokd -domain=$NGROK_DOMAIN -httpAddr=&#34;:8080&#34; -httpsAddr=&#34;:8081&#34;
+</span></span></code></pre></div><ul>
+<li>客户端</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>vim ngrok.cfg
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 添加以下两行
+</span></span><span style="display:flex;"><span># 第一行是将要绑定的域名+4443端口
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>server_addr: &#34;ngrok.phpgao.com:4443&#34;
+</span></span><span style="display:flex;"><span>trust_host_root_certs: true
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 帮助信息
+</span></span><span style="display:flex;"><span>./ngrok -h
+</span></span><span style="display:flex;"><span>Examples:
+</span></span><span style="display:flex;"><span>    ngrok 80
+</span></span><span style="display:flex;"><span>    ngrok -subdomain=example 8080
+</span></span><span style="display:flex;"><span>    ngrok -proto=tcp 22
+</span></span><span style="display:flex;"><span>    ngrok -hostname=&#34;example.com&#34; -httpauth=&#34;user:password&#34; 10.0.0.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 8080就是我们要转发的端口了
+</span></span><span style="display:flex;"><span>./ngrok -config=./ngrok.cfg 8080
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 指定协议和端口，不指定默认是 http+https
+</span></span><span style="display:flex;"><span>./ngrok -config=./ngrok.cfg -proto=tcp 22
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 指定子域名，不指定就会随机生成
+</span></span><span style="display:flex;"><span>./ngrok -config=./ngrok.cfg -subdomain=test 8080
+</span></span></code></pre></div><p>如上，要是用ssh,请运行倒数第二个命令。
+运行成功后截图,
+<img src="https://pic1.zhimg.com/50/5905b632ce968e3ba1d773b18f6c92d4_hd.jpg" alt="">
+然后</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>ssh user@ngrok.com -p36756
+</span></span></code></pre></div><p>可以愉快的在家撸代码了。额
+<img src="http://ws4.sinaimg.cn/large/9150e4e5ly1fk18ib42hbj208s0513yq.jpg" alt=""></p>
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-tags">
+              <a href="/tags/network/">
+                network
+              </a>
+            </div>
+            
+          </div>
+        </div>
+        
+          <div class="row">
+            <div class="col-xs-12">
+              
+            </div>
+          </div>
+
+          
+
+<div class="related-content">
+  <h3>Related Posts</h3>
+  <ul>
+    
+    <li><a href="/posts/%E7%B2%97%E8%B0%88tcp-ip%E5%8D%8F%E8%AE%AE/">粗谈Tcp/Ip协议</a></li>
+    
+    <li><a href="/posts/xx-net%E7%BD%91%E7%BB%9C%E5%88%86%E4%BA%AB/">xx-net网络分享</a></li>
+    
+    <li><a href="/posts/ipv6%E7%BD%91%E7%BB%9C%E4%B8%8B%E8%A7%82%E7%9C%8B%E6%B8%85%E5%8D%8Eiptv/">ipv6网络下观看清华iptv</a></li>
+    
+  </ul>
+</div>
+
+
+
+          
+          
+        
+
+        <div class="site-footer">
+  <div class="busuanzi-footer" hidden>
+    <span id="busuanzi_container_site_pv">
+      本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    <span id="busuanzi_container_site_uv">
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </span>
+    <span id="busuanzi_container_page_pv" >本文阅读量<span id="busuanzi_value_page_pv"></span>次</span>
+  </div>
+  
+</div>
+      </div>
+    </div>
+  </article>
+
+  <script src="https://utteranc.es/client.js"
+        repo="nzooherd/blog-talks"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+  </script>
+  
+
+
+
+  
+
+</body>
+
+</html>

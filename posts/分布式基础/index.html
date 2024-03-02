@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.123.7">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="nzooherd" />
+  <meta property="og:url" content="http://nzooherd.github.io/posts/%E5%88%86%E5%B8%83%E5%BC%8F%E5%9F%BA%E7%A1%80/" />
+  <link rel="canonical" href="http://nzooherd.github.io/posts/%E5%88%86%E5%B8%83%E5%BC%8F%E5%9F%BA%E7%A1%80/" /><link rel="apple-touch-icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="shortcut" href="/favicon.ico" /><link rel="alternate" type="application/atom+xml" href="http://nzooherd.github.io/index.xml" title="nzooherd&#39;s blog">
+
+  <script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "http:\/\/nzooherd.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "分布式基础",
+      "headline" : "分布式基础",
+      "description" : "CAP Consistency 当一个系统在数据一致的状态下执行更新操作后，应该保证系统的数据处于一致的状态。\nAvailability 提供的服务必须处于可用状态。两个维度，有限时间内和返回结果\nPartition tolerance 分布式系统在遇到任何网络分区故障的时候，仍然需要能够保证对外提供满足一致性和可用性的服务。 网络分区是指在分布式系统个中，不同的节点分布在不同的子网络，一些特殊原因导致子网络之间网络不联通，各个系统的网络环境被切分成了若干个孤立区域。\n",
+      "inLanguage" : "en-US",
+      "author" : "nzooherd",
+      "creator" : "nzooherd",
+      "publisher": "nzooherd",
+      "accountablePerson" : "nzooherd",
+      "copyrightHolder" : "nzooherd",
+      "copyrightYear" : "2018",
+      "datePublished": "2018-05-09 23:31:48 \u002b0000 UTC",
+      "dateModified" : "2018-05-09 23:31:48 \u002b0000 UTC",
+      "url" : "http:\/\/nzooherd.github.io\/posts\/%E5%88%86%E5%B8%83%E5%BC%8F%E5%9F%BA%E7%A1%80\/",
+      "keywords" : [ "分布式", ]
+  }
+</script>
+<title>分布式基础</title>
+  <meta property="og:title" content="分布式基础" />
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="CAP Consistency 当一个系统在数据一致的状态下执行更新操作后，应该保证系统的数据处于一致的状态。
+Availability 提供的服务必须处于可用状态。两个维度，有限时间内和返回结果
+Partition tolerance 分布式系统在遇到任何网络分区故障的时候，仍然需要能够保证对外提供满足一致性和可用性的服务。 网络分区是指在分布式系统个中，不同的节点分布在不同的子网络，一些特殊原因导致子网络之间网络不联通，各个系统的网络环境被切分成了若干个孤立区域。
+" />
+  <meta name="description" content="CAP Consistency 当一个系统在数据一致的状态下执行更新操作后，应该保证系统的数据处于一致的状态。
+Availability 提供的服务必须处于可用状态。两个维度，有限时间内和返回结果
+Partition tolerance 分布式系统在遇到任何网络分区故障的时候，仍然需要能够保证对外提供满足一致性和可用性的服务。 网络分区是指在分布式系统个中，不同的节点分布在不同的子网络，一些特殊原因导致子网络之间网络不联通，各个系统的网络环境被切分成了若干个孤立区域。
+" />
+  <meta property="og:locale" content="en-us" />
+
+  
+    <style>body{font-family:bree serif,sans-serif;-webkit-font-smoothing:antialiased;margin:0 20px}article{max-width:800px;margin-left:auto;margin-right:auto}a{color:#000;text-decoration:none}a:hover{font-weight:600;text-decoration:underline}.post-ads{margin:50px 0}.markdown-body{font-size:18px;max-width:100%}.markdown-body a{text-decoration:underline;text-decoration-color:#000}.markdown-body pre{padding:16px;overflow:auto;border-radius:10px}.markdown-body code{padding:.2em .4em;font-size:85%;background-color:#f6f8fa;border-radius:6px}.markdown-body pre>code{padding:0;font-size:100%;background-color:inherit;border:0}.Chinese .markdown-body{line-height:200%}.site-date-catalog{font-size:2rem}.header-title{font-size:2rem;font-weight:700;margin-top:32px;font-family:bungee shade,sans-serif}.header-title a{text-decoration:none}.header-subtitle{color:#666}.header-items{margin:10px 0}.header-item{margin:0 5px}.header-line{width:100%;border-width:2px;border-color:#482936;border-style:solid none none none}.lang-switch{font-weight:600}#posts-list{min-height:600px}.posts-line{font-size:1.2rem;margin:12px 0}.posts-categories{font-size:.8rem;margin:auto;text-align:center}.posts-category{padding:3px 0;border:#000 2px solid;border-radius:5px}.site-footer{}.site-footer-item{margin-right:12px}.post-content img{max-width:100%;display:block;margin-right:auto;margin-top:12px}.post-header{margin-bottom:50px}.post-title{font-size:2rem;font-weight:600}.post-tags{display:inline;font-weight:600;padding:2px 5px;margin-right:6px;border:#000 2px solid;border-radius:5px}.post-date{font-weight:800;font-style:italic}.post-author{float:right;font-weight:600}.page-content{min-height:60%}.post-content{margin-bottom:50px}.post-content p{hyphens:auto;line-height:1.8;text-justify:ideographic;margin-bottom:1em}.related-content{border-width:3px;border-style:solid;border-color:#000;padding:0 10px;margin-bottom:50px;margin-top:100px}.related-content li{margin:5px 0}.taxonomy-term{font-size:3rem}.gallery-img{text-align:center}.gallery-img span{text-align:center}.gallery-img-desc{font-size:.8em;font-weight:800}#disqus_thread{position:relative}#disqus_thread:after{content:"";display:block;height:55px;width:100%;position:absolute;bottom:0;background:#fff}@media screen and (max-width:600px){.header-title,.header-subtitle,.header-items{text-align:center}.posts-line{font-size:16px}.markdown-body{font-size:16px}.post-title{font-size:2rem}.post-content p{letter-spacing:.05em}}@media screen and (max-width:48em){.posts-category{display:none}}table{border-spacing:0;border-collapse:collapse}table th{padding:6px 13px;border:1px solid #dfe2e5;font-size:large}table td{padding:6px 13px;border:1px solid #dfe2e5}</style>
+  
+  
+    <style>.container,.container-fluid{margin-right:auto;margin-left:auto}.container-fluid{padding-right:2rem;padding-left:2rem}.row{box-sizing:border-box;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-flex:0;-ms-flex:0 1 auto;flex:initial;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-.5rem;margin-left:-.5rem}.row.reverse{-webkit-box-orient:horizontal;-webkit-box-direction:reverse;-ms-flex-direction:row-reverse;flex-direction:row-reverse}.col.reverse{-webkit-box-orient:vertical;-webkit-box-direction:reverse;-ms-flex-direction:column-reverse;flex-direction:column-reverse}.col-xs,.col-xs-1,.col-xs-10,.col-xs-11,.col-xs-12,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-offset-0,.col-xs-offset-1,.col-xs-offset-10,.col-xs-offset-11,.col-xs-offset-12,.col-xs-offset-2,.col-xs-offset-3,.col-xs-offset-4,.col-xs-offset-5,.col-xs-offset-6,.col-xs-offset-7,.col-xs-offset-8,.col-xs-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-xs{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-xs-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-xs-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-xs-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-xs-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-xs-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-xs-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-xs-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-xs-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-xs-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-xs-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-xs-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-xs-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-xs-offset-0{margin-left:0}.col-xs-offset-1{margin-left:8.33333333%}.col-xs-offset-2{margin-left:16.66666667%}.col-xs-offset-3{margin-left:25%}.col-xs-offset-4{margin-left:33.33333333%}.col-xs-offset-5{margin-left:41.66666667%}.col-xs-offset-6{margin-left:50%}.col-xs-offset-7{margin-left:58.33333333%}.col-xs-offset-8{margin-left:66.66666667%}.col-xs-offset-9{margin-left:75%}.col-xs-offset-10{margin-left:83.33333333%}.col-xs-offset-11{margin-left:91.66666667%}.start-xs{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-xs{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-xs{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-xs{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-xs{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-xs{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-xs{-ms-flex-pack:distribute;justify-content:space-around}.between-xs{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-xs{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-xs{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}@media only screen and (min-width:48em){.container{width:49rem}.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-offset-0,.col-sm-offset-1,.col-sm-offset-10,.col-sm-offset-11,.col-sm-offset-12,.col-sm-offset-2,.col-sm-offset-3,.col-sm-offset-4,.col-sm-offset-5,.col-sm-offset-6,.col-sm-offset-7,.col-sm-offset-8,.col-sm-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-sm{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-sm-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-sm-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-sm-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-sm-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-sm-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-sm-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-sm-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-sm-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-sm-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-sm-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-sm-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-sm-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-sm-offset-0{margin-left:0}.col-sm-offset-1{margin-left:8.33333333%}.col-sm-offset-2{margin-left:16.66666667%}.col-sm-offset-3{margin-left:25%}.col-sm-offset-4{margin-left:33.33333333%}.col-sm-offset-5{margin-left:41.66666667%}.col-sm-offset-6{margin-left:50%}.col-sm-offset-7{margin-left:58.33333333%}.col-sm-offset-8{margin-left:66.66666667%}.col-sm-offset-9{margin-left:75%}.col-sm-offset-10{margin-left:83.33333333%}.col-sm-offset-11{margin-left:91.66666667%}.start-sm{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-sm{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-sm{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-sm{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-sm{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-sm{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-sm{-ms-flex-pack:distribute;justify-content:space-around}.between-sm{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-sm{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-sm{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:64em){.container{width:65rem}.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-offset-0,.col-md-offset-1,.col-md-offset-10,.col-md-offset-11,.col-md-offset-12,.col-md-offset-2,.col-md-offset-3,.col-md-offset-4,.col-md-offset-5,.col-md-offset-6,.col-md-offset-7,.col-md-offset-8,.col-md-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-md{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-md-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-md-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-md-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-md-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-md-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-md-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-md-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-md-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-md-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-md-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-md-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-md-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-md-offset-0{margin-left:0}.col-md-offset-1{margin-left:8.33333333%}.col-md-offset-2{margin-left:16.66666667%}.col-md-offset-3{margin-left:25%}.col-md-offset-4{margin-left:33.33333333%}.col-md-offset-5{margin-left:41.66666667%}.col-md-offset-6{margin-left:50%}.col-md-offset-7{margin-left:58.33333333%}.col-md-offset-8{margin-left:66.66666667%}.col-md-offset-9{margin-left:75%}.col-md-offset-10{margin-left:83.33333333%}.col-md-offset-11{margin-left:91.66666667%}.start-md{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-md{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-md{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-md{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-md{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-md{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-md{-ms-flex-pack:distribute;justify-content:space-around}.between-md{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-md{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-md{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}@media only screen and (min-width:75em){.container{width:76rem}.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-offset-0,.col-lg-offset-1,.col-lg-offset-10,.col-lg-offset-11,.col-lg-offset-12,.col-lg-offset-2,.col-lg-offset-3,.col-lg-offset-4,.col-lg-offset-5,.col-lg-offset-6,.col-lg-offset-7,.col-lg-offset-8,.col-lg-offset-9{box-sizing:border-box;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:none;padding-right:.5rem;padding-left:.5rem}.col-lg{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;-ms-flex-preferred-size:0;flex-basis:0;max-width:100%}.col-lg-1{-ms-flex-preferred-size:8.33333333%;flex-basis:8.33333333%;max-width:8.33333333%}.col-lg-2{-ms-flex-preferred-size:16.66666667%;flex-basis:16.66666667%;max-width:16.66666667%}.col-lg-3{-ms-flex-preferred-size:25%;flex-basis:25%;max-width:25%}.col-lg-4{-ms-flex-preferred-size:33.33333333%;flex-basis:33.33333333%;max-width:33.33333333%}.col-lg-5{-ms-flex-preferred-size:41.66666667%;flex-basis:41.66666667%;max-width:41.66666667%}.col-lg-6{-ms-flex-preferred-size:50%;flex-basis:50%;max-width:50%}.col-lg-7{-ms-flex-preferred-size:58.33333333%;flex-basis:58.33333333%;max-width:58.33333333%}.col-lg-8{-ms-flex-preferred-size:66.66666667%;flex-basis:66.66666667%;max-width:66.66666667%}.col-lg-9{-ms-flex-preferred-size:75%;flex-basis:75%;max-width:75%}.col-lg-10{-ms-flex-preferred-size:83.33333333%;flex-basis:83.33333333%;max-width:83.33333333%}.col-lg-11{-ms-flex-preferred-size:91.66666667%;flex-basis:91.66666667%;max-width:91.66666667%}.col-lg-12{-ms-flex-preferred-size:100%;flex-basis:100%;max-width:100%}.col-lg-offset-0{margin-left:0}.col-lg-offset-1{margin-left:8.33333333%}.col-lg-offset-2{margin-left:16.66666667%}.col-lg-offset-3{margin-left:25%}.col-lg-offset-4{margin-left:33.33333333%}.col-lg-offset-5{margin-left:41.66666667%}.col-lg-offset-6{margin-left:50%}.col-lg-offset-7{margin-left:58.33333333%}.col-lg-offset-8{margin-left:66.66666667%}.col-lg-offset-9{margin-left:75%}.col-lg-offset-10{margin-left:83.33333333%}.col-lg-offset-11{margin-left:91.66666667%}.start-lg{-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;text-align:start}.center-lg{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center}.end-lg{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;text-align:end}.top-lg{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start}.middle-lg{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.bottom-lg{-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.around-lg{-ms-flex-pack:distribute;justify-content:space-around}.between-lg{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.first-lg{-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.last-lg{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1}}</style>
+  
+
+  
+
+  <link href="/index.xml" rel="alternate" type="application/rss+xml"
+    title="nzooherd&#39;s blog">
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Bree+Serif|Bungee+Shade" rel="stylesheet">
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <meta name="referrer" content="no-referrer-when-downgrade"><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="分布式基础"/>
+<meta name="twitter:description" content="CAP
+
+
+Consistency
+当一个系统在数据一致的状态下执行更新操作后，应该保证系统的数据处于一致的状态。
+
+
+Availability
+提供的服务必须处于可用状态。两个维度，有限时间内和返回结果
+
+
+Partition tolerance
+分布式系统在遇到任何网络分区故障的时候，仍然需要能够保证对外提供满足一致性和可用性的服务。
+网络分区是指在分布式系统个中，不同的节点分布在不同的子网络，一些特殊原因导致子网络之间网络不联通，各个系统的网络环境被切分成了若干个孤立区域。
+
+"/>
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-217390416-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-217390416-1');
+</script>
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="site-header">
+          
+<header>
+  
+  
+  
+  <div class="header-title">
+    <a href="/"
+      >nzooherd 写字的地方</a
+    >
+  </div>
+  <div class="header-subtitle">In real life.</div>
+</header>
+<div class="row end-md center-xs header-items">
+  
+  <div class="header-item">
+    <a href="https://nzooherd.github.io/about" target="_blank">About</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://twitter.com/zmxnv123" target="_blank">Twitter</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="http://nzooherd.github.io/gallery/" target="_blank">Gallery</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://github.com/nzooherd" target="_blank">Github</a>
+  </div>
+  
+  <div class="header-item">
+    <a href="https://sspai.com/u/vmhwvppx" target="_blank">Sspai</a>
+  </div>
+  
+</div>
+<div class="row end-xs">
+   
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">分布式基础</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2018-05-09 23:31:48 UTC">
+                09 May 2018
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+              <div class="post-author">
+                <a target="_blank" href="http://nzooherd.github.io/">@nzooherd</a>
+              </div>
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          
+          <h2 id="cap">CAP</h2>
+<ul>
+<li>
+<p>Consistency
+当一个系统在数据一致的状态下执行更新操作后，应该保证系统的数据处于一致的状态。</p>
+</li>
+<li>
+<p>Availability
+提供的服务必须处于可用状态。两个维度，有限时间内和返回结果</p>
+</li>
+<li>
+<p>Partition tolerance
+分布式系统在遇到任何网络分区故障的时候，仍然需要能够保证对外提供满足一致性和可用性的服务。
+网络分区是指在分布式系统个中，不同的节点分布在不同的子网络，一些特殊原因导致子网络之间网络不联通，各个系统的网络环境被切分成了若干个孤立区域。</p>
+</li>
+</ul>
+<h2 id="base">BASE</h2>
+<p>Base available, soft state, eventually consisten</p>
+<ul>
+<li>
+<p>Base available
+出现部分障碍时，损失部分可用性。相应时间上损失和功能上损失</p>
+</li>
+<li>
+<p>soft state
+允许数据存在中间状态，并认为该中间状态存在不影响整体可用性。</p>
+</li>
+<li>
+<p>eventually consisten
+系统中所有数据副本，在经过一段时间同步后，最终到达一个一致状态。</p>
+</li>
+</ul>
+<ol>
+<li>因果一致性</li>
+<li>读已之所写</li>
+<li>会话一致性</li>
+<li>单调读一致性</li>
+<li>单调写一致性</li>
+</ol>
+<h2 id="2pc">2PC</h2>
+<p>阶段一: 提交事物请求
+协调者向事务参与者发送事务内容，各个参与者尝试执行此事务，单并不提交，并将结果返回给协调者。</p>
+<p>阶段二: 执行事物提交
+如果所有参与者都全部执行成功，并收到成功请求，就向所有参与者发送提交请求。否则发送回滚请求。</p>
+<p>原理简单，实现方便
+同步阻塞，单点问题，脑裂。</p>
+<h2 id="3pc">3PC</h2>
+<p>阶段一: CanCommit
+协调者向所有参与者发送事务内容，如果参与者<strong>认为</strong>可以数理执行事务，反馈Yes，否则反馈No.</p>
+<p>阶段二: PreCommit
+如果协调者收到的都是Yes，向所有参与者发送PreCommit请求，参与者收到PreComit后，执行事务并不提交，并将结果返回给协调者。
+如果收到No或者超时，中断事务。</p>
+<p>阶段三: doCommit
+协调者发送提交请求。</p>
+<h2 id="paxos算法">Paxos算法</h2>
+<p>拜占庭将军问题: 信息在从服务器A-&gt;服务器B发送的过程中有可能被篡改。</p>
+<p>分布式算法的两个重要属性</p>
+<ul>
+<li>安全性
+保证永远不会发生的事情</li>
+<li>活性
+最终一定会发生的事情</li>
+</ul>
+<p>讲解一下我理解的Paxos算法，首先Paxos算法是一个复杂的算法，不要期望像快排那样三言两语的说清楚，首先放空一下大脑，留出一个小时的时间来学习。
+Paxos是一个一致性算法，目的就是在一堆服务器中通过协议使状态保持一致，所以Paxos算法是在很多服务器之间使用的。由于服务器集群一般处于内网内，安全程度较高，所以只考虑信息的延迟和丢失而不考虑篡改。</p>
+<h3 id="推导">推导</h3>
+<p>Paxos算法中有三个角色proposer, acceptor, learner.
+proposer用于提出议案(即一个状态说明)，acceptor可以接收proposer提出的议案，paxos算法主要用于proposer和accetpor之间，所以先不讲解learner算法。</p>
+<p>我们的目的是:</p>
+<ul>
+<li>在所有提出的议案中，只有一个被选定。</li>
+<li>如果没有议案被提出，则不会有议案被选定。</li>
+</ul>
+<p>安全性需求如下:</p>
+<ul>
+<li>只有被提出的议案才可以被选定</li>
+<li>如果某个服务器认为某个议案被选定，则这个议案必须被选定。</li>
+</ul>
+<p>分析:
+实现<em>只有一个被选定的议案</em>最简单的方式就是只允许一个acceptor，并且只接收第一个议案，但是一旦这个accepor宕机后，整个服务就会丢失。所以需要有<strong>多个acceptor</strong>。
+在多个acceptor情况下，我们先假设<strong>1. 一个acceptor最多批准一个议案</strong>，并且<strong>2. 多于半数accetpor接收了某个议案</strong>，则这个议案被批准。我们现在来看一看假设是否可以满足需求。</p>
+<ol>
+<li>如果只有一个议案被提出，仍然可以选出一个议案。
+可以得到:</li>
+</ol>
+<blockquote>
+<p>P1: 一个Acceptor必须批准它收到的第一个议案。
+然而，这就导致一个新问题，没有议案得到足够多的批准。考虑n个proposer对n个acceptor提出了n个议案的情况。</p>
+</blockquote>
+<p>所以<strong>推翻我们的假设1</strong>，即每个acceptor可以批准不止一个议案。
+我们现在假设<strong>每个议案都有一个全局唯一的编号和一个不唯一的内容</strong>，即[编号，Value]可以代表一个议案。回到目的1,这里只有一个被选定，代表的是Value而不是议案了。</p>
+<ol start="2">
+<li>根据我们的目的1，只有一个被选定
+由题意得:</li>
+</ol>
+<blockquote>
+<p>P2: 如果编号为m,Value值为V0的议案被选定了，所有比编号m更高的且被选定的议案，Value也应该是V0.
+由于每一个被选定的议案，都必须预先被批准。</p>
+</blockquote>
+<p>所以如下推论</p>
+<blockquote>
+<p>P2a: 如果[m, Vm]被选定了，那么所有比编号M0更高，且被Acceptor批准的议案，Value也必须是V0。</p>
+</blockquote>
+<p><strong>P2a可以推导出P2, 但是P2不一定能推导出P2a.但是我们的目的只需满足P2就可以了，所以如果满足P2a，一定满足P2，至于我们为什么要继续推导P2a，因为P2很难在工程上直接实现，所以要继续推导，下同</strong></p>
+<p>对于每一个被批准的议案，必须预先被提出。
+所以得到如下推论</p>
+<blockquote>
+<p>P2b: 如果一个议案[m, Vm]被选定之后，任何proposer产生的编号更高的议案，值必须是V0。</p>
+</blockquote>
+<p>但是当一个议案被选定后，在没有通信的情况下，对于某个proposer，很难知道议案已经被选定。
+所以Paxos作者就提出了以下推论，<strong>真是不懂是怎么想出来的</strong></p>
+<blockquote>
+<p>P2c: 对于任意的n和Vn,如果议案[n, Vn]被提出，存在一个由半数以上的Acceptors组成的集合S，满足下面两个条件中的一个
+1.S中不存在任何批准过编号小于n的议案Acceptor。
+2.S中所有Accetpor批准过的小于n的议案中，编号最大的议案的Value值是Vn。</p>
+</blockquote>
+<p>如果满足P2c，就可以得到P2b。下面来证明P2c =&gt; P2b。
+如果P2c =&gt; P2b，将其逆反得到 非P2b =&gt; 非P2c。</p>
+<blockquote>
+<p>如果一个议案[m, Vm]被选定后，proposer产生一个一个[n, Vn]的议案， n=m+1,且Vn != Vm。由于Vm已经得到多数Acceptor批准，所以不存在这样一个集合， 该集合中不存在任何批准过编号小于n的议案的Acceptor,因为两个多数Acceptor至少有一个重合。同理也不存在满足条件2的集合。得证!</p>
+</blockquote>
+<p>到这里推导已经停止，<strong>因为P2c已经可以从工程上实现，它规定了如何产生一个议案。</strong>
+对于产生的每个议案[m, Vm]，需满足以下条件
+存在一个超过半数的Acceptor集合S</p>
+<ol>
+<li>要么S中没有Acceptor批准过的编号小于m的任何议案.</li>
+<li>要么S中所有Acceptor批准的所有编号小于m的议案中，编号最大的议案的Value为Vm.</li>
+</ol>
+<p>基于P2c，有如下议案<strong>生成算法</strong></p>
+<ol>
+<li>Proposer选择一个新的议案编号n,向某个Acceptor发送请求，要求该Acceptor做出如下回应.</li>
+</ol>
+<ul>
+<li>保证proposer不再批准任何编号小于n的议案。</li>
+<li>如果Acceptor批准过任何议案，就向proposer反馈已经批准的编号小于n的最大编号的议案。
+将该请求称为编号n议案的prepare请求。</li>
+</ul>
+<ol start="2">
+<li>如果propser收到来自半数以上的acceptor的结果，就产生编号为n，Value为Vn的议案，这里Vn从所有相应结果的编号中取编号最大的议案的Value值，如果Acceptor没有返回任何Value，此时Value就可以有proposer自己选择。</li>
+</ol>
+<p>议案生成之后，proposer向半数以上的Acceptor发送此议案，有如下议案<strong>批准算法</strong>
+Acceptor批准议案
+一个Acceptor可以收到两类请求</p>
+<ol>
+<li>
+<p>prepare请求:
+Acceptor可以在任意时刻相应一个prepare请求。</p>
+</li>
+<li>
+<p>accept请求:
+在不违背Accept现有承诺的情况下，可以响应Accept请求。</p>
+</li>
+</ol>
+<h3 id="优化">优化</h3>
+<p>Acceptor只需记住<strong>它已经批准的议案的最大编号</strong>和<strong>它已经做出Prepare请求相应的议案的最大编号</strong></p>
+<h3 id="综述">综述</h3>
+<ul>
+<li>阶段一</li>
+</ul>
+<ol>
+<li>Proposer 选择一个议案编号n，然后向Acceptor某个超过半数的子集成员发送编号为n的prepare请求。</li>
+<li>如果一个Acceptor收到编号为n的prepare请求，且n大于该Acceptor已经相应的所有Prepare请求编号，它就会将它已经批准过的最大编号的议案作为相应反馈给Propser，同时该Accepotor承诺不再批准编号小于n的议案。</li>
+</ol>
+<ul>
+<li>阶段二</li>
+</ul>
+<ol>
+<li>如果Proposer收到半数以上的Acceptor的关于编号为n的prepare请求，它从这些请求中选取编号最大的议案Value值作为Vn,如果没有，Value可以是任意值。</li>
+<li>如果Acceptor收到[n, Vn]请求，只要该Acceptor尚未对编号大于n的Prepare请求作出相应，就通过这个议案。</li>
+</ol>
+<h3 id="议案获取">议案获取</h3>
+<h3 id="极端情况">极端情况</h3>
+<blockquote>
+<p>Proposer P1提出编号为1的议案，进入第二阶段。Proposer P2提出编号为2的议案，进入第二阶段。然后P1在第二阶段的Accept请求被忽略，提出编号为3的议案，所以P2的Accept请求被忽略，如此往复，导致进入死循环状态。</p>
+</blockquote>
+<p>为了避免陷入死循环，选择一个主Proposer，只有主Proposer才可以提出议案。只要主Proposer提出一个编号更高的议案，该议案将会获得批准。</p>
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-tags">
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">
+                分布式
+              </a>
+            </div>
+            
+          </div>
+        </div>
+        
+          <div class="row">
+            <div class="col-xs-12">
+              
+            </div>
+          </div>
+
+          
+
+
+
+          
+          
+        
+
+        <div class="site-footer">
+  <div class="busuanzi-footer" hidden>
+    <span id="busuanzi_container_site_pv">
+      本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    <span id="busuanzi_container_site_uv">
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </span>
+    <span id="busuanzi_container_page_pv" >本文阅读量<span id="busuanzi_value_page_pv"></span>次</span>
+  </div>
+  
+</div>
+      </div>
+    </div>
+  </article>
+
+  <script src="https://utteranc.es/client.js"
+        repo="nzooherd/blog-talks"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+  </script>
+  
+
+
+
+  
+
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on nzooherd&#39;s blog</title>
+    <link>http://nzooherd.github.io/tags/java/</link>
+    <description>Recent content in Java on nzooherd&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 10 Jul 2018 21:29:54 +0000</lastBuildDate>
+    <atom:link href="http://nzooherd.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>谈谈RPC</title>
+      <link>http://nzooherd.github.io/posts/%E8%B0%88%E8%B0%88rpc/</link>
+      <pubDate>Tue, 10 Jul 2018 21:29:54 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E8%B0%88%E8%B0%88rpc/</guid>
+      <description>&lt;p&gt;RPC(Remote Procedure Call)字面意思就是远程过程调用，RPC框架的作用就是将远程过程调用封装成本地过程调用。所以Rpc-Framework要封装的就是以下这些东西。&#xA;&lt;img src=&#34;http://nzooherd-picture-bed.oss-cn-beijing.aliyuncs.com/20171102105005322.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;在美团实习用到了Thrift，Thrift作为一个跨语言RPC，美团内部通过jar包将其接入Spring，屏蔽了复杂的Thrift连接操作，而且RPC框架可以很非常方便的将一个单机服务转变为分布式架构的。&#xA;不由得让我想起了刚来美团时接手的一个纯C写的分段式语音传输系统，Socket通信加上各种内存复制着实让人恶心。用Java重构后，加上Thrift框架，仅仅两个实习生就多快好省的搞好了这个分布式系统。RPC的强大可见一斑。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>诡异的Integer</title>
+      <link>http://nzooherd.github.io/posts/%E8%AF%A1%E5%BC%82%E7%9A%84integer/</link>
+      <pubDate>Sun, 01 Jul 2018 22:39:03 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E8%AF%A1%E5%BC%82%E7%9A%84integer/</guid>
+      <description>&lt;h2 id=&#34;一个常见的面试题&#34;&gt;一个常见的面试题&lt;/h2&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Java语言实现两个线程交替输出1,2。&#xA;看到这个题就想起了生产者-消费者，进而想到了Synchorinzed, wait, notify。下面是我要写的代码&lt;/p&gt;&#xA;&lt;/blockquote&gt;</description>
+    </item>
+    <item>
+      <title>JDK动态代理</title>
+      <link>http://nzooherd.github.io/posts/jdk%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</link>
+      <pubDate>Sun, 20 May 2018 10:07:45 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/jdk%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</guid>
+      <description>&lt;p&gt;最近复习了一下JDK自带的动态代理，在Java技术中，和动态代理连接最紧密的就是Spring中的AOP，所谓的面向切面技术。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>JAVA泛型</title>
+      <link>http://nzooherd.github.io/posts/java%E6%B3%9B%E5%9E%8B/</link>
+      <pubDate>Sat, 23 Dec 2017 12:26:09 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/java%E6%B3%9B%E5%9E%8B/</guid>
+      <description>&lt;p&gt;最近在看Java源码，在Java容器类中所有容器都用到了泛型，然而Java中的泛型实际上是一种伪泛型。记录一下Java中泛型的实现。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Java NIO易错点</title>
+      <link>http://nzooherd.github.io/posts/java-nio%E6%98%93%E9%94%99%E7%82%B9/</link>
+      <pubDate>Wed, 29 Nov 2017 19:22:03 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/java-nio%E6%98%93%E9%94%99%E7%82%B9/</guid>
+      <description>&lt;p&gt;最近在和同学写一个Android端的类微信项目，不过非常简单，只有添加好友，设置备注，通话等功能。我主要负责服务器端的开发，在开发过程中，使用了Spring框架和Java NIO。有些东西，确实不写代码根本就学不会，在学习过程中，发现Java NIO中的一些易错点，特此记录，以备查询。(可能会不定时更新)&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>记一次诡异的Bug</title>
+      <link>http://nzooherd.github.io/posts/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%AF%A1%E5%BC%82%E7%9A%84bug/</link>
+      <pubDate>Tue, 14 Nov 2017 09:07:38 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%AF%A1%E5%BC%82%E7%9A%84bug/</guid>
+      <description>&lt;p&gt;故事是这样的，前几天固态硬盘到了之后决定重装系统，电脑换上固态后装好Linux后，直接将原来机械硬盘中的JDK, Tomcat, Intellij IDEA拷贝过来，简单的配置了一下环境变量，java -version没有任何问题，于是就开始修改之前的LetChat源文件。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>JavaWeb和SSM</title>
+      <link>http://nzooherd.github.io/posts/javaweb%E5%92%8Cssm/</link>
+      <pubDate>Sat, 28 Oct 2017 12:21:40 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/javaweb%E5%92%8Cssm/</guid>
+      <description>&lt;p&gt;近一个月的时间都在做一个B/S架构的在线聊天工具，从最初的的命令行再到Jsp最后用SSM框架重构，到目前就先告一段落吧，记录一下学习过程中的感想，以便查阅。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>IO多路复用</title>
+      <link>http://nzooherd.github.io/posts/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/</link>
+      <pubDate>Thu, 06 Jul 2017 10:36:54 +0000</pubDate>
+      <guid>http://nzooherd.github.io/posts/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/</guid>
+      <description>&lt;h3 id=&#34;阻塞同步非阻塞异步&#34;&gt;阻塞，同步，非阻塞，异步&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;同步和异步&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;同步和异步关注点是&lt;em&gt;消息通信机制&lt;/em&gt;，同步模型下消息的处理者主动去等待消息的提供者，异步模型下由消息提供者来通知消息处理者。&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;阻塞和非阻塞&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;阻塞和非阻塞关注的是&lt;em&gt;消息处理者在等待调用结果消息结果时的状态&lt;/em&gt;。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
